@@ -1,0 +1,7 @@
+name: TWFaith
+version: '${project.version}'
+main: com.ethan.twfaith.TWFaith
+api-version: 1.18
+commands:
+  faith:
+  pray:
