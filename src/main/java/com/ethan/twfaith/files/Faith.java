@@ -1,9 +1,5 @@
 package com.ethan.twfaith.files;
 
-import org.bukkit.entity.Player;
-
-import java.rmi.server.UID;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,13 +8,15 @@ public class Faith {
     private UUID leader;
     private int faith_points;
     private List<UUID> invited_players;
+    private List<UUID> followers;
 
 
-    public Faith(String faith_name, UUID leader, int faith_points, List<UUID> invited_players) {
+    public Faith(String faith_name, UUID leader, int faith_points, List<UUID> invited_players, List<UUID> followers) {
         this.faith_name = faith_name;
         this.leader = leader;
         this.faith_points = faith_points;
         this.invited_players = invited_players;
+        this.followers = followers;
     }
 
     public String getFaith_name() {
@@ -37,6 +35,10 @@ public class Faith {
         return invited_players;
     }
 
+    public List<UUID> getFollowers() {
+        return followers;
+    }
+
     public void setFaith_name(String faith_name) {
         this.faith_name = faith_name;
     }
@@ -51,5 +53,9 @@ public class Faith {
 
     public void setInvited_players(List<UUID> invited_players){
         this.invited_players = invited_players;
+    }
+
+    public void setFollowers(List<UUID> followers) {
+        this.followers = followers;
     }
 }

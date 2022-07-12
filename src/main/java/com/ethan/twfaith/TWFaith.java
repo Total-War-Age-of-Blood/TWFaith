@@ -2,6 +2,7 @@ package com.ethan.twfaith;
 
 import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.pray;
+import com.ethan.twfaith.files.PlayerData;
 import com.ethan.twfaith.files.UniquePlayers;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -63,6 +64,27 @@ public final class TWFaith extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e){
         if (!unique_player_list.contains(e.getPlayer().getUniqueId())){
             unique_player_list.add(e.getPlayer().getUniqueId());
+            PlayerData player_data = new PlayerData(e.getPlayer().getUniqueId(), "", false, false);
+            try{
+                File player_data_folder = new File(getDataFolder(), "PlayerData");
+                if (!player_data_folder.exists()){
+                    player_data_folder.mkdir();
+                }
+
+                File file = new File(player_data_folder, e.getPlayer().getUniqueId() + ".json");
+                if (!file.exists()){
+                    file.createNewFile();
+                }
+
+                Gson gson = new Gson();
+                Writer writer = new FileWriter(file, false);
+                gson.toJson(player_data, writer);
+                writer.flush();
+                writer.close();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         System.out.println("A player joined the server");
