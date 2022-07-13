@@ -1,6 +1,7 @@
 package com.ethan.twfaith.commands;
 
 import com.ethan.twfaith.files.Faith;
+import com.ethan.twfaith.files.PlayerData;
 import com.ethan.twfaith.files.UniquePlayers;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -20,6 +21,7 @@ public class FaithCommand implements CommandExecutor {
             Player player = (Player) sender;
 
             // TODO add interactions with PlayerData when appropriate
+            // TODO refactor this code to make it less confusing and more compact
 
             if (Objects.equals(args[0], "create") && args.length == 2) {
                 player.sendMessage("You have created the faith named " + args[1]);
@@ -41,6 +43,18 @@ public class FaithCommand implements CommandExecutor {
                     gson.toJson(faith, writer);
                     writer.flush();
                     writer.close();
+
+                    File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                    File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                    Reader reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(reader, PlayerData.class);
+                    player_data.setFaith(args[1]);
+                    player_data.setIn_faith(true);
+                    player_data.setLeader(true);
+                    Writer player_data_writer = new FileWriter(player_data_file, false);
+                    gson.toJson(player_data, player_data_writer);
+                    player_data_writer.flush();
+                    player_data_writer.close();
 
                     System.out.println("Saved data!");
                 }catch(IOException e){
@@ -83,11 +97,41 @@ public class FaithCommand implements CommandExecutor {
                 }
             }
 
+            // TODO Make disband change the PlayerData for leader
             if (Objects.equals(args[0], "disband") && args.length == 1){
                 try{
                     File folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Faiths");
                     File faith_file = new File (folder, player.getUniqueId() + ".json");
                     if (faith_file.exists()){
+                        Reader faith_reader = new FileReader(faith_file);
+                        Gson gson = new Gson();
+                        Faith read_faith = gson.fromJson(faith_reader, Faith.class);
+                        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                        File leader_data_file = new File(player_data_folder, read_faith.getLeader() + ".json");
+                        Reader leader_data_reader = new FileReader(leader_data_file);
+                        PlayerData leader_player_data = gson.fromJson(leader_data_reader, PlayerData.class);
+                        leader_player_data.setLeader(false);
+                        leader_player_data.setFaith("");
+                        leader_player_data.setIn_faith(false);
+                        Writer leader_player_data_writer = new FileWriter(leader_data_file, false);
+                        gson.toJson(leader_player_data, leader_player_data_writer);
+                        leader_player_data_writer.flush();
+                        leader_player_data_writer.close();
+                        leader_data_reader.close();
+                        for (UUID unique_player : read_faith.getFollowers()){
+                            File player_data_file = new File(player_data_folder, unique_player + ".json");
+                            Reader player_data_reader = new FileReader(player_data_file);
+                            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                            player_data.setLeader(false);
+                            player_data.setIn_faith(false);
+                            player_data.setFaith("");
+                            Writer player_data_writer = new FileWriter(player_data_file, false);
+                            gson.toJson(player_data_reader, player_data_writer);
+                            player_data_writer.flush();
+                            player_data_writer.close();
+                            player_data_reader.close();
+                        }
+                        faith_reader.close();
                         faith_file.delete();
                         player.sendMessage("Your faith has been deleted.");
                     }
@@ -96,6 +140,7 @@ public class FaithCommand implements CommandExecutor {
 
             }
 
+            // TODO make rename change the PlayerData for all current members
             if (Objects.equals(args[0], "rename")){
                 try{
                     File folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Faiths");
@@ -163,8 +208,7 @@ public class FaithCommand implements CommandExecutor {
 
 
             }
-
-
+            
             if (Objects.equals(args[0], "join") && args.length == 2){
                 try{
                     Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder().mkdir();

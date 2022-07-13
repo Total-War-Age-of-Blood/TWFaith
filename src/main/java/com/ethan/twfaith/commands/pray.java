@@ -12,6 +12,9 @@ public class pray implements CommandExecutor {
         Player player = (Player) sender;
         if (sender instanceof Player){
 // TODO finish pray command
+            // pray command should increase the number of faith points of the faith by one
+            // pray command should have a configurable cool down
+            // pray command should send player a message so they know it worked
         }
         return false;
     }

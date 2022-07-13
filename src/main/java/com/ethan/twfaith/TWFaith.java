@@ -19,6 +19,7 @@ import java.util.UUID;
 
 public final class TWFaith extends JavaPlugin implements Listener {
     // TODO add cool powers that are unlocked with faith points
+    // TODO add gui for unlocking powers
     public List<UUID> unique_player_list = new ArrayList<>();
 
     @Override
