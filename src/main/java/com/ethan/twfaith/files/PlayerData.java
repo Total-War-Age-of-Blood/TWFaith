@@ -7,12 +7,14 @@ import java.util.UUID;
 public class PlayerData {
 
     UUID uuid;
+    String led_by;
     String faith;
     boolean in_faith;
     boolean leader;
 
-    public PlayerData(UUID uuid, String faith, boolean in_faith, boolean leader) {
+    public PlayerData(UUID uuid, String led_by, String faith, boolean in_faith, boolean leader) {
         this.uuid = uuid;
+        this.led_by = led_by;
         this.faith = faith;
         this.in_faith = in_faith;
         this.leader = leader;
@@ -25,6 +27,10 @@ public class PlayerData {
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
+
+    public String getLed_by() { return led_by; }
+
+    public void setLed_by(String led_by) { this.led_by = led_by; }
 
     public String getFaith() {
         return faith;

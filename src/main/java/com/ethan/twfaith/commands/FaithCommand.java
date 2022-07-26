@@ -19,8 +19,7 @@ public class FaithCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
-            // TODO add interactions with PlayerData when appropriate
+            
             // TODO refactor this code to make it less confusing and more compact
 
             if (Objects.equals(args[0], "create") && args.length == 2) {
@@ -97,7 +96,6 @@ public class FaithCommand implements CommandExecutor {
                 }
             }
 
-            // TODO Make disband change the PlayerData for leader
             if (Objects.equals(args[0], "disband") && args.length == 1){
                 try{
                     File folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Faiths");
@@ -140,7 +138,6 @@ public class FaithCommand implements CommandExecutor {
 
             }
 
-            // TODO make rename change the PlayerData for all current members
             if (Objects.equals(args[0], "rename")){
                 try{
                     File folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Faiths");
@@ -156,6 +153,28 @@ public class FaithCommand implements CommandExecutor {
                         gson.toJson(read_faith, writer);
                         writer.flush();
                         writer.close();
+
+                        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                        File leader_data_file = new File(player_data_folder, read_faith.getLeader() + ".json");
+                        Reader leader_data_reader = new FileReader(leader_data_file);
+                        PlayerData leader_player_data = gson.fromJson(leader_data_reader, PlayerData.class);
+                        leader_player_data.setFaith(args[1]);
+                        Writer leader_player_data_writer = new FileWriter(leader_data_file, false);
+                        gson.toJson(leader_player_data, leader_player_data_writer);
+                        leader_player_data_writer.flush();
+                        leader_player_data_writer.close();
+                        leader_data_reader.close();
+                        for (UUID unique_player : read_faith.getFollowers()){
+                            File player_data_file = new File(player_data_folder, unique_player + ".json");
+                            Reader player_data_reader = new FileReader(player_data_file);
+                            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                            player_data.setFaith(args[1]);
+                            Writer player_data_writer = new FileWriter(player_data_file, false);
+                            gson.toJson(player_data_reader, player_data_writer);
+                            player_data_writer.flush();
+                            player_data_writer.close();
+                            player_data_reader.close();
+                        }
 
                         player.sendMessage("Renamed faith to " + args[1]);
 
@@ -208,7 +227,7 @@ public class FaithCommand implements CommandExecutor {
 
 
             }
-            
+
             if (Objects.equals(args[0], "join") && args.length == 2){
                 try{
                     Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder().mkdir();
@@ -226,7 +245,7 @@ public class FaithCommand implements CommandExecutor {
                         try{
                             File folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Faiths");
                             File faith_file = new File(folder, unique_player + ".json");
-                            if (file.exists()){
+                            if (faith_file.exists()){
                                 Reader faith_reader = new FileReader(faith_file);
                                 Faith read_faith = gson.fromJson(faith_reader, Faith.class);
                                 List<UUID> invited_players = read_faith.getInvited_players();
@@ -248,11 +267,24 @@ public class FaithCommand implements CommandExecutor {
                                     writer.flush();
                                     writer.close();
 
+                                    File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                                    File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                                    Reader player_data_reader = new FileReader(player_data_file);
+                                    PlayerData read_player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                                    read_player_data.setFaith(args[1]);
+                                    read_player_data.setIn_faith(true);
+                                    read_player_data.setLed_by(String.valueOf(read_faith.getLeader()));
+
+                                    Writer player_data_writer = new FileWriter(player_data_file, false);
+                                    gson.toJson(read_player_data, player_data_writer);
+                                    player_data_writer.flush();
+                                    player_data_writer.close();
+
 
                                 }
                             }
                         }catch(IOException e){
-                            System.out.println(e);
+                            e.printStackTrace();
                         }
                     }
                 }catch(IOException e){
@@ -260,7 +292,41 @@ public class FaithCommand implements CommandExecutor {
                 }
             }
 
-            //TODO add leave faith
+            if (Objects.equals(args[0], "leave")){
+                try{
+                    Gson gson = new Gson();
+                    File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                    File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                    Reader player_data_reader = new FileReader(player_data_file);
+                    PlayerData read_player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    if (read_player_data.getIn_faith()){
+                        // Removing the player from the faith data file
+                        File faith_folder = new File (Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Faiths");
+                        File faith_file = new File (faith_folder, read_player_data.getLed_by() + ".json");
+                        Reader faith_reader = new FileReader(faith_file);
+                        Faith read_faith = gson.fromJson(faith_reader, Faith.class);
+                        List<UUID> followers = read_faith.getFollowers();
+                        followers.remove(player.getUniqueId());
+                        Writer faith_data_writer = new FileWriter(faith_file, false);
+                        gson.toJson(read_faith, faith_data_writer);
+                        faith_data_writer.flush();
+                        faith_data_writer.close();
+
+                        // Removing the faith from the player data file
+                        read_player_data.setIn_faith(false);
+                        read_player_data.setLeader(false);
+                        read_player_data.setFaith("");
+                        read_player_data.setLed_by("");
+                        Writer player_data_writer = new FileWriter(player_data_file, false);
+                        gson.toJson(read_player_data, player_data_writer);
+                        player_data_writer.flush();
+                        player_data_writer.close();
+
+                        player.sendMessage("You have left " + read_faith.getFaith_name());
+
+                    }
+                }catch (IOException e){e.printStackTrace();}
+            }
 
         }
             return false;
