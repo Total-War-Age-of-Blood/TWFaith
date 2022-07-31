@@ -4,6 +4,10 @@ import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.pray;
 import com.ethan.twfaith.files.PlayerData;
 import com.ethan.twfaith.files.UniquePlayers;
+import com.ethan.twfaith.guis.Blessings;
+import com.ethan.twfaith.guis.Curses;
+import com.ethan.twfaith.guis.FaithUpgrade;
+import com.ethan.twfaith.guis.GodPowers;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -28,6 +32,12 @@ public final class TWFaith extends JavaPlugin implements Listener {
         // Primary config
         getConfig().options().copyDefaults();
         saveDefaultConfig();
+
+        // Event Listeners
+        Bukkit.getPluginManager().registerEvents(new FaithUpgrade(), this);
+        Bukkit.getPluginManager().registerEvents(new Blessings(), this);
+        Bukkit.getPluginManager().registerEvents(new GodPowers(), this);
+        Bukkit.getPluginManager().registerEvents(new Curses(), this);
 
         // Plugin Commands
         getCommand("faith").setExecutor(new FaithCommand());

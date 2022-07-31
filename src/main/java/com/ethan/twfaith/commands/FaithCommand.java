@@ -1,15 +1,21 @@
 package com.ethan.twfaith.commands;
 
+import com.ethan.twfaith.customevents.FaithUpgradeEvent;
 import com.ethan.twfaith.files.Faith;
 import com.ethan.twfaith.files.PlayerData;
 import com.ethan.twfaith.files.UniquePlayers;
+import com.ethan.twfaith.guis.FaithUpgrade;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.*;
 import java.util.*;
@@ -275,6 +281,20 @@ public class FaithCommand implements CommandExecutor {
                         player.sendMessage("You have left " + read_faith.getFaith_name());
                     }
                 }catch (IOException e){e.printStackTrace();}
+            }
+
+            if (Objects.equals(args[0], "upgrade")){
+                File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                try {
+                    Reader player_data_reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    if (player_data.getLeader()){
+                        // Runs custom event for opening a gui menu
+                        Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(player, "Faith Upgrade"));
+                        return true;
+
+                    } else{player.sendMessage(ChatColor.RED + "Error: Must be leader to upgrade faith.");}
+                } catch (FileNotFoundException e) {e.printStackTrace();}
             }
         }
             return false;
