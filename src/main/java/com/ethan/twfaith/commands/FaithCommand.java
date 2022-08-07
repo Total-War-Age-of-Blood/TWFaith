@@ -4,18 +4,14 @@ import com.ethan.twfaith.customevents.FaithUpgradeEvent;
 import com.ethan.twfaith.files.Faith;
 import com.ethan.twfaith.files.PlayerData;
 import com.ethan.twfaith.files.UniquePlayers;
-import com.ethan.twfaith.guis.FaithUpgrade;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
 
 import java.io.*;
 import java.util.*;
@@ -23,6 +19,7 @@ import java.util.*;
 public class FaithCommand implements CommandExecutor {
     // TODO Set up error messages for all commands
     // TODO Set up autocomplete for all commands
+    // TODO Make sure that gods lose their powers when they disband their faith
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {

@@ -62,9 +62,9 @@ public class FaithUpgrade implements Listener {
 
     @EventHandler
     public void guiClickEvent(InventoryClickEvent e){
-        if(!e.getClickedInventory().equals(gui)){
+        try{        if(!e.getClickedInventory().equals(gui)){
             return;
-        }
+        }}catch (NullPointerException exception){return;}
 
         e.setCancelled(true);
 

@@ -2,6 +2,7 @@ package com.ethan.twfaith;
 
 import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.pray;
+import com.ethan.twfaith.commands.taunt;
 import com.ethan.twfaith.files.PlayerData;
 import com.ethan.twfaith.files.UniquePlayers;
 import com.ethan.twfaith.guis.Blessings;
@@ -23,7 +24,7 @@ import java.util.UUID;
 
 public final class TWFaith extends JavaPlugin implements Listener {
     // TODO add cool powers that are unlocked with faith points
-    // TODO add gui for unlocking powers
+    // TODO Replace hard-coded values with configurable ones where applicable
     public List<UUID> unique_player_list = new ArrayList<>();
 
     @Override
@@ -38,10 +39,12 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new Blessings(), this);
         Bukkit.getPluginManager().registerEvents(new GodPowers(), this);
         Bukkit.getPluginManager().registerEvents(new Curses(), this);
+        Bukkit.getPluginManager().registerEvents(new taunt(), this);
 
         // Plugin Commands
         getCommand("faith").setExecutor(new FaithCommand());
         getCommand("pray").setExecutor(new pray(this));
+        getCommand("taunt").setExecutor(new taunt());
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
@@ -75,7 +78,10 @@ public final class TWFaith extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e){
         if (!unique_player_list.contains(e.getPlayer().getUniqueId())){
             unique_player_list.add(e.getPlayer().getUniqueId());
-            PlayerData player_data = new PlayerData(e.getPlayer().getUniqueId(), "", "", false, false, 0, 0);
+            PlayerData player_data = new PlayerData(e.getPlayer().getUniqueId(), "", "", false, false,
+                    0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, false, null);
             try{
                 File player_data_folder = new File(getDataFolder(), "PlayerData");
                 if (!player_data_folder.exists()){
