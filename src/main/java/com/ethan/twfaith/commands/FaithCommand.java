@@ -55,7 +55,7 @@ public class FaithCommand implements CommandExecutor {
                     player_data.setFaith(args[1]);
                     player_data.setIn_faith(true);
                     player_data.setLeader(true);
-                    player_data.setLed_by(String.valueOf(player.getUniqueId()));
+                    player_data.setLed_by(player.getUniqueId());
                     Writer player_data_writer = new FileWriter(sender_data_file, false);
                     gson.toJson(player_data, player_data_writer);
                     player_data_writer.flush();
@@ -236,7 +236,7 @@ public class FaithCommand implements CommandExecutor {
                                     PlayerData read_player_data = gson.fromJson(player_data_reader, PlayerData.class);
                                     read_player_data.setFaith(args[1]);
                                     read_player_data.setIn_faith(true);
-                                    read_player_data.setLed_by(String.valueOf(read_faith.getLeader()));
+                                    read_player_data.setLed_by(read_faith.getLeader());
 
                                     Writer player_data_writer = new FileWriter(sender_data_file, false);
                                     gson.toJson(read_player_data, player_data_writer);
@@ -269,7 +269,7 @@ public class FaithCommand implements CommandExecutor {
                         read_player_data.setIn_faith(false);
                         read_player_data.setLeader(false);
                         read_player_data.setFaith("");
-                        read_player_data.setLed_by("");
+                        read_player_data.setLed_by(null);
                         Writer player_data_writer = new FileWriter(sender_data_file, false);
                         gson.toJson(read_player_data, player_data_writer);
                         player_data_writer.flush();

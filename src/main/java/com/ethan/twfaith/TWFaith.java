@@ -78,10 +78,10 @@ public final class TWFaith extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e){
         if (!unique_player_list.contains(e.getPlayer().getUniqueId())){
             unique_player_list.add(e.getPlayer().getUniqueId());
-            PlayerData player_data = new PlayerData(e.getPlayer().getUniqueId(), "", "", false, false,
+            PlayerData player_data = new PlayerData(e.getPlayer().getUniqueId(), e.getPlayer().getUniqueId(), "", false, false,
                     0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, false, null);
+                    0, 0, 0, 0, false, e.getPlayer().getUniqueId());
             try{
                 File player_data_folder = new File(getDataFolder(), "PlayerData");
                 if (!player_data_folder.exists()){

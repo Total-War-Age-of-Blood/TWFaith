@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -135,6 +136,66 @@ public class GodPowers implements Listener {
                     System.out.println("Savior clicked");
                 }catch(IOException exception){exception.printStackTrace();}
                 break;
+            case 12:
+                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                gson = new Gson();
+                try{
+                    FileReader player_data_reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    player_data.setTaunt(1);
+                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
+                    gson.toJson(player_data, player_data_writer);
+                    player_data_writer.flush();
+                    player_data_writer.close();
+                    System.out.println("Taunt clicked");
+                }catch(IOException exception){exception.printStackTrace();}
+                break;
+            case 13:
+                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                gson = new Gson();
+                try{
+                    FileReader player_data_reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    player_data.setInsidious(1);
+                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
+                    gson.toJson(player_data, player_data_writer);
+                    player_data_writer.flush();
+                    player_data_writer.close();
+                    System.out.println("Insidious clicked");
+                }catch(IOException exception){exception.printStackTrace();}
+                break;
+            case 14:
+                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                gson = new Gson();
+                try{
+                    FileReader player_data_reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    player_data.setExplosive_landing(1);
+                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
+                    gson.toJson(player_data, player_data_writer);
+                    player_data_writer.flush();
+                    player_data_writer.close();
+                    System.out.println("Explosive Landing clicked");
+                }catch(IOException exception){exception.printStackTrace();}
+                break;
+            case 15:
+                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                gson = new Gson();
+                try{
+                    FileReader player_data_reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    player_data.setFlood(1);
+                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
+                    gson.toJson(player_data, player_data_writer);
+                    player_data_writer.flush();
+                    player_data_writer.close();
+                    System.out.println("Flood clicked");
+                }catch(IOException exception){exception.printStackTrace();}
+                break;
             case 16:
                 Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(player, "Faith Upgrade"));
                 break;
@@ -184,7 +245,7 @@ public class GodPowers implements Listener {
                 Reader player_data_reader = new FileReader(player_data_file);
                 PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
                 if (player_data.getLeader() || !player_data.getIn_faith()){return;}
-                Player leader = Bukkit.getPlayer(UUID.fromString(player_data.getLed_by()));
+                Player leader = Bukkit.getPlayer(player_data.getLed_by());
                 System.out.println("Player is in faith and is not leader.");
                 if (leader.getLocation().distance(player.getLocation()) > 30){return;}
                 System.out.println("Player and leader are within 30 blocks");
@@ -206,5 +267,24 @@ public class GodPowers implements Listener {
                 }
             }catch (IOException exception){exception.printStackTrace();}
         }
+    }
+
+    // Insidious
+    @EventHandler
+    public void insidiousTriggerEvent(PlayerToggleSneakEvent e){
+        Player player = e.getPlayer();
+        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+        Gson gson = new Gson();
+        try{
+            Reader player_data_reader = new FileReader(player_data_file);
+            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+            if (player_data.getInsidious() < 1){return;}
+            // Toggle Sneak event takes the sneak state of the player before the toggle happens
+            // So we have to check if the player is standing before sneak is toggled.
+            if (!player.isSneaking()){
+                player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 0));
+            } else{player.removePotionEffect(PotionEffectType.INVISIBILITY);}
+        }catch(Exception exception){exception.printStackTrace();}
     }
 }

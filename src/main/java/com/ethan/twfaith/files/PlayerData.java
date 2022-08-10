@@ -7,7 +7,7 @@ import java.util.UUID;
 public class PlayerData {
 
     UUID uuid;
-    String led_by;
+    UUID led_by;
     String faith;
     boolean in_faith;
     boolean leader;
@@ -34,7 +34,7 @@ public class PlayerData {
     UUID taunter;
 
 
-    public PlayerData(UUID uuid, String led_by, String faith, boolean in_faith, boolean leader, long last_prayer, int faith_points,
+    public PlayerData(UUID uuid, UUID led_by, String faith, boolean in_faith, boolean leader, long last_prayer, int faith_points,
                       int terrain_bonus, int summon_god, int god_proximity_bonus, int name_prophets, int god_of_defense,
                       int god_of_crafstman, int crumbling, int heavy_boots, int intoxicate, int discombobulate, int entangle,
                       int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted, UUID taunter) {
@@ -74,9 +74,9 @@ public class PlayerData {
         this.uuid = uuid;
     }
 
-    public String getLed_by() { return led_by; }
+    public UUID getLed_by() { return led_by; }
 
-    public void setLed_by(String led_by) { this.led_by = led_by; }
+    public void setLed_by(UUID led_by) { this.led_by = led_by; }
 
     public String getFaith() {
         return faith;
