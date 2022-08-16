@@ -1,8 +1,8 @@
 package com.ethan.twfaith.commands;
 
 import com.ethan.twfaith.TWFaith;
-import com.ethan.twfaith.files.Faith;
-import com.ethan.twfaith.files.PlayerData;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.PlayerData;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -14,11 +14,11 @@ import java.io.*;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class pray implements CommandExecutor {
+public class Pray implements CommandExecutor {
 
     private TWFaith twFaith;
 
-    public pray(TWFaith twFaith) {
+    public Pray(TWFaith twFaith) {
         this.twFaith = twFaith;
     }
 

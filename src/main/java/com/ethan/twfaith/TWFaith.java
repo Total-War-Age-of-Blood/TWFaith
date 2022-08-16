@@ -1,10 +1,11 @@
 package com.ethan.twfaith;
 
 import com.ethan.twfaith.commands.FaithCommand;
-import com.ethan.twfaith.commands.pray;
-import com.ethan.twfaith.commands.taunt;
-import com.ethan.twfaith.files.PlayerData;
-import com.ethan.twfaith.files.UniquePlayers;
+import com.ethan.twfaith.commands.FloodCommand;
+import com.ethan.twfaith.commands.Pray;
+import com.ethan.twfaith.commands.Taunt;
+import com.ethan.twfaith.data.PlayerData;
+import com.ethan.twfaith.data.UniquePlayers;
 import com.ethan.twfaith.guis.Blessings;
 import com.ethan.twfaith.guis.Curses;
 import com.ethan.twfaith.guis.FaithUpgrade;
@@ -25,6 +26,8 @@ import java.util.UUID;
 public final class TWFaith extends JavaPlugin implements Listener {
     // TODO add cool powers that are unlocked with faith points
     // TODO Replace hard-coded values with configurable ones where applicable
+    // TODO See if its possible to load all of the PlayerData and Faiths files on startup and save on shutdown to
+    //  decrease the amount of reading disk required
     public List<UUID> unique_player_list = new ArrayList<>();
 
     @Override
@@ -39,12 +42,14 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new Blessings(), this);
         Bukkit.getPluginManager().registerEvents(new GodPowers(), this);
         Bukkit.getPluginManager().registerEvents(new Curses(), this);
-        Bukkit.getPluginManager().registerEvents(new taunt(), this);
+        Bukkit.getPluginManager().registerEvents(new Taunt(), this);
+        Bukkit.getPluginManager().registerEvents(new FloodCommand(), this);
 
         // Plugin Commands
         getCommand("faith").setExecutor(new FaithCommand());
-        getCommand("pray").setExecutor(new pray(this));
-        getCommand("taunt").setExecutor(new taunt());
+        getCommand("pray").setExecutor(new Pray(this));
+        getCommand("taunt").setExecutor(new Taunt());
+        getCommand("flood").setExecutor(new FloodCommand());
 
         Bukkit.getPluginManager().registerEvents(this, this);
 

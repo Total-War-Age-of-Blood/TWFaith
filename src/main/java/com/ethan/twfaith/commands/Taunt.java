@@ -1,6 +1,6 @@
 package com.ethan.twfaith.commands;
 
-import com.ethan.twfaith.files.PlayerData;
+import com.ethan.twfaith.data.PlayerData;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.io.*;
 
-public class taunt implements CommandExecutor, Listener {
+public class Taunt implements CommandExecutor, Listener {
     // TODO implement command cool-down.
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

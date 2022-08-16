@@ -1,9 +1,9 @@
 package com.ethan.twfaith.commands;
 
 import com.ethan.twfaith.customevents.FaithUpgradeEvent;
-import com.ethan.twfaith.files.Faith;
-import com.ethan.twfaith.files.PlayerData;
-import com.ethan.twfaith.files.UniquePlayers;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.PlayerData;
+import com.ethan.twfaith.data.UniquePlayers;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,11 +45,13 @@ public class FaithCommand implements CommandExecutor {
                 try{
                     if (!sender_faith_file.exists()){sender_faith_file.createNewFile();}
 
+                    // Saving new Faith to file
                     Writer writer = new FileWriter(sender_faith_file, false);
                     gson.toJson(faith, writer);
                     writer.flush();
                     writer.close();
 
+                    // Changing Founder's Player Data to reflect creating the faith
                     Reader reader = new FileReader(sender_data_file);
                     PlayerData player_data = gson.fromJson(reader, PlayerData.class);
                     player_data.setFaith(args[1]);

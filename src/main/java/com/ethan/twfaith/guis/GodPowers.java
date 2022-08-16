@@ -1,7 +1,7 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.FaithUpgradeEvent;
-import com.ethan.twfaith.files.PlayerData;
+import com.ethan.twfaith.data.PlayerData;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +21,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.UUID;
 
 public class GodPowers implements Listener {
     private Inventory gui;
@@ -286,5 +285,26 @@ public class GodPowers implements Listener {
                 player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 0));
             } else{player.removePotionEffect(PotionEffectType.INVISIBILITY);}
         }catch(Exception exception){exception.printStackTrace();}
+    }
+
+    // Explosive Landing
+    @EventHandler
+    public void explosiveLandingTriggerEvent(EntityDamageEvent e){
+        // When the player takes damage from hitting the ground, we cancel the damage and create an explosion
+        if (!(e.getEntity() instanceof Player)){return;}
+        if (!e.getCause().equals(EntityDamageEvent.DamageCause.FALL)){return;}
+        Player player = (Player) e.getEntity();
+        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+        Gson gson = new Gson();
+        try{
+            Reader player_data_reader = new FileReader(player_data_file);
+            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+            if (player_data.getExplosive_landing() < 1){return;}
+            float fall_distance = player.getFallDistance();
+            e.setDamage(0);
+            player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 5));
+            player.getWorld().createExplosion(player.getLocation(), fall_distance);
+        }catch (IOException exception){exception.printStackTrace();}
     }
 }
