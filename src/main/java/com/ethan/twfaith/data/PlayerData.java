@@ -30,12 +30,17 @@ public class PlayerData {
     int flood;
     boolean taunted;
     UUID taunter;
+    boolean lions_heart_active;
+    boolean savior_active;
+    boolean insidious_active;
+    boolean explosive_landing_active;
 
 
     public PlayerData(UUID uuid, UUID led_by, String faith, boolean in_faith, boolean leader, long last_prayer, int faith_points,
                       int terrain_bonus, int summon_god, int god_proximity_bonus, int name_prophets, int god_of_defense,
                       int god_of_crafstman, int crumbling, int heavy_boots, int intoxicate, int discombobulate, int entangle,
-                      int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted, UUID taunter) {
+                      int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted,
+                      UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active, boolean explosive_landing_active) {
         this.uuid = uuid;
         this.led_by = led_by;
         this.faith = faith;
@@ -62,6 +67,10 @@ public class PlayerData {
         this.flood = flood;
         this.taunted = taunted;
         this.taunter = taunter;
+        this.lions_heart_active = lions_heart_active;
+        this.savior_active = savior_active;
+        this.insidious_active = insidious_active;
+        this.explosive_landing_active = explosive_landing_active;
     }
 
     public UUID getUuid() {
@@ -251,4 +260,44 @@ public class PlayerData {
     public UUID getTaunter() {return taunter;}
 
     public void setTaunter(UUID taunter) {this.taunter = taunter;}
+
+    public boolean isIn_faith() {
+        return in_faith;
+    }
+
+    public boolean isLeader() {
+        return leader;
+    }
+
+    public boolean isLions_heart_active() {
+        return lions_heart_active;
+    }
+
+    public void setLions_heart_active(boolean lions_heart_active) {
+        this.lions_heart_active = lions_heart_active;
+    }
+
+    public boolean isSavior_active() {
+        return savior_active;
+    }
+
+    public void setSavior_active(boolean savior_active) {
+        this.savior_active = savior_active;
+    }
+
+    public boolean isInsidious_active() {
+        return insidious_active;
+    }
+
+    public void setInsidious_active(boolean insidious_active) {
+        this.insidious_active = insidious_active;
+    }
+
+    public boolean isExplosive_landing_active() {
+        return explosive_landing_active;
+    }
+
+    public void setExplosive_landing_active(boolean explosive_landing_active) {
+        this.explosive_landing_active = explosive_landing_active;
+    }
 }

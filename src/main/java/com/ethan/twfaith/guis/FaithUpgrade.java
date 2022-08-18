@@ -1,6 +1,6 @@
 package com.ethan.twfaith.guis;
 
-import com.ethan.twfaith.customevents.FaithUpgradeEvent;
+import com.ethan.twfaith.customevents.OpenGUIEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -72,13 +72,13 @@ public class FaithUpgrade implements Listener {
 
         switch (e.getSlot()){
             case 10:
-                Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(p, "Blessings"));
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Blessings"));
                 break;
             case 12:
-                Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(p, "God Powers"));
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "God Powers"));
                 break;
             case 14:
-                Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(p, "Curses"));
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Curses"));
                 break;
             case 16:
                 e.getWhoClicked().closeInventory();
@@ -87,7 +87,7 @@ public class FaithUpgrade implements Listener {
     }
 
     @EventHandler
-    public void faithUpgradeEvent(FaithUpgradeEvent e){
+    public void faithUpgradeEvent(OpenGUIEvent e){
         // When custom event is triggered, check to see if it wants to open this gui
         // if so, open the gui
         if(e.getGui_name().equals("Faith Upgrade")){openNewGui(e.getPlayer());}

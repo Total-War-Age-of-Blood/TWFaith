@@ -1,6 +1,6 @@
 package com.ethan.twfaith.guis;
 
-import com.ethan.twfaith.customevents.FaithUpgradeEvent;
+import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.data.PlayerData;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -196,13 +196,13 @@ public class GodPowers implements Listener {
                 }catch(IOException exception){exception.printStackTrace();}
                 break;
             case 16:
-                Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(player, "Faith Upgrade"));
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
                 break;
         }
     }
 
     @EventHandler
-    public void faithUpgradeEvent(FaithUpgradeEvent e){
+    public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGui_name().equals("God Powers")){openGodPowersGui(e.getPlayer());}
     }
 
@@ -214,16 +214,17 @@ public class GodPowers implements Listener {
         File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
         File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
         Gson gson = new Gson();
+        // TODO Fix Lions Heart Giving level 1 strength with a full armor set
         try{
             Reader player_data_reader = new FileReader(player_data_file);
             PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (player_data.getLions_heart() > 0){
+            if (player_data.getLions_heart() > 0 && player_data.isLions_heart_active()){
                 int amplifier = 0;
                 if (player.getEquipment().getBoots() != null){amplifier += 1;}
                 if (player.getEquipment().getLeggings() != null){amplifier += 1;}
                 if (player.getEquipment().getChestplate() != null){amplifier += 1;}
                 if (player.getEquipment().getHelmet() != null){amplifier += 1;}
-                System.out.println(amplifier);
+                // System.out.println(amplifier);
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                 player.addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(Integer.MAX_VALUE, 3 - amplifier));
             }
@@ -233,7 +234,7 @@ public class GodPowers implements Listener {
     // Savior
     @EventHandler
     public void saviorTriggerEvent(EntityDamageEvent e){
-        System.out.println("Entity Damage detected!");
+        // System.out.println("Entity Damage detected!");
         if (e.getEntity() instanceof Player){
             Player player = (Player) e.getEntity();
             File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
@@ -255,7 +256,7 @@ public class GodPowers implements Listener {
                 Reader leader_data_reader = new FileReader(leader_data_file);
                 PlayerData leader_data = gson.fromJson(leader_data_reader, PlayerData.class);
 
-                if (leader_data.getSavior() > 0){
+                if (leader_data.getSavior() > 0 && leader_data.isSavior_active()){
                     System.out.println("Leader has Savior");
                     Location player_location = player.getLocation();
                     Location leader_location = leader.getLocation();
@@ -278,7 +279,7 @@ public class GodPowers implements Listener {
         try{
             Reader player_data_reader = new FileReader(player_data_file);
             PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (player_data.getInsidious() < 1){return;}
+            if (player_data.getInsidious() < 1 || !player_data.isInsidious_active()){return;}
             // Toggle Sneak event takes the sneak state of the player before the toggle happens
             // So we have to check if the player is standing before sneak is toggled.
             if (!player.isSneaking()){
@@ -300,7 +301,7 @@ public class GodPowers implements Listener {
         try{
             Reader player_data_reader = new FileReader(player_data_file);
             PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (player_data.getExplosive_landing() < 1){return;}
+            if (player_data.getExplosive_landing() < 1 || !player_data.isExplosive_landing_active()){return;}
             float fall_distance = player.getFallDistance();
             e.setDamage(0);
             player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 5));

@@ -4,17 +4,18 @@ import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.FloodCommand;
 import com.ethan.twfaith.commands.Pray;
 import com.ethan.twfaith.commands.Taunt;
+import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.UniquePlayers;
-import com.ethan.twfaith.guis.Blessings;
-import com.ethan.twfaith.guis.Curses;
-import com.ethan.twfaith.guis.FaithUpgrade;
-import com.ethan.twfaith.guis.GodPowers;
+import com.ethan.twfaith.guis.*;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -27,7 +28,8 @@ public final class TWFaith extends JavaPlugin implements Listener {
     // TODO add cool powers that are unlocked with faith points
     // TODO Replace hard-coded values with configurable ones where applicable
     // TODO See if its possible to load all of the PlayerData and Faiths files on startup and save on shutdown to
-    //  decrease the amount of reading disk required
+    //  decrease the amount of reading disk required. Persistent Data Containers may be the solution as they have the
+    //  same capacity as JSON and can be applied to the Player object
     public List<UUID> unique_player_list = new ArrayList<>();
 
     @Override
@@ -44,6 +46,8 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new Curses(), this);
         Bukkit.getPluginManager().registerEvents(new Taunt(), this);
         Bukkit.getPluginManager().registerEvents(new FloodCommand(), this);
+        Bukkit.getPluginManager().registerEvents(new SelectPowers(), this);
+        Bukkit.getPluginManager().registerEvents(new UsePowers(), this);
 
         // Plugin Commands
         getCommand("faith").setExecutor(new FaithCommand());
@@ -86,7 +90,8 @@ public final class TWFaith extends JavaPlugin implements Listener {
             PlayerData player_data = new PlayerData(e.getPlayer().getUniqueId(), e.getPlayer().getUniqueId(), "", false, false,
                     0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, false, e.getPlayer().getUniqueId());
+                    0, 0, 0, 0, false, e.getPlayer().getUniqueId(),
+                    false, false, false, false);
             try{
                 File player_data_folder = new File(getDataFolder(), "PlayerData");
                 if (!player_data_folder.exists()){

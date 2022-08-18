@@ -1,6 +1,6 @@
 package com.ethan.twfaith.commands;
 
-import com.ethan.twfaith.customevents.FaithUpgradeEvent;
+import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.UniquePlayers;
@@ -289,10 +289,24 @@ public class FaithCommand implements CommandExecutor {
                     PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
                     if (player_data.getLeader()){
                         // Runs custom event for opening a gui menu
-                        Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(player, "Faith Upgrade"));
+                        Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
                         return true;
 
                     } else{player.sendMessage(ChatColor.RED + "Error: Must be leader to upgrade faith.");}
+                } catch (FileNotFoundException e) {e.printStackTrace();}
+            }
+
+            if (Objects.equals(args[0], "powers")){
+                File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+                try {
+                    Reader player_data_reader = new FileReader(player_data_file);
+                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    if (player_data.getLeader()){
+                        // Runs custom event for opening a gui menu
+                        Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Select Powers"));
+                        return true;
+
+                    } else{player.sendMessage(ChatColor.RED + "Error: Must be leader to use powers.");}
                 } catch (FileNotFoundException e) {e.printStackTrace();}
             }
         }

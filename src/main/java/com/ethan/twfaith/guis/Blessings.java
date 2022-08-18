@@ -1,6 +1,6 @@
 package com.ethan.twfaith.guis;
 
-import com.ethan.twfaith.customevents.FaithUpgradeEvent;
+import com.ethan.twfaith.customevents.OpenGUIEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -102,13 +102,13 @@ public class Blessings implements Listener {
                 System.out.println("Placeholder");
                 break;
             case 16:
-                Bukkit.getPluginManager().callEvent(new FaithUpgradeEvent(p, "Faith Upgrade"));
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));
                 break;
         }
     }
 
     @EventHandler
-    public void faithUpgradeEvent(FaithUpgradeEvent e){
+    public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGui_name().equals("Blessings")){openBlessingsGui(e.getPlayer());}
     }
 }

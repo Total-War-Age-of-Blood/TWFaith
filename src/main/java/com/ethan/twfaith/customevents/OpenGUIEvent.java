@@ -4,14 +4,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class FaithUpgradeEvent extends Event {
+public class OpenGUIEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
     Player player;
     String gui_name;
 
-    public FaithUpgradeEvent(Player player, String gui_name){
+    public OpenGUIEvent(Player player, String gui_name){
         this.player = player;
         this.gui_name = gui_name;
     }
