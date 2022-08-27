@@ -1,7 +1,7 @@
 package com.ethan.twfaith.customevents;
 
-import com.ethan.twfaith.commands.FloodCommand;
-import com.ethan.twfaith.commands.Taunt;
+import com.ethan.twfaith.activepowers.Flood;
+import com.ethan.twfaith.activepowers.Taunt;
 import com.ethan.twfaith.data.PlayerData;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -35,8 +35,9 @@ public class UsePowers implements Listener {
             Gson gson = new Gson();
             PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
 
+            // TODO fix players without perms being able to activate abilities using the special terracotta
             switch (held_item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING)){
-                case "lionsheart":
+                case "Lion's Heart":
                     if (player_data.isLions_heart_active()){
                         player_data.setLions_heart_active(false);
                         player.sendMessage(ChatColor.RED + "Lions Heart Deactivated");
@@ -70,7 +71,7 @@ public class UsePowers implements Listener {
                         player.sendMessage(ChatColor.GREEN + "Explosive Landing Activated");}
                     break;
                 case "Flood":
-                    FloodCommand flood = new FloodCommand();
+                    Flood flood = new Flood();
                     flood.floodTrigger(player);
                     player.sendMessage(ChatColor.DARK_BLUE + "The area floods with water.");
                     break;

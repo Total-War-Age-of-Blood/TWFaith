@@ -104,101 +104,47 @@ public class GodPowers implements Listener {
 
         Player player = (Player) e.getWhoClicked();
 
-        switch (e.getSlot()){
-            case 10:
-                File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-                Gson gson = new Gson();
-                try{
-                    FileReader player_data_reader = new FileReader(player_data_file);
-                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-                    player_data.setLions_heart(1);
-                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                    gson.toJson(player_data, player_data_writer);
-                    player_data_writer.flush();
-                    player_data_writer.close();
-                    System.out.println("Lions Heart clicked");
-                }catch(IOException exception){exception.printStackTrace();}
-                break;
-            case 11:
-                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-                gson = new Gson();
-                try{
-                    FileReader player_data_reader = new FileReader(player_data_file);
-                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-                    player_data.setSavior(1);
-                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                    gson.toJson(player_data, player_data_writer);
-                    player_data_writer.flush();
-                    player_data_writer.close();
-                    System.out.println("Savior clicked");
-                }catch(IOException exception){exception.printStackTrace();}
-                break;
-            case 12:
-                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-                gson = new Gson();
-                try{
-                    FileReader player_data_reader = new FileReader(player_data_file);
-                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-                    player_data.setTaunt(1);
-                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                    gson.toJson(player_data, player_data_writer);
-                    player_data_writer.flush();
-                    player_data_writer.close();
-                    System.out.println("Taunt clicked");
-                }catch(IOException exception){exception.printStackTrace();}
-                break;
-            case 13:
-                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-                gson = new Gson();
-                try{
-                    FileReader player_data_reader = new FileReader(player_data_file);
-                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-                    player_data.setInsidious(1);
-                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                    gson.toJson(player_data, player_data_writer);
-                    player_data_writer.flush();
-                    player_data_writer.close();
-                    System.out.println("Insidious clicked");
-                }catch(IOException exception){exception.printStackTrace();}
-                break;
-            case 14:
-                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-                gson = new Gson();
-                try{
-                    FileReader player_data_reader = new FileReader(player_data_file);
-                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+        Gson gson = new Gson();
+        try{
+            FileReader player_data_reader = new FileReader(player_data_file);
+            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+            switch (e.getSlot()){
+                case 10:
+                        player_data.setLions_heart(1);
+                        System.out.println("Lions Heart clicked");
+                    break;
+                case 11:
+                        player_data.setSavior(1);
+                        System.out.println("Savior clicked");
+                    break;
+                case 12:
+                        player_data.setTaunt(1);
+                        System.out.println("Taunt clicked");
+                    break;
+                case 13:
+                        player_data.setInsidious(1);
+                        System.out.println("Insidious clicked");
+                    break;
+                case 14:
                     player_data.setExplosive_landing(1);
-                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                    gson.toJson(player_data, player_data_writer);
-                    player_data_writer.flush();
-                    player_data_writer.close();
                     System.out.println("Explosive Landing clicked");
-                }catch(IOException exception){exception.printStackTrace();}
-                break;
-            case 15:
-                player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-                gson = new Gson();
-                try{
-                    FileReader player_data_reader = new FileReader(player_data_file);
-                    PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+                    break;
+                case 15:
                     player_data.setFlood(1);
-                    FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                    gson.toJson(player_data, player_data_writer);
-                    player_data_writer.flush();
-                    player_data_writer.close();
                     System.out.println("Flood clicked");
-                }catch(IOException exception){exception.printStackTrace();}
-                break;
-            case 16:
-                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
-                break;
-        }
+                    break;
+                case 16:
+                    Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
+                    break;
+            }
+            FileWriter player_data_writer = new FileWriter(player_data_file, false);
+            gson.toJson(player_data, player_data_writer);
+            player_data_writer.flush();
+            player_data_writer.close();
+        }catch (IOException exception){exception.printStackTrace();}
+
     }
 
     @EventHandler

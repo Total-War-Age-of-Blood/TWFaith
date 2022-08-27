@@ -1,6 +1,8 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.PlayerData;
+import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,6 +14,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Curses implements Listener {
@@ -39,7 +45,7 @@ public class Curses implements Listener {
         // Intoxicate
         ItemStack intoxicate = new ItemStack(Material.HONEY_BOTTLE);
         ItemMeta intoxicate_meta = intoxicate.getItemMeta();
-        intoxicate_meta.setDisplayName(ChatColor.GREEN + "Intoxicate");
+        intoxicate_meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Intoxicate");
         intoxicate_meta.setLore(Arrays.asList("Nearby heathens gain nausea."));
         intoxicate.setItemMeta(intoxicate_meta);
         gui.setItem(12, intoxicate);
@@ -55,7 +61,7 @@ public class Curses implements Listener {
         // Entangle
         ItemStack entangle = new ItemStack(Material.VINE);
         ItemMeta entangle_meta = entangle.getItemMeta();
-        entangle_meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Entangle");
+        entangle_meta.setDisplayName(ChatColor.GREEN + "Entangle");
         entangle_meta.setLore(Arrays.asList("Nearby heathens are caged."));
         entangle.setItemMeta(entangle_meta);
         gui.setItem(14, entangle);
@@ -87,14 +93,41 @@ public class Curses implements Listener {
 
         Player p = (Player) e.getWhoClicked();
 
-        switch (e.getSlot()){
-            case 10:
-                System.out.println("Placeholder");
-                break;
-            case 16:
-                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));
-                break;
-        }
+        try{
+            File player_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
+            File player_file = new File(player_folder, p.getUniqueId() + ".json");
+            FileReader player_file_reader = new FileReader(player_file);
+            Gson gson = new Gson();
+            PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
+
+            switch (e.getSlot()){
+                case 10:
+                    player_data.setCrumbling(1);
+                    break;
+                case 11:
+                    player_data.setHeavy_boots(1);
+                    break;
+                case 12:
+                    player_data.setIntoxicate(1);
+                    break;
+                case 13:
+                    player_data.setDiscombobulate(1);
+                    break;
+                case 14:
+                    player_data.setEntangle(1);
+                    break;
+                case 16:
+                    Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));
+                    break;
+            }
+
+            FileWriter player_data_writer = new FileWriter(player_file, false);
+            gson.toJson(player_data, player_data_writer);
+            player_data_writer.flush();
+            player_data_writer.close();
+
+        }catch (IOException exception){exception.printStackTrace();}
+
     }
 
     @EventHandler

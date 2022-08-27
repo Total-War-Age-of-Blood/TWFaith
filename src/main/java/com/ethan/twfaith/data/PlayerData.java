@@ -34,13 +34,20 @@ public class PlayerData {
     boolean savior_active;
     boolean insidious_active;
     boolean explosive_landing_active;
+    boolean crumbling_active;
+    boolean heavy_boots_active;
+    boolean intoxicate_active;
+    boolean discombobulate_active;
+    boolean entangle_active;
 
 
     public PlayerData(UUID uuid, UUID led_by, String faith, boolean in_faith, boolean leader, long last_prayer, int faith_points,
                       int terrain_bonus, int summon_god, int god_proximity_bonus, int name_prophets, int god_of_defense,
                       int god_of_crafstman, int crumbling, int heavy_boots, int intoxicate, int discombobulate, int entangle,
                       int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted,
-                      UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active, boolean explosive_landing_active) {
+                      UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active,
+                      boolean explosive_landing_active, boolean crumbling_active, boolean heavy_boots_active,
+                      boolean intoxicate_active, boolean discombobulate_active, boolean entangle_active) {
         this.uuid = uuid;
         this.led_by = led_by;
         this.faith = faith;
@@ -261,9 +268,7 @@ public class PlayerData {
 
     public void setTaunter(UUID taunter) {this.taunter = taunter;}
 
-    public boolean isIn_faith() {
-        return in_faith;
-    }
+    public boolean isIn_faith() { return in_faith; }
 
     public boolean isLeader() {
         return leader;

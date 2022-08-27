@@ -1,21 +1,18 @@
 package com.ethan.twfaith;
 
 import com.ethan.twfaith.commands.FaithCommand;
-import com.ethan.twfaith.commands.FloodCommand;
+import com.ethan.twfaith.activepowers.Flood;
 import com.ethan.twfaith.commands.Pray;
-import com.ethan.twfaith.commands.Taunt;
+import com.ethan.twfaith.activepowers.Taunt;
 import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.UniquePlayers;
 import com.ethan.twfaith.guis.*;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -45,15 +42,13 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new GodPowers(), this);
         Bukkit.getPluginManager().registerEvents(new Curses(), this);
         Bukkit.getPluginManager().registerEvents(new Taunt(), this);
-        Bukkit.getPluginManager().registerEvents(new FloodCommand(), this);
+        Bukkit.getPluginManager().registerEvents(new Flood(), this);
         Bukkit.getPluginManager().registerEvents(new SelectPowers(), this);
         Bukkit.getPluginManager().registerEvents(new UsePowers(), this);
 
         // Plugin Commands
         getCommand("faith").setExecutor(new FaithCommand());
         getCommand("pray").setExecutor(new Pray(this));
-        getCommand("taunt").setExecutor(new Taunt());
-        getCommand("flood").setExecutor(new FloodCommand());
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
@@ -71,15 +66,8 @@ public final class TWFaith extends JavaPlugin implements Listener {
             Reader reader = new FileReader(file);
             UniquePlayers read_unique_players = gson.fromJson(reader, UniquePlayers.class);
             unique_player_list.addAll(read_unique_players.getUnique_player_list());
-        }catch(IOException exception){
-            exception.printStackTrace();
-
-        }
-
-
-        }
-
-
+        }catch(IOException exception){exception.printStackTrace();}
+    }
 
     // When players join the server for the first time, they get added to the unique players list
     // The unique players list is used to check for religion files that share a UUID with a player
@@ -91,17 +79,14 @@ public final class TWFaith extends JavaPlugin implements Listener {
                     0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, false, e.getPlayer().getUniqueId(),
-                    false, false, false, false);
+                    false, false, false, false,
+                    false, false, false, false, false);
             try{
                 File player_data_folder = new File(getDataFolder(), "PlayerData");
-                if (!player_data_folder.exists()){
-                    player_data_folder.mkdir();
-                }
+                if (!player_data_folder.exists()){player_data_folder.mkdir();}
 
                 File file = new File(player_data_folder, e.getPlayer().getUniqueId() + ".json");
-                if (!file.exists()){
-                    file.createNewFile();
-                }
+                if (!file.exists()){file.createNewFile();}
 
                 Gson gson = new Gson();
                 Writer writer = new FileWriter(file, false);
@@ -109,9 +94,7 @@ public final class TWFaith extends JavaPlugin implements Listener {
                 writer.flush();
                 writer.close();
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            } catch (Exception ex) {ex.printStackTrace();}
         }
 
         System.out.println("A player joined the server");
@@ -121,20 +104,14 @@ public final class TWFaith extends JavaPlugin implements Listener {
         try{
             getDataFolder().mkdir();
             File file = new File(getDataFolder(), "unique_players.json");
-            if (!file.exists()){
-                file.createNewFile();
-            }
+            if (!file.exists()){file.createNewFile();}
 
             Gson gson = new Gson();
             Writer writer = new FileWriter(file, false);
             gson.toJson(unique_players, writer);
             writer.flush();
             writer.close();
-        }catch(IOException exception){
-            System.out.println(exception);
-
-        }
-
+        }catch(IOException exception){System.out.println(exception);}
     }
 
     @Override

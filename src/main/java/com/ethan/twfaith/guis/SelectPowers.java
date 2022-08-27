@@ -1,6 +1,5 @@
 package com.ethan.twfaith.guis;
 
-import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.data.PlayerData;
 import com.google.gson.Gson;
@@ -8,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,100 +25,44 @@ import java.util.Arrays;
 
 public class SelectPowers implements Listener {
     private Inventory gui;
-    // TODO Replace commands to activate powers with blocks that have NBT tags
+    // TODO Replace the hard coded gui items with a method to reduce file size
     public void openSelectPowersGui(Player player, PlayerData player_data){
         gui = Bukkit.createInventory(null, 45, "Select Powers");
 
-
+        // God Powers
         // Lion's Heart
-        ItemStack lions_heart = new ItemStack(Material.PLAYER_HEAD);
-        ItemMeta lions_meta = lions_heart.getItemMeta();
-        lions_meta.setDisplayName(ChatColor.GOLD + "Lion's Heart");
-        switch (player_data.getLions_heart()){
-            case 0:
-                lions_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                lions_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
-                break;
-        }
-        lions_heart.setItemMeta(lions_meta);
-        gui.setItem(19, lions_heart);
+        generateGUI(Material.PLAYER_HEAD, ChatColor.GOLD, "Lion's Heart", player_data.getLions_heart(), 19);
 
         // Savior
-        ItemStack savior = new ItemStack(Material.GOLDEN_CARROT);
-        ItemMeta savior_meta = savior.getItemMeta();
-        savior_meta.setDisplayName(ChatColor.RED + "Savior");
-        switch (player_data.getSavior()){
-            case 0:
-                savior_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                savior_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
-                break;
-        }
-        savior.setItemMeta(savior_meta);
-        gui.setItem(20, savior);
+        generateGUI(Material.GOLDEN_CARROT, ChatColor.RED, "Savior", player_data.getSavior(), 20);
 
         // Taunt
-        ItemStack taunt = new ItemStack(Material.DIAMOND);
-        ItemMeta taunt_meta = taunt.getItemMeta();
-        taunt_meta.setDisplayName(ChatColor.GOLD + "Taunt");
-        switch (player_data.getTaunt()){
-            case 0:
-                taunt_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                taunt_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
-                break;
-        }
-        taunt.setItemMeta(taunt_meta);
-        gui.setItem(21, taunt);
+        generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", player_data.getTaunt(), 21);
 
         // Insidious
-        ItemStack insidious = new ItemStack(Material.ENDER_EYE);
-        ItemMeta insidious_meta = insidious.getItemMeta();
-        insidious_meta.setDisplayName(ChatColor.BLUE + "Insidious");
-        switch (player_data.getInsidious()){
-            case 0:
-                insidious_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                insidious_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
-                break;
-        }
-        insidious.setItemMeta(insidious_meta);
-        gui.setItem(22, insidious);
+        generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", player_data.getInsidious(), 22);
 
         // Explosive Landing
-        ItemStack explosive_landing = new ItemStack(Material.TNT_MINECART);
-        ItemMeta explosive_landing_meta = explosive_landing.getItemMeta();
-        explosive_landing_meta.setDisplayName(ChatColor.RED + "Explosive Landing");
-        switch (player_data.getExplosive_landing()){
-            case 0:
-                explosive_landing_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                explosive_landing_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
-                break;
-        }
-        explosive_landing.setItemMeta(explosive_landing_meta);
-        gui.setItem(23, explosive_landing);
+        generateGUI(Material.TNT_MINECART, ChatColor.RED, "Explosive Landing", player_data.getExplosive_landing(), 23);
 
         // Flood Power
-        ItemStack flood = new ItemStack(Material.WATER_BUCKET);
-        ItemMeta flood_meta = flood.getItemMeta();
-        flood_meta.setDisplayName(ChatColor.BLUE + "Flood");
-        switch (player_data.getFlood()){
-            case 0:
-                flood_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                flood_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
-                break;
-        }
-        flood.setItemMeta(flood_meta);
-        gui.setItem(24, flood);
+        generateGUI(Material.WATER_BUCKET, ChatColor.BLUE, "Flood", player_data.getFlood(), 24);
+
+        // Curses
+        // Crumbling
+        generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", player_data.getCrumbling(), 28);
+
+        // Heavy Boots
+        generateGUI(Material.DIAMOND_BOOTS, ChatColor.BLACK, "Heavy Boots", player_data.getHeavy_boots(), 29);
+
+        // Intoxicate
+        generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", player_data.getIntoxicate(), 30);
+
+        // Discombobulate
+        generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", player_data.getDiscombobulate(), 31);
+
+        // Entangle
+        generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", player_data.getEntangle(), 32);
 
         // Frame
         ItemStack frame = new ItemStack(Material.ORANGE_STAINED_GLASS_PANE);
@@ -136,9 +80,7 @@ public class SelectPowers implements Listener {
             return;
         }}catch (NullPointerException exception){return;}
 
-
         e.setCancelled(true);
-
         Player p = (Player) e.getWhoClicked();
 
         try{
@@ -148,82 +90,40 @@ public class SelectPowers implements Listener {
             Gson gson = new Gson();
             PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
 
+            // TODO Replace the bulk code with method calls
             switch (e.getSlot()){
                 case 19:
-                    if (player_data.getLions_heart() > 0){
-                        ItemStack lions_heart = new ItemStack(Material.RED_TERRACOTTA);
-                        ItemMeta lions_meta = lions_heart.getItemMeta();
-                        lions_meta.setDisplayName(ChatColor.RED + "Lion's Heart");
-                        // Using PersistentDataContainer to add an NBT tag to the item denoting its power.
-                        PersistentDataContainer lions_data = lions_meta.getPersistentDataContainer();
-                        lions_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, "lionsheart");
-                        lions_heart.setItemMeta(lions_meta);
-
-                        p.getInventory().addItem(lions_heart);
-                    } else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
+                    inventoryClickSwitch(player_data.getLions_heart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
                     break;
                 case 20:
-                    if (player_data.getSavior() > 0){
-                        ItemStack savior = new ItemStack(Material.MAGENTA_TERRACOTTA);
-                        ItemMeta savior_meta = savior.getItemMeta();
-                        savior_meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Savior");
-                        PersistentDataContainer savior_data = savior_meta.getPersistentDataContainer();
-                        savior_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, "Savior");
-                        savior.setItemMeta(savior_meta);
-
-                        p.getInventory().addItem(savior);
-                    } else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
+                    inventoryClickSwitch(player_data.getSavior(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Savior", p);
                     break;
                 case 21:
-                    if (player_data.getTaunt() > 0){
-                        ItemStack taunt = new ItemStack(Material.ORANGE_TERRACOTTA);
-                        ItemMeta taunt_meta = taunt.getItemMeta();
-                        taunt_meta.setDisplayName(ChatColor.GOLD + "Taunt");
-                        PersistentDataContainer taunt_data = taunt_meta.getPersistentDataContainer();
-                        taunt_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, "Taunt");
-                        taunt.setItemMeta(taunt_meta);
-
-                        p.getInventory().addItem(taunt);
-                    } else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
+                    inventoryClickSwitch(player_data.getTaunt(), Material.ORANGE_TERRACOTTA, ChatColor.GOLD, "Taunt", p);
                     break;
                 case 22:
-                    if (player_data.getInsidious() > 0){
-                        ItemStack insidious = new ItemStack(Material.BLUE_TERRACOTTA);
-                        ItemMeta insidious_meta = insidious.getItemMeta();
-                        insidious_meta.setDisplayName(ChatColor.BLUE + "Insidious");
-                        PersistentDataContainer insidious_data = insidious_meta.getPersistentDataContainer();
-                        insidious_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, "Insidious");
-                        insidious.setItemMeta(insidious_meta);
-
-                        p.getInventory().addItem(insidious);
-                    } else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
+                    inventoryClickSwitch(player_data.getInsidious(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Insidious", p);
                     break;
                 case 23:
-                    if (player_data.getExplosive_landing() > 0){
-                        ItemStack explosive = new ItemStack(Material.RED_TERRACOTTA);
-                        ItemMeta explosive_meta = explosive.getItemMeta();
-                        explosive_meta.setDisplayName(ChatColor.RED + "Explosive Landing");
-                        PersistentDataContainer explosive_data = explosive_meta.getPersistentDataContainer();
-                        explosive_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, "Explosive Landing");
-                        explosive.setItemMeta(explosive_meta);
-
-                        p.getInventory().addItem(explosive);
-                    } else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
+                    inventoryClickSwitch(player_data.getExplosive_landing(), Material.RED_TERRACOTTA, ChatColor.RED, "Explosive Landing", p);
                     break;
                 case 24:
-                        if (player_data.getFlood() > 0){
-                            ItemStack flood = new ItemStack(Material.BLUE_TERRACOTTA);
-                            ItemMeta flood_meta = flood.getItemMeta();
-                            flood_meta.setDisplayName(ChatColor.BLUE + "Flood");
-                            PersistentDataContainer flood_data = flood_meta.getPersistentDataContainer();
-                            flood_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, "Flood");
-                            flood.setItemMeta(flood_meta);
-
-                            p.getInventory().addItem(flood);
-                        } else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
+                    inventoryClickSwitch(player_data.getFlood(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Flood", p);
                     break;
-                case 16:
-                    Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));
+                case 28:
+                    inventoryClickSwitch(player_data.getCrumbling(), Material.GRAY_TERRACOTTA, ChatColor.GRAY, "Crumbling", p);
+                    break;
+                case 29:
+                    inventoryClickSwitch(player_data.getHeavy_boots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
+                    break;
+                case 30:
+                    inventoryClickSwitch(player_data.getIntoxicate(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Intoxicate", p);
+                    break;
+                case 31:
+                    inventoryClickSwitch(player_data.getDiscombobulate(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Discombobulate", p);
+                    break;
+                case 32:
+                    inventoryClickSwitch(player_data.getEntangle(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Entangle", p);
                     break;
             }
         }catch (IOException exception){exception.printStackTrace();}
@@ -242,6 +142,38 @@ public class SelectPowers implements Listener {
                 openSelectPowersGui(e.getPlayer(), player_data);
             }catch (IOException exception){exception.printStackTrace();}
         }
+    }
+
+    // This method will populate the power selection GUI with the powers.
+    public void generateGUI(Material block, ChatColor color, String display, int data, int spot){
+        ItemStack item = new ItemStack(block);
+        ItemMeta item_meta = item.getItemMeta();
+        item_meta.setDisplayName(color + display);
+        switch (data){
+            case 0:
+                item_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
+                break;
+            case 1:
+                item_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
+                break;
+        }
+        item.setItemMeta(item_meta);
+        gui.setItem(spot, item);
+
+    }
+
+    // This method gives the god the terracotta power block from the selection menu
+    public void inventoryClickSwitch(int player_data, Material block, ChatColor color, String display_name, Player p){
+        if (player_data > 0){
+            ItemStack item = new ItemStack(block);
+            ItemMeta item_meta = item.getItemMeta();
+            item_meta.setDisplayName(color + display_name);
+            PersistentDataContainer item_data = item_meta.getPersistentDataContainer();
+            item_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, display_name);
+            item.setItemMeta(item_meta);
+
+            p.getInventory().addItem(item);
+        }else{p.sendMessage(ChatColor.DARK_RED + "ERROR: Player must own power to equip it");}
     }
 }
 
