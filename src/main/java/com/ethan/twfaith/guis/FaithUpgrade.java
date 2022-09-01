@@ -12,7 +12,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 
 public class FaithUpgrade implements Listener {
     private Inventory gui;
@@ -21,35 +22,16 @@ public class FaithUpgrade implements Listener {
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
 
         // Blessings
-        ItemStack blessings = new ItemStack(Material.TOTEM_OF_UNDYING);
-        ItemMeta blessings_meta = blessings.getItemMeta();
-        blessings_meta.setDisplayName(ChatColor.AQUA + "Blessings");
-        blessings_meta.setLore(Arrays.asList(ChatColor.AQUA + "Bless your followers with abilities."));
-        blessings.setItemMeta(blessings_meta);
-        gui.setItem(10, blessings);
+        generateGUI(Material.TOTEM_OF_UNDYING, ChatColor.AQUA, "Blessings", "Bless your followers with abilities.", 10);
 
         // God Powers
-        ItemStack god_powers = new ItemStack(Material.AMETHYST_SHARD);
-        ItemMeta god_powers_meta = god_powers.getItemMeta();
-        god_powers_meta.setDisplayName(ChatColor.DARK_PURPLE + "God Powers");
-        god_powers_meta.setLore(Arrays.asList(ChatColor.LIGHT_PURPLE + "Upgrade your personal abilities."));
-        god_powers.setItemMeta(god_powers_meta);
-        gui.setItem(12, god_powers);
+        generateGUI(Material.AMETHYST_SHARD, ChatColor.DARK_PURPLE, "God Powers", "Upgrade your personal abilities", 12);
 
         // Curses
-        ItemStack curses = new ItemStack(Material.ENDER_EYE);
-        ItemMeta curses_meta = curses.getItemMeta();
-        curses_meta.setDisplayName(ChatColor.GREEN + "Curses");
-        curses_meta.setLore(Arrays.asList(ChatColor.GREEN + "Curse the heathens."));
-        curses.setItemMeta(curses_meta);
-        gui.setItem(14, curses);
+        generateGUI(Material.ENDER_EYE, ChatColor.GREEN, "Curses", "Curse the heathens.", 14);
 
         // Close Menu
-        ItemStack close = new ItemStack(Material.BARRIER);
-        ItemMeta close_meta = close.getItemMeta();
-        close_meta.setDisplayName(ChatColor.RED + "Close Menu");
-        close.setItemMeta(close_meta);
-        gui.setItem(16, close);
+        generateGUI(Material.BARRIER, ChatColor.RED, "Close Menu", "See you later!", 16);
 
         // Frame
         ItemStack frame = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
@@ -60,9 +42,19 @@ public class FaithUpgrade implements Listener {
         player.openInventory(gui);
     }
 
+    public void generateGUI(Material material, ChatColor color, String display, String lore, int place){
+        ItemStack item = new ItemStack(material);
+        ItemMeta item_meta = item.getItemMeta();
+        assert item_meta != null;
+        item_meta.setDisplayName(color + display);
+        item_meta.setLore(Collections.singletonList(lore));
+        item.setItemMeta(item_meta);
+        gui.setItem(place, item);
+    }
+
     @EventHandler
     public void guiClickEvent(InventoryClickEvent e){
-        try{        if(!e.getClickedInventory().equals(gui)){
+        try{        if(!Objects.equals(e.getClickedInventory(), gui)){
             return;
         }}catch (NullPointerException exception){return;}
 

@@ -1,8 +1,8 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,8 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.*;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 
 public class GodPowers implements Listener {
     private Inventory gui;
@@ -30,60 +30,25 @@ public class GodPowers implements Listener {
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
         // TODO make Lion's Heart's icon a lion head
         // Lion's Heart
-        ItemStack lions_heart = new ItemStack(Material.PLAYER_HEAD);
-        ItemMeta lions_heart_meta = lions_heart.getItemMeta();
-        lions_heart_meta.setDisplayName(ChatColor.DARK_RED + "Lion's Heart");
-        lions_heart_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored."));
-        lions_heart.setItemMeta(lions_heart_meta);
-        gui.setItem(10, lions_heart);
+        generateGUI(Material.PLAYER_HEAD, ChatColor.DARK_RED, "Lion's Heart", "Your attacks are stronger when you are unarmored.", 10);
 
         // Savior
-        ItemStack savior = new ItemStack(Material.GOLDEN_CARROT);
-        ItemMeta savior_meta = savior.getItemMeta();
-        savior_meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Savior");
-        savior_meta.setLore(Arrays.asList("Swap places with injured followers."));
-        savior.setItemMeta(savior_meta);
-        gui.setItem(11, savior);
+        generateGUI(Material.GOLDEN_CARROT, ChatColor.LIGHT_PURPLE, "Savior", "Swap places with injured followers.", 11);
 
         // Taunt
-        ItemStack taunt = new ItemStack(Material.DIAMOND);
-        ItemMeta taunt_meta = taunt.getItemMeta();
-        taunt_meta.setDisplayName(ChatColor.GOLD + "Taunt");
-        taunt_meta.setLore(Arrays.asList("Attract the attention of enemies."));
-        taunt.setItemMeta(taunt_meta);
-        gui.setItem(12, taunt);
+        generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", "Attract the attention of enemies.", 12);
 
         // Insidious
-        ItemStack insidious = new ItemStack(Material.ENDER_EYE);
-        ItemMeta insidious_meta = insidious.getItemMeta();
-        insidious_meta.setDisplayName(ChatColor.BLUE + "Insidious");
-        insidious_meta.setLore(Arrays.asList("Gain invisibility when standing still."));
-        insidious.setItemMeta(insidious_meta);
-        gui.setItem(13, insidious);
+        generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", "Gain invisibility when crouching.", 13);
 
         // Explosive Landing
-        ItemStack explosive_landing = new ItemStack(Material.TNT_MINECART);
-        ItemMeta explosive_landing_meta = explosive_landing.getItemMeta();
-        explosive_landing_meta.setDisplayName(ChatColor.DARK_RED + "Explosive Landing");
-        explosive_landing_meta.setLore(Arrays.asList("Create an explosion when you hit the ground."));
-        explosive_landing.setItemMeta(explosive_landing_meta);
-        gui.setItem(14, explosive_landing);
+        generateGUI(Material.TNT_MINECART, ChatColor.DARK_RED, "Explosive Landing", "Create an explosion when you hit the ground.", 14);
 
         // Flood
-        ItemStack flood = new ItemStack(Material.WATER_BUCKET);
-        ItemMeta flood_meta = flood.getItemMeta();
-        flood_meta.setDisplayName(ChatColor.DARK_BLUE + "Flood");
-        flood_meta.setLore(Arrays.asList("Temporarily flood the area."));
-        flood.setItemMeta(flood_meta);
-        gui.setItem(15, flood);
-
+        generateGUI(Material.WATER_BUCKET, ChatColor.DARK_BLUE, "Flood", "Temporarily flood the area.", 15);
 
         // Close Menu
-        ItemStack close = new ItemStack(Material.BARRIER);
-        ItemMeta close_meta = close.getItemMeta();
-        close_meta.setDisplayName(ChatColor.RED + "Back");
-        close.setItemMeta(close_meta);
-        gui.setItem(16, close);
+        generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", 16);
 
         // Frame
         ItemStack frame = new ItemStack(Material.MAGENTA_STAINED_GLASS_PANE);
@@ -94,9 +59,19 @@ public class GodPowers implements Listener {
         player.openInventory(gui);
     }
 
+    public void generateGUI(Material material, ChatColor color, String display, String lore, int place){
+        ItemStack item = new ItemStack(material);
+        ItemMeta item_meta = item.getItemMeta();
+        assert item_meta != null;
+        item_meta.setDisplayName(color + display);
+        item_meta.setLore(Collections.singletonList(lore));
+        item.setItemMeta(item_meta);
+        gui.setItem(place, item);
+    }
+
     @EventHandler
     public void guiClickEvent(InventoryClickEvent e){
-        try{        if(!e.getClickedInventory().equals(gui)){
+        try{        if(!Objects.equals(e.getClickedInventory(), gui)){
             return;
         }}catch (NullPointerException exception){return;}
 
@@ -104,47 +79,37 @@ public class GodPowers implements Listener {
 
         Player player = (Player) e.getWhoClicked();
 
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
-        try{
-            FileReader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            switch (e.getSlot()){
-                case 10:
-                        player_data.setLions_heart(1);
-                        System.out.println("Lions Heart clicked");
-                    break;
-                case 11:
-                        player_data.setSavior(1);
-                        System.out.println("Savior clicked");
-                    break;
-                case 12:
-                        player_data.setTaunt(1);
-                        System.out.println("Taunt clicked");
-                    break;
-                case 13:
-                        player_data.setInsidious(1);
-                        System.out.println("Insidious clicked");
-                    break;
-                case 14:
-                    player_data.setExplosive_landing(1);
-                    System.out.println("Explosive Landing clicked");
-                    break;
-                case 15:
-                    player_data.setFlood(1);
-                    System.out.println("Flood clicked");
-                    break;
-                case 16:
-                    Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
-                    break;
-            }
-            FileWriter player_data_writer = new FileWriter(player_data_file, false);
-            gson.toJson(player_data, player_data_writer);
-            player_data_writer.flush();
-            player_data_writer.close();
-        }catch (IOException exception){exception.printStackTrace();}
-
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        switch (e.getSlot()){
+            case 10:
+                    player_data.setLions_heart(1);
+                    System.out.println("Lions Heart clicked");
+                break;
+            case 11:
+                    player_data.setSavior(1);
+                    System.out.println("Savior clicked");
+                break;
+            case 12:
+                    player_data.setTaunt(1);
+                    System.out.println("Taunt clicked");
+                break;
+            case 13:
+                    player_data.setInsidious(1);
+                    System.out.println("Insidious clicked");
+                break;
+            case 14:
+                player_data.setExplosive_landing(1);
+                System.out.println("Explosive Landing clicked");
+                break;
+            case 15:
+                player_data.setFlood(1);
+                System.out.println("Flood clicked");
+                break;
+            case 16:
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
+                break;
+        }
+       PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
     }
 
     @EventHandler
@@ -157,16 +122,11 @@ public class GodPowers implements Listener {
     @EventHandler
     public void lionsHeartEvent(PlayerMoveEvent e){
         Player player = e.getPlayer();
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
         // TODO Fix Lions Heart Giving level 1 strength with a full armor set
-        try{
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
             if (player_data.getLions_heart() > 0 && player_data.isLions_heart_active()){
                 int amplifier = 0;
-                if (player.getEquipment().getBoots() != null){amplifier += 1;}
+                if (Objects.requireNonNull(player.getEquipment()).getBoots() != null){amplifier += 1;}
                 if (player.getEquipment().getLeggings() != null){amplifier += 1;}
                 if (player.getEquipment().getChestplate() != null){amplifier += 1;}
                 if (player.getEquipment().getHelmet() != null){amplifier += 1;}
@@ -174,7 +134,6 @@ public class GodPowers implements Listener {
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                 player.addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(Integer.MAX_VALUE, 3 - amplifier));
             }
-        }catch(IOException exception){exception.printStackTrace();}
     }
 
     // Savior
@@ -183,35 +142,28 @@ public class GodPowers implements Listener {
         // System.out.println("Entity Damage detected!");
         if (e.getEntity() instanceof Player){
             Player player = (Player) e.getEntity();
-            File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-            File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-            Gson gson = new Gson();
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
             if (player.getHealth() - e.getDamage() > 6){return;}
-            try{
-                Reader player_data_reader = new FileReader(player_data_file);
-                PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-                if (player_data.getLeader() || !player_data.getIn_faith()){return;}
-                Player leader = Bukkit.getPlayer(player_data.getLed_by());
-                System.out.println("Player is in faith and is not leader.");
-                if (leader.getLocation().distance(player.getLocation()) > 30){return;}
-                System.out.println("Player and leader are within 30 blocks");
-                if (leader.getHealth() < 10){return;}
-                System.out.println("Leader has at least 5 hearts");
-                File leader_data_file = new File (player_data_folder, leader.getUniqueId() + ".json");
+            if (player_data.getLeader() || !player_data.getIn_faith()){return;}
+            Player leader = Bukkit.getPlayer(player_data.getLed_by());
+            System.out.println("Player is in faith and is not leader.");
+            assert leader != null;
+            if (leader.getLocation().distance(player.getLocation()) > 30){return;}
+            System.out.println("Player and leader are within 30 blocks");
+            if (leader.getHealth() < 10){return;}
+            System.out.println("Leader has at least 5 hearts");
 
-                Reader leader_data_reader = new FileReader(leader_data_file);
-                PlayerData leader_data = gson.fromJson(leader_data_reader, PlayerData.class);
+            PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getDisplayName());
 
-                if (leader_data.getSavior() > 0 && leader_data.isSavior_active()){
-                    System.out.println("Leader has Savior");
-                    Location player_location = player.getLocation();
-                    Location leader_location = leader.getLocation();
-                    player.teleport(leader_location);
-                    leader.teleport(player_location);
-                    player.sendMessage("Savior activates!");
-                    leader.sendMessage("Savior activates!");
-                }
-            }catch (IOException exception){exception.printStackTrace();}
+            if (leader_data.getSavior() > 0 && leader_data.isSavior_active()){
+                System.out.println("Leader has Savior");
+                Location player_location = player.getLocation();
+                Location leader_location = leader.getLocation();
+                player.teleport(leader_location);
+                leader.teleport(player_location);
+                player.sendMessage("Savior activates!");
+                leader.sendMessage("Savior activates!");
+            }
         }
     }
 
@@ -219,19 +171,13 @@ public class GodPowers implements Listener {
     @EventHandler
     public void insidiousTriggerEvent(PlayerToggleSneakEvent e){
         Player player = e.getPlayer();
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
-        try{
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (player_data.getInsidious() < 1 || !player_data.isInsidious_active()){return;}
-            // Toggle Sneak event takes the sneak state of the player before the toggle happens
-            // So we have to check if the player is standing before sneak is toggled.
-            if (!player.isSneaking()){
-                player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 0));
-            } else{player.removePotionEffect(PotionEffectType.INVISIBILITY);}
-        }catch(Exception exception){exception.printStackTrace();}
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        if (player_data.getInsidious() < 1 || !player_data.isInsidious_active()){return;}
+        // Toggle Sneak event takes the sneak state of the player before the toggle happens
+        // So we have to check if the player is standing before sneak is toggled.
+        if (!player.isSneaking()){
+            player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 0));
+        } else{player.removePotionEffect(PotionEffectType.INVISIBILITY);}
     }
 
     // Explosive Landing
@@ -241,17 +187,11 @@ public class GodPowers implements Listener {
         if (!(e.getEntity() instanceof Player)){return;}
         if (!e.getCause().equals(EntityDamageEvent.DamageCause.FALL)){return;}
         Player player = (Player) e.getEntity();
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
-        try{
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (player_data.getExplosive_landing() < 1 || !player_data.isExplosive_landing_active()){return;}
-            float fall_distance = player.getFallDistance();
-            e.setDamage(0);
-            player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 5));
-            player.getWorld().createExplosion(player.getLocation(), fall_distance);
-        }catch (IOException exception){exception.printStackTrace();}
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        if (player_data.getExplosive_landing() < 1 || !player_data.isExplosive_landing_active()){return;}
+        float fall_distance = player.getFallDistance();
+        e.setDamage(0);
+        player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 5));
+        player.getWorld().createExplosion(player.getLocation(), fall_distance);
     }
 }

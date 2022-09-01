@@ -1,7 +1,7 @@
 package com.ethan.twfaith.activepowers;
 
+import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.*;
+import java.util.Objects;
 
 public class Taunt implements Listener {
     // TODO implement command cool-down.
@@ -19,25 +19,17 @@ public class Taunt implements Listener {
     @EventHandler
     public void onTauntEvent(PlayerMoveEvent e){
         Player player = e.getPlayer();
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
-        try{
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
             if (!player_data.isTaunted()){return;}
-            if (player.getLocation().distance(Bukkit.getPlayer(player_data.getTaunter()).getLocation()) <= 30){
+            if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(player_data.getTaunter())).getLocation()) <= 30){
                 player.addPotionEffect(PotionEffectType.HUNGER.createEffect(Integer.MAX_VALUE, 0));
             }else{
                 player_data.setTaunted(false);
                 player_data.setTaunter(null);
-                FileWriter player_data_writer = new FileWriter(player_data_file, false);
-                gson.toJson(player_data, player_data_writer);
-                player_data_writer.flush();
-                player_data_writer.close();
+                PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+
                 player.removePotionEffect(PotionEffectType.HUNGER);
             }
-        }catch(IOException exception){exception.printStackTrace();}
     }
 
     // Removes taunt when taunter is hit by taunted
@@ -46,80 +38,50 @@ public class Taunt implements Listener {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player){
             Player taunter = (Player) e.getEntity();
             Player taunted = (Player) e.getDamager();
-            File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-            File taunted_data_file = new File(player_data_folder, taunted.getUniqueId() + ".json");
-            Gson gson = new Gson();
-            try{
-                Reader taunted_data_reader = new FileReader(taunted_data_file);
-                PlayerData taunted_data = gson.fromJson(taunted_data_reader, PlayerData.class);
-                if (taunted_data.getTaunter().equals(taunter.getUniqueId())){
-                    taunted_data.setTaunted(false);
-                    taunted_data.setTaunter(null);
-                    Writer taunted_data_writer = new FileWriter(taunted_data_file, false);
-                    gson.toJson(taunted_data, taunted_data_writer);
-                    taunted_data_writer.flush();
-                    taunted_data_writer.close();
-                    taunted.removePotionEffect(PotionEffectType.HUNGER);
-                    taunted.sendMessage("Attacked Taunter!");
-                }
-            }catch(IOException exception){exception.printStackTrace();}
+            PlayerData taunted_data = PlayerHashMap.player_data_hashmap.get(taunted.getDisplayName());
+
+            if (taunted_data.getTaunter().equals(taunter.getUniqueId())){
+                taunted_data.setTaunted(false);
+                taunted_data.setTaunter(null);
+                taunted.removePotionEffect(PotionEffectType.HUNGER);
+                taunted.sendMessage("Attacked Taunter!");
+                PlayerHashMap.player_data_hashmap.put(taunted.getDisplayName(), taunted_data);
+            }
         }
     }
     @EventHandler
     public void leaveTauntCancel(PlayerQuitEvent e){
         Player player = e.getPlayer();
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
-        try {
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (player_data.isTaunted()){player.removePotionEffect(PotionEffectType.HUNGER);}
-            player_data.setTaunter(e.getPlayer().getUniqueId());
-            player_data.setTaunted(false);
-            Writer player_data_writer = new FileWriter(player_data_file, false);
-            gson.toJson(player_data, player_data_writer);
-            player_data_writer.flush();
-            player_data_writer.close();
-        }catch (IOException exception){exception.printStackTrace();}
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+
+        if (player_data.isTaunted()){player.removePotionEffect(PotionEffectType.HUNGER);}
+        player_data.setTaunter(e.getPlayer().getUniqueId());
+        player_data.setTaunted(false);
+        PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
     }
 
     public void tauntTrigger(Player player){
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
-        Gson gson = new Gson();
-        try{
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
-            if (!player_data.getLeader() || player_data.getTaunt() < 1){return;}
-            player.addPotionEffect(PotionEffectType.GLOWING.createEffect(3000, 0));
-            for (Player heathen : Bukkit.getOnlinePlayers()){
-                if (heathen.getLocation().distance(player.getLocation()) < 30){
-                    File heathen_data_file = new File(player_data_folder, heathen.getUniqueId() + ".json");
-                    Reader heathen_data_reader = new FileReader(heathen_data_file);
-                    PlayerData heathen_data = gson.fromJson(heathen_data_reader, PlayerData.class);
-                    if (heathen_data.getIn_faith()){
-                        if (!heathen_data.getLed_by().equals(player_data.getUuid())){
-                            heathen_data.setTaunted(true);
-                            heathen_data.setTaunter(player.getUniqueId());
-                            Writer heathen_data_writer = new FileWriter(heathen_data_file, false);
-                            gson.toJson(heathen_data, heathen_data_writer);
-                            heathen_data_writer.flush();
-                            heathen_data_writer.close();
-                            heathen.sendMessage(player.getDisplayName() + " has taunted you! Hit them to stop hunger.");
-                        }
-                    }else{
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        if (!player_data.getLeader() || player_data.getTaunt() < 1){return;}
+        player.addPotionEffect(PotionEffectType.GLOWING.createEffect(3000, 0));
+        for (Player heathen : Bukkit.getOnlinePlayers()){
+            if (heathen.getLocation().distance(player.getLocation()) < 30){
+                PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getDisplayName());
+                if (heathen_data.getIn_faith()){
+                    if (!heathen_data.getLed_by().equals(player_data.getUuid())){
                         heathen_data.setTaunted(true);
                         heathen_data.setTaunter(player.getUniqueId());
-                        Writer heathen_data_writer = new FileWriter(heathen_data_file, false);
-                        gson.toJson(heathen_data, heathen_data_writer);
-                        heathen_data_writer.flush();
-                        heathen_data_writer.close();
+                        PlayerHashMap.player_data_hashmap.put(heathen.getDisplayName(), heathen_data);
                         heathen.sendMessage(player.getDisplayName() + " has taunted you! Hit them to stop hunger.");
                     }
+                }else{
+                    heathen_data.setTaunted(true);
+                    heathen_data.setTaunter(player.getUniqueId());
+                    PlayerHashMap.player_data_hashmap.put(heathen.getDisplayName(), heathen_data);
+                    heathen.sendMessage(player.getDisplayName() + " has taunted you! Hit them to stop hunger.");
                 }
             }
-        }catch(IOException exception){exception.printStackTrace();}
+        }
     }
 
 }

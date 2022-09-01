@@ -1,6 +1,7 @@
 package com.ethan.twfaith.activepowers;
 
 import com.ethan.twfaith.TWFaith;
+import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.tasks.RemoveFlood;
 import com.google.gson.Gson;
@@ -51,13 +52,9 @@ public class Flood implements Listener {
     }
 
     public void floodTrigger(Player player){
-        File player_data_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(),
-                "PlayerData");
-        File player_data_file = new File(player_data_folder, player.getUniqueId() + ".json");
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
         Gson gson = new Gson();
         try{
-            Reader player_data_reader = new FileReader(player_data_file);
-            PlayerData player_data = gson.fromJson(player_data_reader, PlayerData.class);
             if (player_data.getFlood() < 1){return;}
             Location player_location = player.getLocation();
             World world = player_location.getWorld();

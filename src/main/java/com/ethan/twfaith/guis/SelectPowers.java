@@ -1,13 +1,12 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,11 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 
 public class SelectPowers implements Listener {
     private Inventory gui;
@@ -76,71 +72,58 @@ public class SelectPowers implements Listener {
 
     @EventHandler
     public void guiClickEvent(InventoryClickEvent e){
-        try{        if(!e.getClickedInventory().equals(gui)){
+        try{        if(!Objects.equals(e.getClickedInventory(), gui)){
             return;
         }}catch (NullPointerException exception){return;}
 
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getDisplayName());
 
-        try{
-            File player_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-            File player_file = new File(player_folder, p.getUniqueId() + ".json");
-            FileReader player_file_reader = new FileReader(player_file);
-            Gson gson = new Gson();
-            PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
+        switch (e.getSlot()){
+            case 19:
+                inventoryClickSwitch(player_data.getLions_heart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
+                break;
+            case 20:
+                inventoryClickSwitch(player_data.getSavior(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Savior", p);
+                break;
+            case 21:
+                inventoryClickSwitch(player_data.getTaunt(), Material.ORANGE_TERRACOTTA, ChatColor.GOLD, "Taunt", p);
+                break;
+            case 22:
+                inventoryClickSwitch(player_data.getInsidious(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Insidious", p);
+                break;
+            case 23:
+                inventoryClickSwitch(player_data.getExplosive_landing(), Material.RED_TERRACOTTA, ChatColor.RED, "Explosive Landing", p);
+                break;
+            case 24:
+                inventoryClickSwitch(player_data.getFlood(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Flood", p);
+                break;
+            case 28:
+                inventoryClickSwitch(player_data.getCrumbling(), Material.GRAY_TERRACOTTA, ChatColor.GRAY, "Crumbling", p);
+                break;
+            case 29:
+                inventoryClickSwitch(player_data.getHeavy_boots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
+                break;
+            case 30:
+                inventoryClickSwitch(player_data.getIntoxicate(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Intoxicate", p);
+                break;
+            case 31:
+                inventoryClickSwitch(player_data.getDiscombobulate(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Discombobulate", p);
+                break;
+            case 32:
+                inventoryClickSwitch(player_data.getEntangle(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Entangle", p);
+                break;
+        }
 
-            // TODO Replace the bulk code with method calls
-            switch (e.getSlot()){
-                case 19:
-                    inventoryClickSwitch(player_data.getLions_heart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
-                    break;
-                case 20:
-                    inventoryClickSwitch(player_data.getSavior(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Savior", p);
-                    break;
-                case 21:
-                    inventoryClickSwitch(player_data.getTaunt(), Material.ORANGE_TERRACOTTA, ChatColor.GOLD, "Taunt", p);
-                    break;
-                case 22:
-                    inventoryClickSwitch(player_data.getInsidious(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Insidious", p);
-                    break;
-                case 23:
-                    inventoryClickSwitch(player_data.getExplosive_landing(), Material.RED_TERRACOTTA, ChatColor.RED, "Explosive Landing", p);
-                    break;
-                case 24:
-                    inventoryClickSwitch(player_data.getFlood(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Flood", p);
-                    break;
-                case 28:
-                    inventoryClickSwitch(player_data.getCrumbling(), Material.GRAY_TERRACOTTA, ChatColor.GRAY, "Crumbling", p);
-                    break;
-                case 29:
-                    inventoryClickSwitch(player_data.getHeavy_boots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
-                    break;
-                case 30:
-                    inventoryClickSwitch(player_data.getIntoxicate(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Intoxicate", p);
-                    break;
-                case 31:
-                    inventoryClickSwitch(player_data.getDiscombobulate(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Discombobulate", p);
-                    break;
-                case 32:
-                    inventoryClickSwitch(player_data.getEntangle(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Entangle", p);
-                    break;
-            }
-        }catch (IOException exception){exception.printStackTrace();}
 
     }
 
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGui_name().equals("Select Powers")){
-            try{
-                File player_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-                File player_file = new File(player_folder, e.getPlayer().getUniqueId() + ".json");
-                FileReader player_file_reader = new FileReader(player_file);
-                Gson gson = new Gson();
-                PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
-                openSelectPowersGui(e.getPlayer(), player_data);
-            }catch (IOException exception){exception.printStackTrace();}
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(e.getPlayer().getDisplayName());
+            openSelectPowersGui(e.getPlayer(), player_data);
         }
     }
 
@@ -148,13 +131,14 @@ public class SelectPowers implements Listener {
     public void generateGUI(Material block, ChatColor color, String display, int data, int spot){
         ItemStack item = new ItemStack(block);
         ItemMeta item_meta = item.getItemMeta();
+        assert item_meta != null;
         item_meta.setDisplayName(color + display);
         switch (data){
             case 0:
-                item_meta.setLore(Arrays.asList(ChatColor.RED + "Not Owned"));
+                item_meta.setLore(Collections.singletonList(ChatColor.RED + "Not Owned"));
                 break;
             case 1:
-                item_meta.setLore(Arrays.asList(ChatColor.GREEN + "Owned"));
+                item_meta.setLore(Collections.singletonList(ChatColor.GREEN + "Owned"));
                 break;
         }
         item.setItemMeta(item_meta);
@@ -167,9 +151,10 @@ public class SelectPowers implements Listener {
         if (player_data > 0){
             ItemStack item = new ItemStack(block);
             ItemMeta item_meta = item.getItemMeta();
+            assert item_meta != null;
             item_meta.setDisplayName(color + display_name);
             PersistentDataContainer item_data = item_meta.getPersistentDataContainer();
-            item_data.set(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING, display_name);
+            item_data.set(new NamespacedKey(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")), "Power"), PersistentDataType.STRING, display_name);
             item.setItemMeta(item_meta);
 
             p.getInventory().addItem(item);

@@ -35,6 +35,7 @@ public class PlayerData {
     boolean insidious_active;
     boolean explosive_landing_active;
     boolean crumbling_active;
+    boolean crumbling_victim;
     boolean heavy_boots_active;
     boolean intoxicate_active;
     boolean discombobulate_active;
@@ -46,7 +47,7 @@ public class PlayerData {
                       int god_of_crafstman, int crumbling, int heavy_boots, int intoxicate, int discombobulate, int entangle,
                       int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted,
                       UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active,
-                      boolean explosive_landing_active, boolean crumbling_active, boolean heavy_boots_active,
+                      boolean explosive_landing_active, boolean crumbling_active, boolean crumbling_victim, boolean heavy_boots_active,
                       boolean intoxicate_active, boolean discombobulate_active, boolean entangle_active) {
         this.uuid = uuid;
         this.led_by = led_by;
@@ -78,6 +79,12 @@ public class PlayerData {
         this.savior_active = savior_active;
         this.insidious_active = insidious_active;
         this.explosive_landing_active = explosive_landing_active;
+        this.crumbling_active = crumbling_active;
+        this.crumbling_victim = crumbling_victim;
+        this.heavy_boots_active = heavy_boots_active;
+        this.insidious_active = intoxicate_active;
+        this.discombobulate_active = discombobulate_active;
+        this.entangle_active = entangle_active;
     }
 
     public UUID getUuid() {

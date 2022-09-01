@@ -3,7 +3,7 @@ package com.ethan.twfaith.customevents;
 import com.ethan.twfaith.activepowers.Flood;
 import com.ethan.twfaith.activepowers.Taunt;
 import com.ethan.twfaith.data.PlayerData;
-import com.google.gson.Gson;
+import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -14,27 +14,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class UsePowers implements Listener {
 
     // When player right clicks, check if the item in main hand has the NBT tag for a god power. If it does, activate the power.
     @EventHandler
     public void onRightClick(PlayerInteractEvent e){
-        Player player =(Player) e.getPlayer();
+        Player player = e.getPlayer();
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
         ItemStack held_item = e.getPlayer().getInventory().getItemInMainHand();
         if (!held_item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING)){return;}
         e.setCancelled(true);
-        try{
-            File player_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "PlayerData");
-            File player_file = new File(player_folder, e.getPlayer().getUniqueId() + ".json");
-            FileReader player_file_reader = new FileReader(player_file);
-            Gson gson = new Gson();
-            PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
-
             // TODO fix players without perms being able to activate abilities using the special terracotta
             switch (held_item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING)){
                 case "Lion's Heart":
@@ -76,11 +65,7 @@ public class UsePowers implements Listener {
                     player.sendMessage(ChatColor.DARK_BLUE + "The area floods with water.");
                     break;
             }
-            FileWriter player_data_writer = new FileWriter(player_file, false);
-            gson.toJson(player_data, player_data_writer);
-            player_data_writer.flush();
-            player_data_writer.close();
-        }catch (IOException exception){exception.printStackTrace();}
+            PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
     }
 
     // TODO Only allow power to be held or given to the hot bar.
