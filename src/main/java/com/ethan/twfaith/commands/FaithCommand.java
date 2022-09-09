@@ -1,9 +1,11 @@
 package com.ethan.twfaith.commands;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
+import com.ethan.twfaith.powers.SummonGod;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,6 +26,7 @@ public class FaithCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
 
             // Variables that can be used by multiple commands go here
             File faith_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "Faiths");
@@ -39,8 +42,19 @@ public class FaithCommand implements CommandExecutor {
 
             if (Objects.equals(args[0], "create") && args.length == 2) {
                 player.sendMessage("You have created the faith named " + args[1]);
-                Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>());
+                HashMap<String, Integer> terrain_bonuses = new HashMap<>();
+                terrain_bonuses.put("Snowy", 0);
+                terrain_bonuses.put("Cold", 0);
+                terrain_bonuses.put("Temperate", 0);
+                terrain_bonuses.put("Warm", 0);
+                terrain_bonuses.put("Aquatic", 0);
+                terrain_bonuses.put("Cave", 0);
+                terrain_bonuses.put("Nether", 0);
+                terrain_bonuses.put("End", 0);
+                Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>(), terrain_bonuses);
+                FaithHashMap.player_faith_hashmap.put(player.getUniqueId(), faith);
 
+                // TODO see if this is still relevant
                 try{
                     if (!sender_faith_file.exists()){sender_faith_file.createNewFile();}
 
@@ -51,7 +65,6 @@ public class FaithCommand implements CommandExecutor {
                     writer.close();
 
                     // Changing Founder's Player Data to reflect creating the faith
-                    PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
 
                     player_data.setFaith(args[1]);
                     player_data.setIn_faith(true);
@@ -92,6 +105,7 @@ public class FaithCommand implements CommandExecutor {
 
                         for (UUID unique_player : read_faith.getFollowers()){
                             Player follower = Bukkit.getPlayer(unique_player);
+                            assert follower != null;
                             PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getDisplayName());
                             follower_data.setLeader(false);
                             follower_data.setIn_faith(false);
@@ -171,7 +185,6 @@ public class FaithCommand implements CommandExecutor {
                 }
             }
 
-            // TODO Update /faith join to new file iteration method
             if (Objects.equals(args[0], "join") && args.length == 2){
                 for (File faith_file : Objects.requireNonNull(faith_folder.listFiles())){
                     try{
@@ -196,7 +209,6 @@ public class FaithCommand implements CommandExecutor {
                             writer.flush();
                             writer.close();
 
-                            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
                             player_data.setFaith(args[1]);
                             player_data.setIn_faith(true);
                             player_data.setLed_by(read_faith.getLeader());
@@ -209,7 +221,6 @@ public class FaithCommand implements CommandExecutor {
 
             if (Objects.equals(args[0], "leave")){
                 try{
-                    PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
                     if (player_data.getIn_faith()){
                         // Removing the player from the faith data file
                         File faith_file = new File (faith_folder, player_data.getLed_by() + ".json");
@@ -235,7 +246,6 @@ public class FaithCommand implements CommandExecutor {
             }
 
             if (Objects.equals(args[0], "upgrade")){
-                PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
                 if (player_data.getLeader()){
                     // Runs custom event for opening a gui menu
                     Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
@@ -245,13 +255,27 @@ public class FaithCommand implements CommandExecutor {
             }
 
             if (Objects.equals(args[0], "powers")){
-                PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
                 if (player_data.getLeader()){
                     // Runs custom event for opening a gui menu
                     Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Select Powers"));
                     return true;
 
                 } else{player.sendMessage(ChatColor.RED + "Error: Must be leader to use powers.");}
+            }
+
+            if (Objects.equals(args[0], "summon")){
+                SummonGod summon = new SummonGod();
+                summon.summonTrigger(player, player_data);
+            }
+
+            if (Objects.equals(args[0], "accept")){
+                UUID requester_id = SummonGod.summon_requests.get(player.getUniqueId());
+                if (Bukkit.getPlayer(requester_id) == null){return true;}
+                Player requester = Bukkit.getPlayer(requester_id);
+                assert requester != null;
+                requester.sendMessage(player.getDisplayName() + " has been summoned!");
+                player.teleport(requester.getLocation());
+                SummonGod.summon_requests.remove(player.getUniqueId());
             }
         }
             return false;

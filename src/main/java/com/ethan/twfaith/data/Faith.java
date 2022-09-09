@@ -1,5 +1,6 @@
 package com.ethan.twfaith.data;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,14 +10,16 @@ public class Faith {
     private int faith_points;
     private List<UUID> invited_players;
     private List<UUID> followers;
+    HashMap<String, Integer> terrain_bonuses;
 
 
-    public Faith(String faith_name, UUID leader, int faith_points, List<UUID> invited_players, List<UUID> followers) {
+    public Faith(String faith_name, UUID leader, int faith_points, List<UUID> invited_players, List<UUID> followers, HashMap<String, Integer> terrain_bonuses) {
         this.faith_name = faith_name;
         this.leader = leader;
         this.faith_points = faith_points;
         this.invited_players = invited_players;
         this.followers = followers;
+        this.terrain_bonuses = terrain_bonuses;
     }
 
     public String getFaith_name() {
@@ -57,5 +60,13 @@ public class Faith {
 
     public void setFollowers(List<UUID> followers) {
         this.followers = followers;
+    }
+
+    public HashMap<String, Integer> getTerrain_bonuses() {
+        return terrain_bonuses;
+    }
+
+    public void setTerrain_bonuses(HashMap<String, Integer> terrain_bonuses) {
+        this.terrain_bonuses = terrain_bonuses;
     }
 }

@@ -16,6 +16,8 @@ public class PlayerHashMap implements Listener {
     // Creates the Hashmap for managing PlayerData
     public static HashMap<String, PlayerData> player_data_hashmap = new HashMap<>();
 
+    // TODO make PlayerHashMap use UUID instead of display name to prevent data loss with username changes
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
         Player player = e.getPlayer();
@@ -46,7 +48,9 @@ public class PlayerHashMap implements Listener {
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, false, e.getPlayer().getUniqueId(),
                 false, false, false, false,
-                false, false, false, false, false, false);
+                false, false, false, false, false,
+                false, false, false, false, false,
+                0, 0, 0, 0, false, false, false, false, 0, false);
         try {
             // Check to see if the necessary directories already exist.
             File player_data_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");

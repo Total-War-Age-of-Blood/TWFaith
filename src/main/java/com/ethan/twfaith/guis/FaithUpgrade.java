@@ -78,6 +78,8 @@ public class FaithUpgrade implements Listener {
         }
     }
 
+    // This event is essential for GUI's because without it the plugin cannot recognize the in-game GUI as equal to the
+    // gui in the file.
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
         // When custom event is triggered, check to see if it wants to open this gui

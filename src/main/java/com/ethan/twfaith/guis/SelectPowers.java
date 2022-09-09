@@ -20,10 +20,29 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class SelectPowers implements Listener {
+    // TODO implement biome group and bonus selection for terrain bonus power
     private Inventory gui;
-    // TODO Replace the hard coded gui items with a method to reduce file size
     public void openSelectPowersGui(Player player, PlayerData player_data){
         gui = Bukkit.createInventory(null, 45, "Select Powers");
+
+        // Blessings
+        // Terrain Bonus
+        generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Terrain Bonus", player_data.getTerrain_bonus(), 10);
+
+        // Summon God
+        generateGUI(Material.WHITE_CANDLE, ChatColor.WHITE, "Summon God", player_data.getSummon_god(), 11);
+
+        // Hell's Fury
+        generateGUI(Material.FLINT_AND_STEEL, ChatColor.YELLOW, "Hell's Fury", player_data.getHells_fury(), 12);
+
+        // Powerful Flock
+        generateGUI(Material.WHITE_WOOL, ChatColor.RED, "Powerful Flock", player_data.getPowerful_flock(), 13);
+
+        // Divine Intervention
+        generateGUI(Material.ELYTRA, ChatColor.GOLD, "Divine Intervention", player_data.getDivine_intervention(), 14);
+
+        // Mana
+        generateGUI(Material.BREAD, ChatColor.GOLD, "Mana", player_data.getMana(), 15);
 
         // God Powers
         // Lion's Heart
@@ -81,6 +100,23 @@ public class SelectPowers implements Listener {
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getDisplayName());
 
         switch (e.getSlot()){
+            case 10:
+                inventoryClickSwitch(player_data.getTerrain_bonus(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Terrain Bonus", p);
+                break;
+            case 11:
+                inventoryClickSwitch(player_data.getSummon_god(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Summon God", p);
+                break;
+            case 12:
+                inventoryClickSwitch(player_data.getHells_fury(), Material.RED_TERRACOTTA, ChatColor.RED, "Hell's Fury", p);
+                break;
+            case 13:
+                inventoryClickSwitch(player_data.getPowerful_flock(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Powerful Flock", p);
+                break;
+            case 14:
+                inventoryClickSwitch(player_data.getDivine_intervention(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Divine Intervention", p);
+            case 15:
+                inventoryClickSwitch(player_data.getMana(), Material.YELLOW_TERRACOTTA, ChatColor.GOLD, "Mana", p);
+                break;
             case 19:
                 inventoryClickSwitch(player_data.getLions_heart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
                 break;
@@ -115,8 +151,6 @@ public class SelectPowers implements Listener {
                 inventoryClickSwitch(player_data.getEntangle(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Entangle", p);
                 break;
         }
-
-
     }
 
     @EventHandler

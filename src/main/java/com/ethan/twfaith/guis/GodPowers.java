@@ -24,7 +24,6 @@ import java.util.Objects;
 
 public class GodPowers implements Listener {
     private Inventory gui;
-    // TODO Implement mechanics for powers.
     // TODO Implement gui purchasing
     public void openGodPowersGui(Player player){
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");

@@ -1,6 +1,10 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.FaithHashMap;
+import com.ethan.twfaith.data.PlayerData;
+import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,19 +33,19 @@ public class Blessings implements Listener {
 
         // TODO make Summon God's icon the player's head
         // Summon God
-        generateGUI(Material.TOTEM_OF_UNDYING, ChatColor.GOLD, "Summon God", "Allows followers to summon got to them with tpa request", 11);
+        generateGUI(Material.TOTEM_OF_UNDYING, ChatColor.GOLD, "Summon God", "Allows followers to summon got to them with tpa request.", 11);
 
-        // God Proximity Bonus
-        generateGUI(Material.PLAYER_HEAD, ChatColor.AQUA, "God Proximity Bonus", "Buffs for being close to god.", 12);
+        // Hell's Fury
+        generateGUI(Material.FLINT_AND_STEEL, ChatColor.RED, "Hell's Fury", "Followers leave a trail of fire in their wake.", 12);
 
-        // Name Prophets
-        generateGUI(Material.BLACK_CANDLE, ChatColor.RED, "Name Prophets", "Your favorite followers get some of your powers.", 13);
+        // Powerful Flock
+        generateGUI(Material.WHITE_WOOL, ChatColor.WHITE, "Powerful Flock", "Your followers are stronger together.", 13);
 
-        // Holy Protection
-        generateGUI(Material.SHIELD, ChatColor.LIGHT_PURPLE, "Holy Protection", "Buff your followers when they are defending their church.", 14);
+        // Divine Intervention
+        generateGUI(Material.ELYTRA, ChatColor.GOLD, "Divine Intervention", "Raise your followers out of the devil's grasp.", 14);
 
-        // God of Crafts
-        generateGUI(Material.CRAFTING_TABLE, ChatColor.BLUE, "God of Crafts", "Increases quality of crafted tools, weapons, and armor.", 15);
+        // Mana
+        generateGUI(Material.BREAD, ChatColor.GOLD, "Mana", "Shower mana from the sky.", 15);
 
         // Close Menu
         generateGUI(Material.BARRIER, ChatColor.RED, "Close Menu", "Return to previous menu.", 16);
@@ -74,10 +78,27 @@ public class Blessings implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getDisplayName());
+        Faith faith_data = FaithHashMap.player_faith_hashmap.get(player_data.getUuid());
 
         switch (e.getSlot()){
             case 10:
-                System.out.println("Placeholder");
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Biome Groups"));
+                break;
+            case 11:
+                player_data.setSummon_god(1);
+                break;
+            case 12:
+                player_data.setHells_fury(1);
+                break;
+            case 13:
+                player_data.setPowerful_flock(1);
+                break;
+            case 14:
+                player_data.setDivine_intervention(1);
+                break;
+            case 15:
+                player_data.setMana(1);
                 break;
             case 16:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));

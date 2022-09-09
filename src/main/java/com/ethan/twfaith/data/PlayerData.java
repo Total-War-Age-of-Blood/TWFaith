@@ -37,9 +37,24 @@ public class PlayerData {
     boolean crumbling_active;
     boolean crumbling_victim;
     boolean heavy_boots_active;
+    boolean heavy_boots_victim;
     boolean intoxicate_active;
+    boolean intoxicate_victim;
     boolean discombobulate_active;
+    boolean discombobulate_victim;
     boolean entangle_active;
+    boolean entangle_victim;
+    int powerful_flock;
+    int hells_fury;
+    int divine_intervention;
+    int mana;
+    boolean terrain_bonus_active;
+    boolean summon_god_active;
+    boolean powerful_flock_active;
+    boolean in_flock;
+    double nearby_friends;
+    boolean hells_fury_active;
+
 
 
     public PlayerData(UUID uuid, UUID led_by, String faith, boolean in_faith, boolean leader, long last_prayer, int faith_points,
@@ -47,8 +62,10 @@ public class PlayerData {
                       int god_of_crafstman, int crumbling, int heavy_boots, int intoxicate, int discombobulate, int entangle,
                       int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted,
                       UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active,
-                      boolean explosive_landing_active, boolean crumbling_active, boolean crumbling_victim, boolean heavy_boots_active,
-                      boolean intoxicate_active, boolean discombobulate_active, boolean entangle_active) {
+                      boolean explosive_landing_active, boolean crumbling_active, boolean crumbling_victim, boolean heavy_boots_active, boolean heavy_boots_victim,
+                      boolean intoxicate_active, boolean intoxicate_victim, boolean discombobulate_active, boolean discombobulate_victim,
+                      boolean entangle_active, boolean entangle_victim, int powerful_flock, int hells_fury, int divine_intervention,
+                      int mana, boolean terrain_bonus_active, boolean summon_god_active, boolean powerful_flock_active, boolean in_flock, double nearby_friends, boolean hells_fury_active) {
         this.uuid = uuid;
         this.led_by = led_by;
         this.faith = faith;
@@ -82,9 +99,23 @@ public class PlayerData {
         this.crumbling_active = crumbling_active;
         this.crumbling_victim = crumbling_victim;
         this.heavy_boots_active = heavy_boots_active;
-        this.insidious_active = intoxicate_active;
+        this.heavy_boots_victim = heavy_boots_victim;
+        this.intoxicate_active = intoxicate_active;
+        this.intoxicate_victim = intoxicate_victim;
         this.discombobulate_active = discombobulate_active;
+        this.discombobulate_victim = discombobulate_victim;
         this.entangle_active = entangle_active;
+        this.entangle_victim = entangle_victim;
+        this.powerful_flock = powerful_flock;
+        this.hells_fury = hells_fury;
+        this.divine_intervention = divine_intervention;
+        this.mana = mana;
+        this.terrain_bonus_active = terrain_bonus_active;
+        this.summon_god_active = summon_god_active;
+        this.powerful_flock_active = powerful_flock_active;
+        this.in_flock = in_flock;
+        this.nearby_friends = nearby_friends;
+        this.hells_fury_active = hells_fury_active;
     }
 
     public UUID getUuid() {
@@ -311,5 +342,165 @@ public class PlayerData {
 
     public void setExplosive_landing_active(boolean explosive_landing_active) {
         this.explosive_landing_active = explosive_landing_active;
+    }
+
+    public boolean isCrumbling_active() {
+        return crumbling_active;
+    }
+
+    public void setCrumbling_active(boolean crumbling_active) {
+        this.crumbling_active = crumbling_active;
+    }
+
+    public boolean isCrumbling_victim() {
+        return crumbling_victim;
+    }
+
+    public void setCrumbling_victim(boolean crumbling_victim) {
+        this.crumbling_victim = crumbling_victim;
+    }
+
+    public boolean isHeavy_boots_active() {
+        return heavy_boots_active;
+    }
+
+    public void setHeavy_boots_active(boolean heavy_boots_active) {
+        this.heavy_boots_active = heavy_boots_active;
+    }
+
+    public boolean isIntoxicate_active() {
+        return intoxicate_active;
+    }
+
+    public void setIntoxicate_active(boolean intoxicate_active) {
+        this.intoxicate_active = intoxicate_active;
+    }
+
+    public boolean isDiscombobulate_active() {
+        return discombobulate_active;
+    }
+
+    public void setDiscombobulate_active(boolean discombobulate_active) {
+        this.discombobulate_active = discombobulate_active;
+    }
+
+    public boolean isEntangle_active() {
+        return entangle_active;
+    }
+
+    public void setEntangle_active(boolean entangle_active) {
+        this.entangle_active = entangle_active;
+    }
+
+    public boolean isHeavy_boots_victim() {
+        return heavy_boots_victim;
+    }
+
+    public void setHeavy_boots_victim(boolean heavy_boots_victim) {
+        this.heavy_boots_victim = heavy_boots_victim;
+    }
+
+    public boolean isIntoxicate_victim() {
+        return intoxicate_victim;
+    }
+
+    public void setIntoxicate_victim(boolean intoxicate_victim) {
+        this.intoxicate_victim = intoxicate_victim;
+    }
+
+    public boolean isDiscombobulate_victim() {
+        return discombobulate_victim;
+    }
+
+    public void setDiscombobulate_victim(boolean discombobulate_victim) {
+        this.discombobulate_victim = discombobulate_victim;
+    }
+
+    public boolean isEntangle_victim() {
+        return entangle_victim;
+    }
+
+    public void setEntangle_victim(boolean entangle_victim) {
+        this.entangle_victim = entangle_victim;
+    }
+
+    public int getPowerful_flock() {
+        return powerful_flock;
+    }
+
+    public void setPowerful_flock(int powerful_flock) {
+        this.powerful_flock = powerful_flock;
+    }
+
+    public int getHells_fury() {
+        return hells_fury;
+    }
+
+    public void setHells_fury(int hells_fury) {
+        this.hells_fury = hells_fury;
+    }
+
+    public int getDivine_intervention() {
+        return divine_intervention;
+    }
+
+    public void setDivine_intervention(int divine_intervention) {
+        this.divine_intervention = divine_intervention;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    public boolean isTerrain_bonus_active() {
+        return terrain_bonus_active;
+    }
+
+    public void setTerrain_bonus_active(boolean terrain_bonus_active) {
+        this.terrain_bonus_active = terrain_bonus_active;
+    }
+
+    public boolean isSummon_god_active() {
+        return summon_god_active;
+    }
+
+    public void setSummon_god_active(boolean summon_god_active) {
+        this.summon_god_active = summon_god_active;
+    }
+
+    public boolean isPowerful_flock_active() {
+        return powerful_flock_active;
+    }
+
+    public void setPowerful_flock_active(boolean powerful_flock_active) {
+        this.powerful_flock_active = powerful_flock_active;
+    }
+
+    public boolean isIn_flock() {
+        return in_flock;
+    }
+
+    public void setIn_flock(boolean in_flock) {
+        this.in_flock = in_flock;
+    }
+
+    public double getNearby_friends() {
+        return nearby_friends;
+    }
+
+    public void setNearby_friends(double nearby_friends) {
+        this.nearby_friends = nearby_friends;
+    }
+
+    public boolean isHells_fury_active() {
+        return hells_fury_active;
+    }
+
+    public void setHells_fury_active(boolean hells_fury_active) {
+        this.hells_fury_active = hells_fury_active;
     }
 }

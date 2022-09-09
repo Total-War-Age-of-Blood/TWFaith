@@ -1,4 +1,4 @@
-package com.ethan.twfaith.activepowers;
+package com.ethan.twfaith.powers;
 
 import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.PlayerHashMap;
