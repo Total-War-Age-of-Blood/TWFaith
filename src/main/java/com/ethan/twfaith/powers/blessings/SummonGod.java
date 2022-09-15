@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.blessings;
 
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;

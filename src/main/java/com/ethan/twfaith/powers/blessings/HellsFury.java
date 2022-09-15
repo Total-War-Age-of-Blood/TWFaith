@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.blessings;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class HellsFury implements Listener {
     public void onHellsFuryTrigger(Player player, PlayerData player_data){
         for (Player nearby : Bukkit.getOnlinePlayers()){
-            PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getDisplayName());
+            PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
             if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLed_by().equals(nearby_data.getLed_by())){continue;}
             if (nearby_data.isHells_fury_active()){
                 nearby_data.setHells_fury_active(false);
@@ -30,7 +30,7 @@ public class HellsFury implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         if (!player_data.isHells_fury_active()){return;}
         Location player_loc = player.getLocation();
         World world = player.getWorld();

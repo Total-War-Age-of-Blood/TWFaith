@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.curses;
 
 import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.data.PlayerData;
@@ -17,20 +17,20 @@ public class Crumbling implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         boolean is_crumbling = false;
         for (String crumbler : UsePowers.crumblers){
             if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(crumbler)).getLocation()) <= 30){is_crumbling = true;}
         }
         player_data.setCrumbling_victim(is_crumbling);
-        PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
     }
 
     // The crumbling effect
     @EventHandler
     public void onArmorDamage(PlayerItemDamageEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         // System.out.println(event.getItem());
         if (!player_data.isCrumbling_victim()){
             // System.out.println("Not crumbling victim");

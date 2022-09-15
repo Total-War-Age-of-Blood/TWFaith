@@ -1,13 +1,16 @@
 package com.ethan.twfaith;
 
 import com.ethan.twfaith.data.FaithHashMap;
-import com.ethan.twfaith.powers.*;
 import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.Pray;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.guis.*;
-import com.ethan.twfaith.powers.TerrainBonus;
+import com.ethan.twfaith.powers.blessings.TerrainBonus;
+import com.ethan.twfaith.powers.blessings.*;
+import com.ethan.twfaith.powers.curses.*;
+import com.ethan.twfaith.powers.godpowers.Flood;
+import com.ethan.twfaith.powers.godpowers.Taunt;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +21,6 @@ import java.util.Objects;
 public final class TWFaith extends JavaPlugin implements Listener {
     private static TWFaith plugin;
 
-    // TODO Move upgrades from PlayerData class to Faith class
     // TODO add cool powers that are unlocked with faith points
     // TODO Replace hard-coded values with configurable ones where applicable
     // TODO Load PlayerData into hashmap when a player joins
@@ -56,10 +58,12 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new DivineIntervention(), this);
         Bukkit.getPluginManager().registerEvents(new Mana(), this);
         Bukkit.getPluginManager().registerEvents(new TerrainBonus(), this);
-        Bukkit.getPluginManager().registerEvents(new com.ethan.twfaith.guis.TerrainBonus(), this);
+        Bukkit.getPluginManager().registerEvents(new TerrainBonusUpgrade(), this);
+        Bukkit.getPluginManager().registerEvents(new TerrainBonusEquip(), this);
 
         // Plugin Commands
         Objects.requireNonNull(getCommand("faith")).setExecutor(new FaithCommand());
+        Objects.requireNonNull(getCommand("faith")).setTabCompleter(new FaithTab());
         Objects.requireNonNull(getCommand("pray")).setExecutor(new Pray(this));
 
         Bukkit.getPluginManager().registerEvents(this, this);

@@ -5,7 +5,7 @@ import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
-import com.ethan.twfaith.powers.SummonGod;
+import com.ethan.twfaith.powers.blessings.SummonGod;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,13 +20,12 @@ import java.util.*;
 
 public class FaithCommand implements CommandExecutor {
     // TODO Set up error messages for all commands
-    // TODO Set up autocomplete for all commands
     // TODO Make sure that gods lose their powers when they disband their faith
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
 
             // Variables that can be used by multiple commands go here
             File faith_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "Faiths");
@@ -42,16 +41,9 @@ public class FaithCommand implements CommandExecutor {
 
             if (Objects.equals(args[0], "create") && args.length == 2) {
                 player.sendMessage("You have created the faith named " + args[1]);
-                HashMap<String, Integer> terrain_bonuses = new HashMap<>();
-                terrain_bonuses.put("Snowy", 0);
-                terrain_bonuses.put("Cold", 0);
-                terrain_bonuses.put("Temperate", 0);
-                terrain_bonuses.put("Warm", 0);
-                terrain_bonuses.put("Aquatic", 0);
-                terrain_bonuses.put("Cave", 0);
-                terrain_bonuses.put("Nether", 0);
-                terrain_bonuses.put("End", 0);
-                Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>(), terrain_bonuses);
+                Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>(),
+                        0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, false, new ArrayList<>());
                 FaithHashMap.player_faith_hashmap.put(player.getUniqueId(), faith);
 
                 // TODO see if this is still relevant
@@ -71,7 +63,7 @@ public class FaithCommand implements CommandExecutor {
                     player_data.setLeader(true);
                     player_data.setLed_by(player.getUniqueId());
 
-                    PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
                     System.out.println("Saved data!");
                 }catch(IOException e){e.printStackTrace();}
@@ -97,20 +89,20 @@ public class FaithCommand implements CommandExecutor {
                         Reader faith_reader = new FileReader(sender_faith_file);
                         Faith read_faith = gson.fromJson(faith_reader, Faith.class);
 
-                        PlayerData leader_player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+                        PlayerData leader_player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
                         leader_player_data.setLeader(false);
                         leader_player_data.setFaith("");
                         leader_player_data.setIn_faith(false);
-                        PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), leader_player_data);
+                        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), leader_player_data);
 
                         for (UUID unique_player : read_faith.getFollowers()){
                             Player follower = Bukkit.getPlayer(unique_player);
                             assert follower != null;
-                            PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getDisplayName());
+                            PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getUniqueId());
                             follower_data.setLeader(false);
                             follower_data.setIn_faith(false);
                             follower_data.setFaith("");
-                            PlayerHashMap.player_data_hashmap.put(follower.getDisplayName(), follower_data);
+                            PlayerHashMap.player_data_hashmap.put(follower.getUniqueId(), follower_data);
                         }
                         faith_reader.close();
                         sender_faith_file.delete();
@@ -131,23 +123,23 @@ public class FaithCommand implements CommandExecutor {
                         writer.flush();
                         writer.close();
 
-                        PlayerData leader_player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+                        PlayerData leader_player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
                         leader_player_data.setFaith(args[1]);
-                        PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), leader_player_data);
+                        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), leader_player_data);
 
                         for (UUID unique_player : read_faith.getFollowers()){
                             Player follower = Bukkit.getPlayer(unique_player);
                             assert follower != null;
-                            PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getDisplayName());
+                            PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getUniqueId());
                             follower_data.setFaith(args[1]);
-                            PlayerHashMap.player_data_hashmap.put(follower.getDisplayName(), follower_data);
+                            PlayerHashMap.player_data_hashmap.put(follower.getUniqueId(), follower_data);
                         }
 
                         player.sendMessage("Renamed faith to " + args[1]);
 
                     }else{player.sendMessage(ChatColor.RED + "ERROR: Could not rename faith. Are you sure you are the" +
                             " leader of a faith?");}
-                }catch(IOException e){System.out.println(e);}
+                }catch(IOException e){e.printStackTrace();}
             }
 
             if (Objects.equals(args[0], "invite") && Objects.equals(args[1], "add") && args.length == 3){
@@ -212,7 +204,7 @@ public class FaithCommand implements CommandExecutor {
                             player_data.setFaith(args[1]);
                             player_data.setIn_faith(true);
                             player_data.setLed_by(read_faith.getLeader());
-                            PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+                            PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
                         }
 
                     }catch(IOException e){e.printStackTrace();}
@@ -238,7 +230,7 @@ public class FaithCommand implements CommandExecutor {
                         player_data.setLeader(false);
                         player_data.setFaith("");
                         player_data.setLed_by(null);
-                        PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+                        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
                         player.sendMessage("You have left " + read_faith.getFaith_name());
                     }

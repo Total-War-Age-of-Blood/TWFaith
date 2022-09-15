@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.godpowers;
 
 import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Flood implements Listener {
     List<Block> block_list = new ArrayList<>();
@@ -31,7 +32,7 @@ public class Flood implements Listener {
         try{
             // Because it is hard to get a unique identifier from the BlockFromToEvent that would also be given to a
             // Flood object, we are going to iterate through the Floods directory and test all block lists.
-            File flood_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Floods");
+            File flood_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "Floods");
             File[] flood_files = flood_folder.listFiles();
             for (File flood : flood_files){
                 FileReader flood_reader = new FileReader(flood);
@@ -49,10 +50,13 @@ public class Flood implements Listener {
                 }
             }
         } catch (FileNotFoundException e) {e.printStackTrace();}
+        // If the flood files folder is empty, it will throw a lot of null pointer exceptions at the console.
+        // My solution is to just ignore them.
+        catch (NullPointerException ignored){}
     }
 
     public void floodTrigger(Player player){
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         Gson gson = new Gson();
         try{
             if (player_data.getFlood() < 1){return;}
@@ -63,6 +67,7 @@ public class Flood implements Listener {
             // y value. Then, we replace the block above that one with water.
             for (int x = -radius; x < radius; x++) {
                 for (int z = -radius; z < radius; z++) {
+                    assert world != null;
                     Block block = world.getHighestBlockAt(player_location.getBlockX()+x, player_location.getBlockZ()+z);
                     Block air_block = world.getBlockAt(block.getX(), block.getY() + 1, block.getZ());
                     air_block.setType(Material.WATER, false);
@@ -78,7 +83,7 @@ public class Flood implements Listener {
             // Storing the block list for the flood in a JSON file so the EventHandler that stops water flowing in the
             // zone can reference it.
             com.ethan.twfaith.data.Flood flood = new com.ethan.twfaith.data.Flood(player.getUniqueId(), block_coordinates);
-            File flood_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Floods");
+            File flood_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "Floods");
             if (!flood_folder.exists()){flood_folder.mkdir();}
             File flood_file = new File(flood_folder, player.getUniqueId() + ".json");
             if (!flood_file.exists()){flood_file.createNewFile();}

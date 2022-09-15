@@ -11,12 +11,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 
 public class PlayerHashMap implements Listener {
     // Creates the Hashmap for managing PlayerData
-    public static HashMap<String, PlayerData> player_data_hashmap = new HashMap<>();
-
-    // TODO make PlayerHashMap use UUID instead of display name to prevent data loss with username changes
+    public static HashMap<UUID, PlayerData> player_data_hashmap = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
@@ -37,7 +36,7 @@ public class PlayerHashMap implements Listener {
                 System.out.println("Putting PlayerData in HashMap.");
                 FileReader player_file_reader = new FileReader(player_file);
                 PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
-                player_data_hashmap.put(player.getDisplayName(), player_data);
+                player_data_hashmap.put(player.getUniqueId(), player_data);
             }catch (IOException exception){exception.printStackTrace();}
             found_player = true;
         }
@@ -68,11 +67,12 @@ public class PlayerHashMap implements Listener {
         } catch (Exception ex) {ex.printStackTrace();}
 
         // Add the player's data to the hashmap
-        player_data_hashmap.put(e.getPlayer().getDisplayName(), player_data);
+        player_data_hashmap.put(e.getPlayer().getUniqueId(), player_data);
         System.out.println("Player " + e.getPlayer().getDisplayName() + " added to HashMap.");
     }
 
     // Save data from HashMap to file when player quits, then remove player from HashMap
+    // TODO set active powers to false when player leaves
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
@@ -81,7 +81,7 @@ public class PlayerHashMap implements Listener {
             File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
             File player_file = new File(player_folder, player.getUniqueId() + ".json");
             FileWriter player_data_writer = new FileWriter(player_file, false);
-            PlayerData player_data = player_data_hashmap.get(player.getDisplayName());
+            PlayerData player_data = player_data_hashmap.get(player.getUniqueId());
             gson.toJson(player_data, player_data_writer);
             player_data_writer.flush();
             player_data_writer.close();
@@ -89,7 +89,7 @@ public class PlayerHashMap implements Listener {
         }catch (IOException exception){exception.printStackTrace();}
 
         // Remove player from HashMap
-        player_data_hashmap.remove(player.getDisplayName());
+        player_data_hashmap.remove(player.getUniqueId());
         System.out.println(player.getDisplayName() + " has been removed from HashMap.");
     }
 }

@@ -1,8 +1,17 @@
 package com.ethan.twfaith.customevents;
 
-import com.ethan.twfaith.powers.*;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
+import com.ethan.twfaith.powers.blessings.DivineIntervention;
+import com.ethan.twfaith.powers.blessings.HellsFury;
+import com.ethan.twfaith.powers.blessings.Mana;
+import com.ethan.twfaith.powers.blessings.TerrainBonus;
+import com.ethan.twfaith.powers.curses.Discombobulate;
+import com.ethan.twfaith.powers.curses.Entangle;
+import com.ethan.twfaith.powers.curses.HeavyBoots;
+import com.ethan.twfaith.powers.curses.Intoxicate;
+import com.ethan.twfaith.powers.godpowers.Flood;
+import com.ethan.twfaith.powers.godpowers.Taunt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -20,11 +29,13 @@ public class UsePowers implements Listener {
 
     public static LinkedHashSet<String> crumblers = new LinkedHashSet<>();
 
+    // TODO rewrite the Persistent Data system to allow for the Terrain bonus information
+    //  to be easily accessed without a ton of cases in the switch statement
     // When player right clicks, check if the item in main hand has the NBT tag for a god power. If it does, activate the power.
     @EventHandler
     public void onRightClick(PlayerInteractEvent e){
         Player player = e.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         ItemStack held_item = e.getPlayer().getInventory().getItemInMainHand();
         boolean is_power;
         // Using Objects.requireNonNull is not enough to stop the console from getting spammed. To prevent console spam,
@@ -35,15 +46,6 @@ public class UsePowers implements Listener {
         if (!is_power){return;}
         e.setCancelled(true);
             switch (Objects.requireNonNull(held_item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")), "Power"), PersistentDataType.STRING))){
-                case "Terrain Bonus":
-                    if (player_data.isTerrain_bonus_active()){
-                        player_data.setTerrain_bonus_active(false);
-                        player.sendMessage(ChatColor.RED + "Terrain Bonus Deactivated");
-                    }else{
-                        player_data.setTerrain_bonus_active(true);
-                        player.sendMessage(ChatColor.GREEN + "Terrain Bonus Activated");
-                    }
-                    break;
                 case "Summon God":
                     if (player_data.isSummon_god_active()){
                         player_data.setSummon_god_active(false);
@@ -158,7 +160,24 @@ public class UsePowers implements Listener {
                     Entangle entangle = new Entangle();
                     entangle.onEntangleTrigger(player, player_data);
             }
-            PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+        // The terrain bonuses are not going in the switch statement since I would have to code 56 entries.
+        // This
+        if (Objects.requireNonNull(held_item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey
+                (Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")), "Power"), PersistentDataType.STRING)).contains("Terrain Bonus")){
+            ItemStack power_block = e.getItem();
+            TerrainBonus terrain_bonus = new TerrainBonus();
+            assert power_block != null;
+            terrain_bonus.terrainToggle(Objects.requireNonNull(power_block.getItemMeta()).getDisplayName(), e.getPlayer());
+            if (player_data.isTerrain_bonus_active()){
+                player_data.setTerrain_bonus_active(false);
+                player.sendMessage(ChatColor.RED + "Terrain Bonus Deactivated");
+            }else{
+                player_data.setTerrain_bonus_active(true);
+                player.sendMessage(ChatColor.GREEN + "Terrain Bonus Activated");
+            }
+        }
+
+            PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
     }
 
     // TODO Only allow power to be held or given to the hot bar.

@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Pray implements CommandExecutor {
 
+    // TODO make Pray part of FaithCommand
     private TWFaith twFaith;
 
     public Pray(TWFaith twFaith) {
@@ -28,7 +29,7 @@ public class Pray implements CommandExecutor {
 
         Player player = (Player) sender;
         if (sender instanceof Player){
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
             Gson gson = new Gson();
             try {
                 long last_prayer = player_data.getLast_prayer();
@@ -48,7 +49,7 @@ public class Pray implements CommandExecutor {
                     player_data.setLast_prayer(current_time);
                     player_data.setFaith_points(player_data.getFaith_points() + 1);
 
-                    PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
                     player.sendMessage("You pray to your god.");
 

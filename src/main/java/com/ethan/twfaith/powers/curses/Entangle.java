@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.curses;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -30,7 +30,7 @@ public class Entangle implements Listener {
     public void onEntangleTrigger(Player player, PlayerData player_data){
 
         for (Player heathen : Bukkit.getOnlinePlayers()){
-            PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getDisplayName());
+            PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
             if (heathen.getLocation().distance(player.getLocation()) > 30 || heathen_data.getFaith().equals(player_data.getFaith())){continue;}
             Location heathen_loc = heathen.getLocation();
             // We find the coordinates we need to place the blocks by looping a 1 block radius around the player.

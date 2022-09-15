@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.curses;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -15,10 +15,10 @@ public class Discombobulate implements Listener {
     public static LinkedHashSet<String> discombobulators = new LinkedHashSet<>();
 
     public void discombobulateTrigger(Player player){
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         // See who is in range of the power
         for (Player heathen : Bukkit.getOnlinePlayers()){
-            PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getDisplayName());
+            PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
             if (heathen.getLocation().distance(player.getLocation()) <= 30 && !heathen_data.getFaith().equals(player_data.getFaith())){
 
                 // Clear the inventory of affected players and record their items for redistribution

@@ -27,7 +27,12 @@ public class SelectPowers implements Listener {
 
         // Blessings
         // Terrain Bonus
-        generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Terrain Bonus", player_data.getTerrain_bonus(), 10);
+        ItemStack item = new ItemStack(Material.GRASS_BLOCK);
+        ItemMeta item_meta = item.getItemMeta();
+        assert item_meta != null;
+        item_meta.setDisplayName(ChatColor.GREEN + "Terrain Bonus");
+        item.setItemMeta(item_meta);
+        gui.setItem(10, item);
 
         // Summon God
         generateGUI(Material.WHITE_CANDLE, ChatColor.WHITE, "Summon God", player_data.getSummon_god(), 11);
@@ -97,11 +102,11 @@ public class SelectPowers implements Listener {
 
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
 
         switch (e.getSlot()){
             case 10:
-                inventoryClickSwitch(player_data.getTerrain_bonus(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Terrain Bonus", p);
+                Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Equip Terrain Bonus"));
                 break;
             case 11:
                 inventoryClickSwitch(player_data.getSummon_god(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Summon God", p);
@@ -156,7 +161,7 @@ public class SelectPowers implements Listener {
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGui_name().equals("Select Powers")){
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(e.getPlayer().getDisplayName());
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(e.getPlayer().getUniqueId());
             openSelectPowersGui(e.getPlayer(), player_data);
         }
     }

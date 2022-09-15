@@ -1,8 +1,6 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
-import com.ethan.twfaith.data.Faith;
-import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.Bukkit;
@@ -15,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -31,9 +30,16 @@ public class Blessings implements Listener {
         // Terrain Bonus
         generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Terrain Bonus", "Buffs for being in favored biome.", 10);
 
-        // TODO make Summon God's icon the player's head
         // Summon God
-        generateGUI(Material.TOTEM_OF_UNDYING, ChatColor.GOLD, "Summon God", "Allows followers to summon got to them with tpa request.", 11);
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta item_meta = (SkullMeta) item.getItemMeta();
+        assert item_meta != null;
+        item_meta.setDisplayName(ChatColor.GOLD + "Summon God");
+        item_meta.setLore(Collections.singletonList("Allows followers to summon the god."));
+        item.setItemMeta(item_meta);
+        item_meta.setOwningPlayer(player);
+        item.setItemMeta(item_meta);
+        gui.setItem(11, item);
 
         // Hell's Fury
         generateGUI(Material.FLINT_AND_STEEL, ChatColor.RED, "Hell's Fury", "Followers leave a trail of fire in their wake.", 12);
@@ -78,8 +84,7 @@ public class Blessings implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getDisplayName());
-        Faith faith_data = FaithHashMap.player_faith_hashmap.get(player_data.getUuid());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
 
         switch (e.getSlot()){
             case 10:

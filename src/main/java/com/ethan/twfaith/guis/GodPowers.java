@@ -17,19 +17,40 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.profile.PlayerProfile;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.UUID;
 
 public class GodPowers implements Listener {
     private Inventory gui;
     // TODO Implement gui purchasing
     public void openGodPowersGui(Player player){
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
-        // TODO make Lion's Heart's icon a lion head
         // Lion's Heart
         generateGUI(Material.PLAYER_HEAD, ChatColor.DARK_RED, "Lion's Heart", "Your attacks are stronger when you are unarmored.", 10);
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta item_meta = (SkullMeta) item.getItemMeta();
+
+        // Giving the player head a custom texture
+        PlayerProfile profile = Bukkit.getServer().createPlayerProfile(UUID.randomUUID(), null);
+
+        try{
+            profile.getTextures().setSkin(new URL("http://textures.minecraft.net/texture/9df16fb7bd6eab9a47e7306896a0b6ade7c36965db56469ddb4f93dc2aed6396"));
+            assert item_meta != null;
+            item_meta.setOwnerProfile(profile);
+        }catch (MalformedURLException e){e.printStackTrace();}
+
+        assert item_meta != null;
+        item_meta.setDisplayName(ChatColor.DARK_RED + "Lion's Heart");
+        item_meta.setLore(Collections.singletonList("Your attacks are stronger when you are unarmored"));
+        item.setItemMeta(item_meta);
+        gui.setItem(10, item);
 
         // Savior
         generateGUI(Material.GOLDEN_CARROT, ChatColor.LIGHT_PURPLE, "Savior", "Swap places with injured followers.", 11);
@@ -78,7 +99,7 @@ public class GodPowers implements Listener {
 
         Player player = (Player) e.getWhoClicked();
 
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         switch (e.getSlot()){
             case 10:
                     player_data.setLions_heart(1);
@@ -108,7 +129,7 @@ public class GodPowers implements Listener {
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
                 break;
         }
-       PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+       PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
     }
 
     @EventHandler
@@ -121,7 +142,7 @@ public class GodPowers implements Listener {
     @EventHandler
     public void lionsHeartEvent(PlayerMoveEvent e){
         Player player = e.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         // TODO Fix Lions Heart Giving level 1 strength with a full armor set
             if (player_data.getLions_heart() > 0 && player_data.isLions_heart_active()){
                 int amplifier = 0;
@@ -141,7 +162,7 @@ public class GodPowers implements Listener {
         // System.out.println("Entity Damage detected!");
         if (e.getEntity() instanceof Player){
             Player player = (Player) e.getEntity();
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
             if (player.getHealth() - e.getDamage() > 6){return;}
             if (player_data.getLeader() || !player_data.getIn_faith()){return;}
             Player leader = Bukkit.getPlayer(player_data.getLed_by());
@@ -152,7 +173,7 @@ public class GodPowers implements Listener {
             if (leader.getHealth() < 10){return;}
             System.out.println("Leader has at least 5 hearts");
 
-            PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getDisplayName());
+            PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getUniqueId());
 
             if (leader_data.getSavior() > 0 && leader_data.isSavior_active()){
                 System.out.println("Leader has Savior");
@@ -170,7 +191,7 @@ public class GodPowers implements Listener {
     @EventHandler
     public void insidiousTriggerEvent(PlayerToggleSneakEvent e){
         Player player = e.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         if (player_data.getInsidious() < 1 || !player_data.isInsidious_active()){return;}
         // Toggle Sneak event takes the sneak state of the player before the toggle happens
         // So we have to check if the player is standing before sneak is toggled.
@@ -186,7 +207,7 @@ public class GodPowers implements Listener {
         if (!(e.getEntity() instanceof Player)){return;}
         if (!e.getCause().equals(EntityDamageEvent.DamageCause.FALL)){return;}
         Player player = (Player) e.getEntity();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         if (player_data.getExplosive_landing() < 1 || !player_data.isExplosive_landing_active()){return;}
         float fall_distance = player.getFallDistance();
         e.setDamage(0);

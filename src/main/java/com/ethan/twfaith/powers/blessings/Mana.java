@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.blessings;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -15,7 +15,7 @@ import java.util.Collections;
 public class Mana implements Listener {
     public void onManaTrigger(Player player, PlayerData player_data){
         for (Player nearby : Bukkit.getOnlinePlayers()){
-            PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getDisplayName());
+            PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
             if(!player_data.getLed_by().equals(nearby_data.getLed_by()) || player.getLocation().distance(nearby.getLocation()) > 30){continue;}
             ItemStack mana = new ItemStack(Material.BREAD, 16);
             ItemMeta mana_meta = mana.getItemMeta();

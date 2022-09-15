@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.blessings;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -16,17 +16,17 @@ public class PowerfulFlock implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
 
         // Make sure the leader is online and has the power active
         if (Bukkit.getPlayer(player_data.getLed_by()) == null){return;}
         Player leader = Bukkit.getPlayer(player_data.getLed_by());
         assert leader != null;
-        PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getDisplayName());
+        PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getUniqueId());
 
         double nearby_friends = 0;
         for (Player friend : Bukkit.getOnlinePlayers()){
-            PlayerData friend_data = PlayerHashMap.player_data_hashmap.get(friend.getDisplayName());
+            PlayerData friend_data = PlayerHashMap.player_data_hashmap.get(friend.getUniqueId());
             if (player.getLocation().distance(friend.getLocation()) >= 30 || !player_data.getLed_by().equals(friend_data.getLed_by()) || player.getUniqueId().equals(friend.getUniqueId())){continue;}
             nearby_friends ++;
         }

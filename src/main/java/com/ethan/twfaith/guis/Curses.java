@@ -69,7 +69,7 @@ public class Curses implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
 
         switch (e.getSlot()){
             case 10:
@@ -92,7 +92,7 @@ public class Curses implements Listener {
                 break;
         }
 
-        PlayerHashMap.player_data_hashmap.put(p.getDisplayName(), player_data);
+        PlayerHashMap.player_data_hashmap.put(p.getUniqueId(), player_data);
     }
 
     @EventHandler

@@ -1,4 +1,4 @@
-package com.ethan.twfaith.powers;
+package com.ethan.twfaith.powers.curses;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -20,7 +20,7 @@ public class HeavyBoots implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player  = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getDisplayName());
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
 
         boolean was_victim = player_data.isHeavy_boots_victim();
         // Checks if player should be a victim
@@ -42,7 +42,7 @@ public class HeavyBoots implements Listener {
         }
 
         player_data.setHeavy_boots_victim(heavy_victim);
-        PlayerHashMap.player_data_hashmap.put(player.getDisplayName(), player_data);
+        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
     }
 }
