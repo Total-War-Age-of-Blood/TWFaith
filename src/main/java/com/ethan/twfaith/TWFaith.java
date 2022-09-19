@@ -1,5 +1,7 @@
 package com.ethan.twfaith;
 
+import com.ethan.twfaith.customevents.FaithTab;
+import com.ethan.twfaith.data.BossBars;
 import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.Pray;
@@ -11,9 +13,11 @@ import com.ethan.twfaith.powers.blessings.*;
 import com.ethan.twfaith.powers.curses.*;
 import com.ethan.twfaith.powers.godpowers.Flood;
 import com.ethan.twfaith.powers.godpowers.Taunt;
+import com.ethan.twfaith.tasks.StaminaChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.*;
 import java.util.Objects;
@@ -60,6 +64,7 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new TerrainBonus(), this);
         Bukkit.getPluginManager().registerEvents(new TerrainBonusUpgrade(), this);
         Bukkit.getPluginManager().registerEvents(new TerrainBonusEquip(), this);
+        Bukkit.getPluginManager().registerEvents(new BossBars(), this);
 
         // Plugin Commands
         Objects.requireNonNull(getCommand("faith")).setExecutor(new FaithCommand());
@@ -75,6 +80,10 @@ public final class TWFaith extends JavaPlugin implements Listener {
         // Load Faiths data from files
         FaithHashMap player_faith_hashmap = new FaithHashMap();
         player_faith_hashmap.loadFaiths();
+
+        // Timer Tasks for Cooldowns and Stamina
+        BukkitTask stamina_checker = new StaminaChecker().runTaskTimer(this, 20, 20);
+
     }
 
     @Override

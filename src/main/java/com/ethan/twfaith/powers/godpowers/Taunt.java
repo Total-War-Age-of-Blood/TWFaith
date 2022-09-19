@@ -3,6 +3,7 @@ package com.ethan.twfaith.powers.godpowers;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -62,6 +63,13 @@ public class Taunt implements Listener {
 
     public void tauntTrigger(Player player){
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+
+        if (player_data.getStamina() < 10){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - 10);
+
         if (!player_data.getLeader() || player_data.getTaunt() < 1){return;}
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(3000, 0));
         for (Player heathen : Bukkit.getOnlinePlayers()){

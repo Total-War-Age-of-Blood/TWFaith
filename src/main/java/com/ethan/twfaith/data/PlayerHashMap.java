@@ -48,8 +48,8 @@ public class PlayerHashMap implements Listener {
                 0, 0, 0, 0, false, e.getPlayer().getUniqueId(),
                 false, false, false, false,
                 false, false, false, false, false,
-                false, false, false, false, false,
-                0, 0, 0, 0, false, false, false, false, 0, false);
+                false, false, false, 0, 0, 0,
+                0, false, false, false, false, 0, false, 100, 100, new HashMap<>());
         try {
             // Check to see if the necessary directories already exist.
             File player_data_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");

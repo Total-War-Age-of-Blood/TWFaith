@@ -5,10 +5,7 @@ import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.tasks.RemoveFlood;
 import com.google.gson.Gson;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,6 +55,13 @@ public class Flood implements Listener {
     public void floodTrigger(Player player){
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         Gson gson = new Gson();
+
+        if (player_data.getStamina() < 10){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - 10);
+
         try{
             if (player_data.getFlood() < 1){return;}
             Location player_location = player.getLocation();

@@ -1,14 +1,14 @@
 package com.ethan.twfaith.commands;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
-import com.ethan.twfaith.data.FaithHashMap;
-import com.ethan.twfaith.data.PlayerHashMap;
-import com.ethan.twfaith.data.Faith;
-import com.ethan.twfaith.data.PlayerData;
+import com.ethan.twfaith.data.*;
 import com.ethan.twfaith.powers.blessings.SummonGod;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,13 +38,35 @@ public class FaithCommand implements CommandExecutor {
             }
             File sender_faith_file = new File(faith_folder, player.getUniqueId() + ".json");
             Gson gson = new Gson();
-
+            // TODO prevent players from making faiths with the same name, and prevent players from creating a faith if they are already in a faith or are already the leader of a faith
             if (Objects.equals(args[0], "create") && args.length == 2) {
+                if (player_data.getIn_faith()){
+                    player.sendMessage(ChatColor.RED + "You must leave your current faith before creating a new faith.");
+                    return false;
+                }
+
+                if (player_data.getLeader()){
+                    player.sendMessage(ChatColor.RED + "You are already the leader of a faith.");
+                    return false;
+                }
+
+                for (Faith faith : FaithHashMap.player_faith_hashmap.values()){
+                    if (!(args[1].toLowerCase().equals(faith.getFaith_name().toLowerCase(Locale.ROOT)))){continue;}
+                    player.sendMessage(ChatColor.RED + "A faith with that name already exists.");
+                    return false;
+                }
+
                 player.sendMessage("You have created the faith named " + args[1]);
                 Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>(),
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, false, new ArrayList<>());
                 FaithHashMap.player_faith_hashmap.put(player.getUniqueId(), faith);
+
+                // Give the player a Stamina Boss Bar
+                BossBar boss_bar = Bukkit.createBossBar(ChatColor.YELLOW + "Stamina", BarColor.YELLOW, BarStyle.SEGMENTED_10);
+                boss_bar.setProgress(1);
+                boss_bar.addPlayer(player);
+                BossBars.boss_bar_map.put(player.getUniqueId(), boss_bar);
 
                 // TODO see if this is still relevant
                 try{
@@ -173,11 +195,22 @@ public class FaithCommand implements CommandExecutor {
                             System.out.println("Player successfully added.");
                         }catch(IOException e){e.printStackTrace(); System.out.println("There was an error adding to list.");}
                     }
+                    player.sendMessage("You have invited " + args[2] + " to the faith.");
                     Objects.requireNonNull(Bukkit.getPlayerExact(args[2])).sendMessage("You have been invited to the faith " + faith_name);
                 }
             }
 
             if (Objects.equals(args[0], "join") && args.length == 2){
+                if (player_data.getIn_faith()){
+                    player.sendMessage(ChatColor.RED + "You must leave your current faith before joining a new faith.");
+                    return false;
+                }
+
+                if (player_data.getLeader()){
+                    player.sendMessage(ChatColor.RED + "You are already the leader of a faith. Disband your faith to join another.");
+                    return false;
+                }
+
                 for (File faith_file : Objects.requireNonNull(faith_folder.listFiles())){
                     try{
                         Reader faith_reader = new FileReader(faith_file);
@@ -212,6 +245,10 @@ public class FaithCommand implements CommandExecutor {
             }
 
             if (Objects.equals(args[0], "leave")){
+                if (player_data.getLeader()){
+                    player.sendMessage(ChatColor.RED + "A leader cannot leave the faith. You must disband it.");
+                    return false;
+                }
                 try{
                     if (player_data.getIn_faith()){
                         // Removing the player from the faith data file
@@ -243,7 +280,7 @@ public class FaithCommand implements CommandExecutor {
                     Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
                     return true;
 
-                } else{player.sendMessage(ChatColor.RED + "Error: Must be leader to upgrade faith.");}
+                } else{player.sendMessage(ChatColor.RED + "Must be leader to upgrade faith.");}
             }
 
             if (Objects.equals(args[0], "powers")){
@@ -252,10 +289,13 @@ public class FaithCommand implements CommandExecutor {
                     Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Select Powers"));
                     return true;
 
-                } else{player.sendMessage(ChatColor.RED + "Error: Must be leader to use powers.");}
+                } else{player.sendMessage(ChatColor.RED + "Must be leader to use powers.");}
             }
 
             if (Objects.equals(args[0], "summon")){
+                if (player_data.getLeader()){
+                    player.sendMessage(ChatColor.RED + "Leader cannot summon self.");
+                }
                 SummonGod summon = new SummonGod();
                 summon.summonTrigger(player, player_data);
             }

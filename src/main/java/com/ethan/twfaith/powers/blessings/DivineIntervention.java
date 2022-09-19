@@ -5,6 +5,7 @@ import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.tasks.Divine;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +22,12 @@ public class DivineIntervention implements Listener {
     public static HashMap<UUID, Player> divine_list = new HashMap<>();
 
     public void onDivineTrigger(Player player, PlayerData player_data){
+
+        if (player_data.getStamina() < 10){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - 10);
 
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());

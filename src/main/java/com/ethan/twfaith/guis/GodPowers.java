@@ -1,6 +1,7 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -29,6 +30,7 @@ import java.util.UUID;
 
 public class GodPowers implements Listener {
     private Inventory gui;
+    UsePowers use_powers = new UsePowers();
     // TODO Implement gui purchasing
     public void openGodPowersGui(Player player){
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
@@ -175,6 +177,17 @@ public class GodPowers implements Listener {
 
             PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getUniqueId());
 
+            if (use_powers.checkCoolDown("Savior", player, 10)){return;}
+            // If power is not on cool down, put power on cool down
+            player_data.getCool_downs().put("Savior", System.currentTimeMillis() / 1000);
+            PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+
+            if (player_data.getStamina() < 10){
+                player.sendMessage(ChatColor.RED + "Not enough stamina.");
+                return;
+            }
+            player_data.setStamina(player_data.getStamina() - 10);
+
             if (leader_data.getSavior() > 0 && leader_data.isSavior_active()){
                 System.out.println("Leader has Savior");
                 Location player_location = player.getLocation();
@@ -209,9 +222,21 @@ public class GodPowers implements Listener {
         Player player = (Player) e.getEntity();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         if (player_data.getExplosive_landing() < 1 || !player_data.isExplosive_landing_active()){return;}
+
+        if (use_powers.checkCoolDown("Explosive Landing", player, 10)){return;}
+        // If power is not on cool down, put power on cool down
+        player_data.getCool_downs().put("Explosive Landing", System.currentTimeMillis() / 1000);
+        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+
+        if (player_data.getStamina() < 10){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - 10);
         float fall_distance = player.getFallDistance();
         e.setDamage(0);
         player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 5));
-        player.getWorld().createExplosion(player.getLocation(), fall_distance);
+        // Explosion size is capped to prevent server crashing.
+        player.getWorld().createExplosion(player.getLocation(), Math.min(fall_distance, 100));
     }
 }

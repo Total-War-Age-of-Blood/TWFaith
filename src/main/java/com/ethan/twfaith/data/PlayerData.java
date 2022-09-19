@@ -1,5 +1,6 @@
 package com.ethan.twfaith.data;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class PlayerData {
@@ -40,9 +41,7 @@ public class PlayerData {
     boolean heavy_boots_victim;
     boolean intoxicate_active;
     boolean intoxicate_victim;
-    boolean discombobulate_active;
     boolean discombobulate_victim;
-    boolean entangle_active;
     boolean entangle_victim;
     int powerful_flock;
     int hells_fury;
@@ -54,6 +53,9 @@ public class PlayerData {
     boolean in_flock;
     double nearby_friends;
     boolean hells_fury_active;
+    double stamina;
+    double max_stamina;
+    HashMap<String, Long> cool_downs;
 
 
 
@@ -63,9 +65,10 @@ public class PlayerData {
                       int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted,
                       UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active,
                       boolean explosive_landing_active, boolean crumbling_active, boolean crumbling_victim, boolean heavy_boots_active, boolean heavy_boots_victim,
-                      boolean intoxicate_active, boolean intoxicate_victim, boolean discombobulate_active, boolean discombobulate_victim,
-                      boolean entangle_active, boolean entangle_victim, int powerful_flock, int hells_fury, int divine_intervention,
-                      int mana, boolean terrain_bonus_active, boolean summon_god_active, boolean powerful_flock_active, boolean in_flock, double nearby_friends, boolean hells_fury_active) {
+                      boolean intoxicate_active, boolean intoxicate_victim, boolean discombobulate_victim,
+                      boolean entangle_victim, int powerful_flock, int hells_fury, int divine_intervention,
+                      int mana, boolean terrain_bonus_active, boolean summon_god_active, boolean powerful_flock_active, boolean in_flock,
+                      double nearby_friends, boolean hells_fury_active, double stamina, double max_stamina, HashMap<String, Long> cool_downs) {
         this.uuid = uuid;
         this.led_by = led_by;
         this.faith = faith;
@@ -102,9 +105,7 @@ public class PlayerData {
         this.heavy_boots_victim = heavy_boots_victim;
         this.intoxicate_active = intoxicate_active;
         this.intoxicate_victim = intoxicate_victim;
-        this.discombobulate_active = discombobulate_active;
         this.discombobulate_victim = discombobulate_victim;
-        this.entangle_active = entangle_active;
         this.entangle_victim = entangle_victim;
         this.powerful_flock = powerful_flock;
         this.hells_fury = hells_fury;
@@ -116,6 +117,9 @@ public class PlayerData {
         this.in_flock = in_flock;
         this.nearby_friends = nearby_friends;
         this.hells_fury_active = hells_fury_active;
+        this.stamina = stamina;
+        this.max_stamina = max_stamina;
+        this.cool_downs = cool_downs;
     }
 
     public UUID getUuid() {
@@ -376,22 +380,6 @@ public class PlayerData {
         this.intoxicate_active = intoxicate_active;
     }
 
-    public boolean isDiscombobulate_active() {
-        return discombobulate_active;
-    }
-
-    public void setDiscombobulate_active(boolean discombobulate_active) {
-        this.discombobulate_active = discombobulate_active;
-    }
-
-    public boolean isEntangle_active() {
-        return entangle_active;
-    }
-
-    public void setEntangle_active(boolean entangle_active) {
-        this.entangle_active = entangle_active;
-    }
-
     public boolean isHeavy_boots_victim() {
         return heavy_boots_victim;
     }
@@ -502,5 +490,29 @@ public class PlayerData {
 
     public void setHells_fury_active(boolean hells_fury_active) {
         this.hells_fury_active = hells_fury_active;
+    }
+
+    public double getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(double stamina) {
+        this.stamina = stamina;
+    }
+
+    public double getMax_stamina() {
+        return max_stamina;
+    }
+
+    public void setMax_stamina(double max_stamina) {
+        this.max_stamina = max_stamina;
+    }
+
+    public HashMap<String, Long> getCool_downs() {
+        return cool_downs;
+    }
+
+    public void setCool_downs(HashMap<String, Long> cool_downs) {
+        this.cool_downs = cool_downs;
     }
 }

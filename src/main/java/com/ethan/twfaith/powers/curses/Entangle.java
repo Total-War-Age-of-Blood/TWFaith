@@ -2,10 +2,7 @@ package com.ethan.twfaith.powers.curses;
 
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.TreeType;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -28,6 +25,12 @@ public class Entangle implements Listener {
     ArrayList<Biome> JUNGLE = new ArrayList<>(Arrays.asList(Biome.BAMBOO_JUNGLE, Biome.JUNGLE, Biome.SPARSE_JUNGLE));
     ArrayList<Biome> ACACIA = new ArrayList<>(Arrays.asList(Biome.SAVANNA, Biome.SAVANNA_PLATEAU, Biome.WINDSWEPT_SAVANNA));
     public void onEntangleTrigger(Player player, PlayerData player_data){
+
+        if (player_data.getStamina() < 10){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - 10);
 
         for (Player heathen : Bukkit.getOnlinePlayers()){
             PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());

@@ -3,6 +3,7 @@ package com.ethan.twfaith.powers.curses;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,14 @@ public class Discombobulate implements Listener {
 
     public void discombobulateTrigger(Player player){
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+
+        // Because this is a triggered power, not a toggle power, we check and deduct stamina here
+        if (player_data.getStamina() < 10){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - 10);
+
         // See who is in range of the power
         for (Player heathen : Bukkit.getOnlinePlayers()){
             PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());

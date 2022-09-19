@@ -69,11 +69,23 @@ public class UsePowers implements Listener {
                     fury.onHellsFuryTrigger(player, player_data);
                     break;
                 case "Divine Intervention":
+                    // Check if the power is on cool down
+                    if (checkCoolDown("Divine Intervention", player, 10)){return;}
+                    // If power is not on cool down, put power on cool down
+                    player_data.getCool_downs().put("Divine Intervention", System.currentTimeMillis() / 1000);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    // Activate power
                     DivineIntervention divine = new DivineIntervention();
                     divine.onDivineTrigger(player, player_data);
                     player.sendMessage("Divine Intervention Activated");
                     break;
                 case "Mana":
+                    // Check if the power is on cool down
+                    if (checkCoolDown("Mana", player, 10)){return;}
+                    // If power is not on cool down, put power on cool down
+                    player_data.getCool_downs().put("Mana", System.currentTimeMillis() / 1000);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    // Activate power
                     Mana mana = new Mana();
                     mana.onManaTrigger(player, player_data);
                     break;
@@ -92,6 +104,12 @@ public class UsePowers implements Listener {
                         player.sendMessage(ChatColor.GREEN + "Savior Activated");}
                     break;
                 case "Taunt":
+                    // Check if the power is on cool down
+                    if (checkCoolDown("Taunt", player, 10)){return;}
+                    // If power is not on cool down, put power on cool down
+                    player_data.getCool_downs().put("Taunt", System.currentTimeMillis() / 1000);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    // Activate power
                     Taunt taunt = new Taunt();
                     taunt.tauntTrigger(player);
                     player.sendMessage(ChatColor.GOLD + "You taunt your enemies!");
@@ -111,6 +129,12 @@ public class UsePowers implements Listener {
                         player.sendMessage(ChatColor.GREEN + "Explosive Landing Activated");}
                     break;
                 case "Flood":
+                    // Check if the power is on cool down
+                    if (checkCoolDown("Flood", player, 10)){return;}
+                    // If power is not on cool down, put power on cool down
+                    player_data.getCool_downs().put("Flood", System.currentTimeMillis() / 1000);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    // Activate power
                     Flood flood = new Flood();
                     flood.floodTrigger(player);
                     player.sendMessage(ChatColor.DARK_BLUE + "The area floods with water.");
@@ -150,13 +174,24 @@ public class UsePowers implements Listener {
                     }
                     break;
                 case "Discombobulate":
-                    player_data.setDiscombobulate_active(true);
+                    // Check if the power is on cool down
+                    if (checkCoolDown("Discombobulate", player, 10)){return;}
+                    // If power is not on cool down, put power on cool down
+                    player_data.getCool_downs().put("Discombobulate", System.currentTimeMillis() / 1000);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    // Activate power
                     Discombobulate discombobulate = new Discombobulate();
                     discombobulate.discombobulateTrigger(player);
                     Discombobulate.discombobulators.add(player.getDisplayName());
                     player.sendMessage(ChatColor.GREEN + "Discombobulate Activated");
                     break;
                 case "Entangle":
+                    // Check if the power is on cool down
+                    if (checkCoolDown("Entangle", player, 10)){return;}
+                    // If power is not on cool down, put power on cool down
+                    player_data.getCool_downs().put("Entangle", System.currentTimeMillis() / 1000);
+                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    // Activate power
                     Entangle entangle = new Entangle();
                     entangle.onEntangleTrigger(player, player_data);
             }
@@ -182,4 +217,19 @@ public class UsePowers implements Listener {
 
     // TODO Only allow power to be held or given to the hot bar.
     // TODO Delete power items when they are dropped.
+
+    public boolean checkCoolDown(String power, Player player, long cooldown){
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        if (player_data.getCool_downs().get(power) == null){return false;}
+        long last_use = player_data.getCool_downs().get(power);
+        // Convert to seconds
+        long current = System.currentTimeMillis() / 1000;
+
+        if (current - last_use < cooldown){
+            player.sendMessage(ChatColor.RED + "You can use " + power + " again in " + (cooldown - (current - last_use)) + " seconds.");
+            return true;
+        }
+        return false;
+    }
+
 }
