@@ -7,22 +7,31 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class HellsFury implements Listener {
-    public void onHellsFuryTrigger(Player player, PlayerData player_data){
+    public void onHellsFuryTrigger(Player player, PlayerData player_data, ItemStack chosen_item, ItemMeta chosen_item_meta){
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
             if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLed_by().equals(nearby_data.getLed_by())){continue;}
             if (nearby_data.isHells_fury_active()){
                 nearby_data.setHells_fury_active(false);
                 player.sendMessage("Your foot flames cease.");
+                if (!chosen_item.getEnchantments().isEmpty()){
+                    chosen_item_meta.removeEnchant(Enchantment.DURABILITY);
+                    chosen_item.setItemMeta(chosen_item_meta);
+                }
             }else{
                 nearby_data.setHells_fury_active(true);
                 player.sendMessage("Fiery flames spring from your feet!");
+                chosen_item_meta.addEnchant(Enchantment.DURABILITY, 1, false);
+                chosen_item.setItemMeta(chosen_item_meta);
             }
         }
     }

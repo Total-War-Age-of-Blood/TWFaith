@@ -1,5 +1,9 @@
 package com.ethan.twfaith.data;
 
+import com.ethan.twfaith.customevents.UsePowers;
+import com.ethan.twfaith.powers.curses.Crumbling;
+import com.ethan.twfaith.powers.curses.HeavyBoots;
+import com.ethan.twfaith.powers.curses.Intoxicate;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -72,16 +76,34 @@ public class PlayerHashMap implements Listener {
     }
 
     // Save data from HashMap to file when player quits, then remove player from HashMap
-    // TODO set active powers to false when player leaves
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
+        // Switching off the player's powers
+        PlayerData player_data = player_data_hashmap.get(player.getUniqueId());
+        player_data.setExplosive_landing_active(false);
+        player_data.setInsidious_active(false);
+        player_data.setSavior_active(false);
+        player_data.setCrumbling_active(false);
+        player_data.setHeavy_boots_active(false);
+        player_data.setLions_heart_active(false);
+        player_data.setTerrain_bonus_active(false);
+        player_data.setSummon_god_active(false);
+        player_data.setHells_fury_active(false);
+        player_data.setPowerful_flock_active(false);
+        player_data.setIn_flock(false);
+        player_data.setIntoxicate_victim(false);
+        player_data.setCrumbling_victim(false);
+        player_data.setDiscombobulate_victim(false);
+        player_data.setEntangle_victim(false);
+        player_data.setHeavy_boots_victim(false);
+
+        // Saving data from HashMap to File
         Gson gson = new Gson();
         try{
             File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
             File player_file = new File(player_folder, player.getUniqueId() + ".json");
             FileWriter player_data_writer = new FileWriter(player_file, false);
-            PlayerData player_data = player_data_hashmap.get(player.getUniqueId());
             gson.toJson(player_data, player_data_writer);
             player_data_writer.flush();
             player_data_writer.close();

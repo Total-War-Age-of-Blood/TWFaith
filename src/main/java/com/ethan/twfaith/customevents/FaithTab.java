@@ -12,7 +12,7 @@ public class FaithTab implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         if (args.length == 1) {
-            return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "list", "invite", "disband", "join", "leave", "summon", "powers", "upgrade"), new ArrayList<>());
+            return StringUtil.copyPartialMatches(args[0], Arrays.asList("balance", "create", "list", "invite", "disband", "join", "leave", "summon", "powers", "upgrade", "rename", "kick"), new ArrayList<>());
         }else if (args.length == 2 && Objects.equals(args[0], "invite")){
             return StringUtil.copyPartialMatches(args[0], Collections.singletonList("add"), new ArrayList<>());
         }

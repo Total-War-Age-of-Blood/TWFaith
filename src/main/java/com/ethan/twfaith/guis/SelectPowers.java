@@ -12,15 +12,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.profile.PlayerProfile;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SelectPowers implements Listener {
-    // TODO implement biome group and bonus selection for terrain bonus power
     private Inventory gui;
     public void openSelectPowersGui(Player player, PlayerData player_data){
         gui = Bukkit.createInventory(null, 45, "Select Powers");
@@ -51,7 +58,30 @@ public class SelectPowers implements Listener {
 
         // God Powers
         // Lion's Heart
-        generateGUI(Material.PLAYER_HEAD, ChatColor.GOLD, "Lion's Heart", player_data.getLions_heart(), 19);
+        ItemStack lion_head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta lion_head_meta = (SkullMeta) lion_head.getItemMeta();
+
+        // Giving the player head a custom texture
+        PlayerProfile profile = Bukkit.getServer().createPlayerProfile(UUID.randomUUID(), null);
+
+        try{
+            profile.getTextures().setSkin(new URL("http://textures.minecraft.net/texture/9df16fb7bd6eab9a47e7306896a0b6ade7c36965db56469ddb4f93dc2aed6396"));
+            assert lion_head_meta != null;
+            lion_head_meta.setOwnerProfile(profile);
+        }catch (MalformedURLException e){e.printStackTrace();}
+
+        assert lion_head_meta != null;
+        lion_head_meta.setDisplayName(ChatColor.DARK_RED + "Lion's Heart");
+        switch (player_data.getLions_heart()){
+            case 0:
+                lion_head_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored", ChatColor.RED + "Not Owned"));
+                break;
+            case 1:
+                lion_head_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored", ChatColor.GREEN + "Owned"));
+                break;
+        }
+        lion_head.setItemMeta(lion_head_meta);
+        gui.setItem(19, lion_head);
 
         // Savior
         generateGUI(Material.GOLDEN_CARROT, ChatColor.RED, "Savior", player_data.getSavior(), 20);
@@ -100,9 +130,27 @@ public class SelectPowers implements Listener {
             return;
         }}catch (NullPointerException exception){return;}
 
+        if (gui == null){return;}
+
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
+
+        // Check if player has any empty hotbar slots
+        Inventory player_inventory = p.getInventory();
+        ItemStack[] player_inventory_contents = player_inventory.getContents();
+        boolean empty_slot = false;
+        for (int i = 0; i < 9; i++){
+            if (player_inventory_contents[i] == null){
+                empty_slot = true;
+                break;
+            }
+        }
+        // If player has no empty hotbar slots, do not give the power
+        if (!empty_slot){
+            p.sendMessage(ChatColor.RED + "Must have an empty hotbar slot");
+            return;
+        }
 
         switch (e.getSlot()){
             case 10:
@@ -194,6 +242,7 @@ public class SelectPowers implements Listener {
             item_meta.setDisplayName(color + display_name);
             PersistentDataContainer item_data = item_meta.getPersistentDataContainer();
             item_data.set(new NamespacedKey(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")), "Power"), PersistentDataType.STRING, display_name);
+            item_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             item.setItemMeta(item_meta);
 
             p.getInventory().addItem(item);

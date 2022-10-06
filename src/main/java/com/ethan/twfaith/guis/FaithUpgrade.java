@@ -58,6 +58,8 @@ public class FaithUpgrade implements Listener {
             return;
         }}catch (NullPointerException exception){return;}
 
+        if (gui == null){return;}
+
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();

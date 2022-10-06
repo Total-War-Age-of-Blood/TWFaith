@@ -1,5 +1,6 @@
 package com.ethan.twfaith.powers.blessings;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.Bukkit;
@@ -14,6 +15,11 @@ import java.util.Collections;
 
 public class Mana implements Listener {
     public void onManaTrigger(Player player, PlayerData player_data){
+        if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("mana-stamina")){
+            player.sendMessage(ChatColor.RED + "Not enough stamina.");
+            return;
+        }
+        player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("mana-stamina"));
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
             if(!player_data.getLed_by().equals(nearby_data.getLed_by()) || player.getLocation().distance(nearby.getLocation()) > 30){continue;}

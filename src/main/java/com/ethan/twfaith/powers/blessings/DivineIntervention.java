@@ -23,11 +23,12 @@ public class DivineIntervention implements Listener {
 
     public void onDivineTrigger(Player player, PlayerData player_data){
 
-        if (player_data.getStamina() < 10){
+        int divine_stamina = TWFaith.getPlugin().getConfig().getInt("divine-stamina");
+        if (player_data.getStamina() < divine_stamina){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
             return;
         }
-        player_data.setStamina(player_data.getStamina() - 10);
+        player_data.setStamina(player_data.getStamina() - divine_stamina);
 
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
@@ -38,7 +39,7 @@ public class DivineIntervention implements Listener {
                 nearby.addPotionEffect(PotionEffectType.SLOW_FALLING.createEffect(1 * 20, 0));
                 divine_list.put(nearby.getUniqueId(), nearby);
                 // Allows player to glide to safety
-                BukkitTask divine = new Divine(player).runTaskLater(TWFaith.getPlugin(), 20);
+                BukkitTask divine = new Divine(nearby).runTaskLater(TWFaith.getPlugin(), 20);
                 nearby.sendMessage("Your god lifts you into the air.");
             }
         }

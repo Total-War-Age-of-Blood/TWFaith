@@ -4,11 +4,15 @@ import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Biome;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -28,29 +32,35 @@ public class TerrainBonus implements Listener {
     ArrayList<Biome> NETHER = new ArrayList<>(Arrays.asList(Biome.NETHER_WASTES, Biome.SOUL_SAND_VALLEY, Biome.CRIMSON_FOREST, Biome.WARPED_FOREST, Biome.BASALT_DELTAS));
     ArrayList<Biome> END = new ArrayList<>(Arrays.asList(Biome.THE_END, Biome.SMALL_END_ISLANDS, Biome.END_MIDLANDS, Biome.END_HIGHLANDS, Biome.END_BARRENS));
 
-    public void terrainToggle(String display_name, Player player){
+    public void terrainToggle(String display_name, Player player, ItemStack power_block){
         Faith faith_data = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
         List<String> terrain_active_powers = faith_data.getTerrain_active_powers();
+        ItemMeta power_block_meta = power_block.getItemMeta();
         // If the power was already listed as active, remove it from the list to deactivate it.
         for (String power : terrain_active_powers){
             if (power.equals(display_name)){
                 terrain_active_powers.remove(power);
                 faith_data.setTerrain_active_powers(terrain_active_powers);
-                System.out.println(power);
+                player.sendMessage(ChatColor.RED + power_block.getItemMeta().getDisplayName() + " Deactivated");
+                power_block_meta.removeEnchant(Enchantment.DURABILITY);
+                power_block.setItemMeta(power_block_meta);
+                // System.out.println(power);
                 return;
             }
         }
         // If the power was not already listed, add it to the list to activate it.
         terrain_active_powers.add(display_name);
         faith_data.setTerrain_active_powers(terrain_active_powers);
+        player.sendMessage(ChatColor.GREEN + power_block.getItemMeta().getDisplayName() + "  Activated");
+        power_block_meta.addEnchant(Enchantment.DURABILITY, 1, false);
+        power_block.setItemMeta(power_block_meta);
     }
 
-    // TODO it would be better for performance to replace this event with a repeating task
     @EventHandler
     public void onTerrainTrigger(PlayerMoveEvent event){
         Player player = event.getPlayer();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
-        if (!player_data.getIn_faith()){return;}
+        if (!player_data.getIn_faith() || !player_data.isLeader()){return;}
         Faith faith = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
 
         // if (!faith.isTerrain_bonus_active()){return;}

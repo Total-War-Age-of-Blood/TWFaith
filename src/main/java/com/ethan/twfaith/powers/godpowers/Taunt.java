@@ -1,5 +1,6 @@
 package com.ethan.twfaith.powers.godpowers;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -15,7 +16,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Objects;
 
 public class Taunt implements Listener {
-    // TODO implement command cool-down.
     // Applies and removes the taunt effects based on distance from taunter
     @EventHandler
     public void onTauntEvent(PlayerMoveEvent e){
@@ -23,7 +23,7 @@ public class Taunt implements Listener {
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
             if (!player_data.isTaunted()){return;}
             if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(player_data.getTaunter())).getLocation()) <= 30){
-                player.addPotionEffect(PotionEffectType.HUNGER.createEffect(Integer.MAX_VALUE, 0));
+                player.addPotionEffect(PotionEffectType.HUNGER.createEffect(80, 0));
             }else{
                 player_data.setTaunted(false);
                 player_data.setTaunter(null);
@@ -64,11 +64,11 @@ public class Taunt implements Listener {
     public void tauntTrigger(Player player){
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
 
-        if (player_data.getStamina() < 10){
+        if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("taunt-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
             return;
         }
-        player_data.setStamina(player_data.getStamina() - 10);
+        player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("taunt-stamina"));
 
         if (!player_data.getLeader() || player_data.getTaunt() < 1){return;}
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(3000, 0));

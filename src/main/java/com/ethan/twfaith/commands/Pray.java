@@ -54,7 +54,7 @@ public class Pray implements CommandExecutor {
                     player.sendMessage("You pray to your god.");
 
                 } else if(!((current_time - last_prayer) > twFaith.getConfig().getLong("pray-cool-down"))){
-                    player.sendMessage("Your prayer is still on cool-down for " + (twFaith.getConfig().getLong("pray-cool-down") - (current_time - last_prayer)) + "hours.");
+                    player.sendMessage("Your prayer is still on cool-down for " + (twFaith.getConfig().getLong("pray-cool-down") - (current_time - last_prayer)) + " hours.");
                 }
             } catch (IOException e) {e.printStackTrace();}
 

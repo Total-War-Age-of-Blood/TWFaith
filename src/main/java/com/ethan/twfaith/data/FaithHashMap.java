@@ -38,7 +38,6 @@ public class FaithHashMap {
                gson.toJson(entry.getValue(), file_writer);
                file_writer.flush();
                file_writer.close();
-               player_faith_hashmap.remove(entry.getKey());
            }catch (IOException exception){exception.printStackTrace();}
        }
    }

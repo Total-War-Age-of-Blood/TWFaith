@@ -1,11 +1,13 @@
 package com.ethan.twfaith.commands;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.data.*;
 import com.ethan.twfaith.powers.blessings.SummonGod;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -13,6 +15,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.profile.PlayerProfile;
 
 
 import java.io.*;
@@ -20,7 +23,7 @@ import java.util.*;
 
 public class FaithCommand implements CommandExecutor {
     // TODO Set up error messages for all commands
-    // TODO Make sure that gods lose their powers when they disband their faith
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -38,7 +41,6 @@ public class FaithCommand implements CommandExecutor {
             }
             File sender_faith_file = new File(faith_folder, player.getUniqueId() + ".json");
             Gson gson = new Gson();
-            // TODO prevent players from making faiths with the same name, and prevent players from creating a faith if they are already in a faith or are already the leader of a faith
             if (Objects.equals(args[0], "create") && args.length == 2) {
                 if (player_data.getIn_faith()){
                     player.sendMessage(ChatColor.RED + "You must leave your current faith before creating a new faith.");
@@ -68,7 +70,6 @@ public class FaithCommand implements CommandExecutor {
                 boss_bar.addPlayer(player);
                 BossBars.boss_bar_map.put(player.getUniqueId(), boss_bar);
 
-                // TODO see if this is still relevant
                 try{
                     if (!sender_faith_file.exists()){sender_faith_file.createNewFile();}
 
@@ -115,6 +116,24 @@ public class FaithCommand implements CommandExecutor {
                         leader_player_data.setLeader(false);
                         leader_player_data.setFaith("");
                         leader_player_data.setIn_faith(false);
+                        leader_player_data.setDivine_intervention(0);
+                        leader_player_data.setHells_fury(0);
+                        leader_player_data.setMana(0);
+                        leader_player_data.setPowerful_flock(0);
+                        leader_player_data.setSummon_god(0);
+                        leader_player_data.setTerrain_bonus(0);
+                        leader_player_data.setCrumbling(0);
+                        leader_player_data.setDiscombobulate(0);
+                        leader_player_data.setEntangle(0);
+                        leader_player_data.setHeavy_boots(0);
+                        leader_player_data.setIntoxicate(0);
+                        leader_player_data.setLions_heart(0);
+                        leader_player_data.setSavior(0);
+                        leader_player_data.setInsidious(0);
+                        leader_player_data.setFlood(0);
+                        leader_player_data.setExplosive_landing(0);
+                        leader_player_data.setTaunt(0);
+                        leader_player_data.setFaith_points(0);
                         PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), leader_player_data);
 
                         for (UUID unique_player : read_faith.getFollowers()){
@@ -192,7 +211,7 @@ public class FaithCommand implements CommandExecutor {
                             gson.toJson(read_faith, writer);
                             writer.flush();
                             writer.close();
-                            System.out.println("Player successfully added.");
+                            // System.out.println("Player successfully added.");
                         }catch(IOException e){e.printStackTrace(); System.out.println("There was an error adding to list.");}
                     }
                     player.sendMessage("You have invited " + args[2] + " to the faith.");
@@ -305,11 +324,105 @@ public class FaithCommand implements CommandExecutor {
                 if (Bukkit.getPlayer(requester_id) == null){return true;}
                 Player requester = Bukkit.getPlayer(requester_id);
                 assert requester != null;
+                // Handle cooldown
+                checkCoolDown("Summon", player, TWFaith.getPlugin().getConfig().getLong("summon-cooldown"));
+                player_data.getCool_downs().put("Summon", System.currentTimeMillis() / 1000);
+                PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                // Handle stamina
+                if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("summon-stamina")){
+                    player.sendMessage(ChatColor.RED + "Not enough stamina.");
+                    return true;
+                }
+                player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("summon-stamina"));
                 requester.sendMessage(player.getDisplayName() + " has been summoned!");
                 player.teleport(requester.getLocation());
                 SummonGod.summon_requests.remove(player.getUniqueId());
             }
+
+            if (Objects.equals(args[0], "balance")){
+                player.sendMessage("You have " + player_data.getFaith_points() + " Faith Points");
+            }
+
+            if (Objects.equals(args[0], "kick") && args.length == 2) {
+
+                // Only leaders can use this command
+                if (!player_data.getLeader()){
+                    player.sendMessage(ChatColor.RED + "Must be leader to kick follower.");
+                    return true;
+                }
+
+                // If the kicked player is not online, search the list of offline players. If there is still no result,
+                // tell the player he typed it wrong.
+                Player kicked = Bukkit.getPlayer(args[1]);
+                if (kicked == null){
+                    boolean found_offline = false;
+                    for (OfflinePlayer offline : Bukkit.getOfflinePlayers()){
+                        if (!offline.getName().equals(args[1])){continue;}
+                        // If the player is offline, we have to change the data in the JSON file.
+                        PlayerProfile kicked_profile = offline.getPlayerProfile();
+                        UUID kicked_uuid = kicked_profile.getUniqueId();
+                        File kicked_folder = new File(TWFaith.getPlugin().getDataFolder(), "PlayerData");
+                        File kicked_file = new File(kicked_folder, kicked_uuid + ".json");
+                        try{
+                            FileReader kicked_reader = new FileReader(kicked_file);
+                            PlayerData kicked_data = gson.fromJson(kicked_reader, PlayerData.class);
+
+                            kicked_data.setLed_by(kicked_uuid);
+                            kicked_data.setFaith("");
+                            kicked_data.setIn_faith(false);
+
+                            FileWriter kicked_writer = new FileWriter(kicked_file, false);
+                            gson.toJson(kicked_data, kicked_writer);
+                            kicked_writer.flush();
+                            kicked_writer.close();
+                        }catch (IOException exception){return true;}
+                        Faith faith = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+                        List<UUID> followers = faith.getFollowers();
+                        followers.remove(kicked_uuid);
+                        player.sendMessage("Kicked " + args[1]+ " from " + player_data.getFaith() + ".");
+                        return true;
+                    }
+                    if (!found_offline){
+                        player.sendMessage(ChatColor.RED + "Invalid Username");
+                        return true;
+                    }
+                }
+
+                PlayerData kicked_data = PlayerHashMap.player_data_hashmap.get(kicked.getUniqueId());
+                Faith faith = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+
+                // Kicking the player
+                if (kicked_data.getLed_by().equals(player_data.getLed_by()) && !kicked_data.getLeader()){
+                    kicked_data.setLed_by(kicked.getUniqueId());
+                    kicked_data.setFaith("");
+                    kicked_data.setIn_faith(false);
+                    List<UUID> followers = faith.getFollowers();
+                    followers.remove(kicked.getUniqueId());
+                    faith.setFollowers(followers);
+                    player.sendMessage("Kicked " + kicked.getDisplayName() + " from " + player_data.getFaith() + ".");
+                    kicked.sendMessage("You have been kicked from " + player_data.getFaith() + ".");
+                } else if(!kicked_data.getLed_by().equals(player_data.getLed_by())){
+                    player.sendMessage(ChatColor.RED + "That player is not in your faction.");
+                } else{
+                    player.sendMessage(ChatColor.RED + "You cannot kick yourself.");
+                }
+            }
+
         }
             return false;
+    }
+
+    public boolean checkCoolDown(String power, Player player, long cooldown){
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        if (player_data.getCool_downs().get(power) == null){return false;}
+        long last_use = player_data.getCool_downs().get(power);
+        // Convert to seconds
+        long current = System.currentTimeMillis() / 1000;
+
+        if (current - last_use < cooldown){
+            player.sendMessage(ChatColor.RED + "You can use " + power + " again in " + (cooldown - (current - last_use)) + " seconds.");
+            return true;
         }
+        return false;
+    }
 }

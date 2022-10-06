@@ -56,11 +56,11 @@ public class Flood implements Listener {
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         Gson gson = new Gson();
 
-        if (player_data.getStamina() < 10){
+        if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("flood-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
             return;
         }
-        player_data.setStamina(player_data.getStamina() - 10);
+        player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("flood-stamina"));
 
         try{
             if (player_data.getFlood() < 1){return;}

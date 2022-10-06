@@ -1,5 +1,6 @@
 package com.ethan.twfaith.powers.curses;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.*;
@@ -26,11 +27,11 @@ public class Entangle implements Listener {
     ArrayList<Biome> ACACIA = new ArrayList<>(Arrays.asList(Biome.SAVANNA, Biome.SAVANNA_PLATEAU, Biome.WINDSWEPT_SAVANNA));
     public void onEntangleTrigger(Player player, PlayerData player_data){
 
-        if (player_data.getStamina() < 10){
+        if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("entangle-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
             return;
         }
-        player_data.setStamina(player_data.getStamina() - 10);
+        player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("entangle-stamina"));
 
         for (Player heathen : Bukkit.getOnlinePlayers()){
             PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());

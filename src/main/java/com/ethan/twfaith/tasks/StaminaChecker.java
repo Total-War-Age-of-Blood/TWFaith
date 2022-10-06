@@ -1,10 +1,16 @@
 package com.ethan.twfaith.tasks;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BossBar;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class StaminaChecker extends BukkitRunnable {
@@ -14,52 +20,52 @@ public class StaminaChecker extends BukkitRunnable {
         // This method will run every second and deduct or give stamina from each player based on their active powers.
         for (Player player : Bukkit.getOnlinePlayers()){
             PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
-            Faith faith = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+            if (!player_data.getLeader() || !player_data.getIn_faith()){continue;}
+            Faith faith = FaithHashMap.player_faith_hashmap.get(player_data.getLed_by());
 
             double stamina = player_data.getStamina();
             double max_stamina = player_data.getMax_stamina();
-            // TODO make all of the stamina costs and stamina regen configurable
             // subtract the stamina from the active powers
             if (player_data.isPowerful_flock_active()){
-                stamina -= 11;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("flock-stamina");
             }
             if (player_data.isHells_fury_active()){
-                stamina -= 12;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("hells-stamina");
             }
-            if (player_data.isTerrain_bonus_active()){
-                stamina -= 11;
+            // Because multiple terrain effects can be active at once, we deduct 11 stamina for each terrain bonus
+            // in the active terrain bonus list.
+            if (faith.getTerrain_active_powers().size() > 0){
+                stamina -= (TWFaith.getPlugin().getConfig().getInt("terrain-stamina") * faith.getTerrain_active_powers().size());
             }
             if (player_data.isCrumbling_active()){
-                stamina -= 11;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("crumbling-stamina");
             }
             if (player_data.isHeavy_boots_active()){
-                stamina -= 11;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("heavy-stamina");
             }
             if (player_data.isIntoxicate_active()){
-                stamina -= 11;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("intoxicate-stamina");
             }
             if (player_data.isLions_heart_active()){
-                stamina -= 11;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("lions-heart-stamina");
             }
             if (player_data.isInsidious_active()){
-                stamina -= 11;
+                stamina -= TWFaith.getPlugin().getConfig().getInt("insidious-stamina");
             }
 
             // add the stamina that should have regenerated
 
-            stamina += 10;
+            stamina += TWFaith.getPlugin().getConfig().getInt("base-stamina-regen");
 
             // If the current stamina is negative, turn off all powers and send player a notification.
             // Also, set stamina to 0. If calculated stamina is above max, set to max.
             // Otherwise, set stamina to new calculated stamina.
-
             if (stamina < 0){
                 player_data.setPowerful_flock_active(false);
                 player_data.setHells_fury_active(false);
                 player_data.setSummon_god_active(false);
-                // TODO make terrain bonus deduct stamina based on length of active terrain powers list
-                // TODO fix bug where invisibility effect remains permanently when insidious is disabled by StaminaChecker
                 player_data.setTerrain_bonus_active(false);
+                faith.getTerrain_active_powers().clear();
                 player_data.setCrumbling_active(false);
                 player_data.setHeavy_boots_active(false);
                 player_data.setIntoxicate_active(false);
@@ -70,9 +76,22 @@ public class StaminaChecker extends BukkitRunnable {
                 player_data.setStamina(0);
                 player.sendMessage(ChatColor.RED + "Your energy runs out, and your powers fade.");
 
+                // Remove enchantment sheen for all powers
+                for (int x = 0; x < 9; x++){
+                    if (player.getInventory().getItem(x) == null){continue;}
+                    ItemStack item = player.getInventory().getItem(x);
+                    if (!item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING)){
+                        continue;
+                    }
+                    ItemMeta item_meta = item.getItemMeta();
+                    item_meta.removeEnchant(Enchantment.DURABILITY);
+                    item.setItemMeta(item_meta);
+                }
+
             }else player_data.setStamina(Math.min(stamina, max_stamina));
 
             if (stamina > max_stamina){stamina = max_stamina;}
+            if (stamina < 0){stamina = 0;}
 
             // Update the player's Boss Bar
             if (player_data.getLeader() && player_data.getIn_faith()){

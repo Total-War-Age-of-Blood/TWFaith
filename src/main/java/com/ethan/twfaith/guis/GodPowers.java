@@ -1,5 +1,6 @@
 package com.ethan.twfaith.guis;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -24,6 +25,7 @@ import org.bukkit.profile.PlayerProfile;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
@@ -31,11 +33,10 @@ import java.util.UUID;
 public class GodPowers implements Listener {
     private Inventory gui;
     UsePowers use_powers = new UsePowers();
-    // TODO Implement gui purchasing
     public void openGodPowersGui(Player player){
+        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
         // Lion's Heart
-        generateGUI(Material.PLAYER_HEAD, ChatColor.DARK_RED, "Lion's Heart", "Your attacks are stronger when you are unarmored.", 10);
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta item_meta = (SkullMeta) item.getItemMeta();
 
@@ -50,27 +51,34 @@ public class GodPowers implements Listener {
 
         assert item_meta != null;
         item_meta.setDisplayName(ChatColor.DARK_RED + "Lion's Heart");
-        item_meta.setLore(Collections.singletonList("Your attacks are stronger when you are unarmored"));
+        switch (player_data.getLions_heart()){
+            case 0:
+                item_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored", ChatColor.RED + "Not Owned"));
+                break;
+            case 1:
+                item_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored", ChatColor.GREEN + "Owned"));
+                break;
+        }
         item.setItemMeta(item_meta);
         gui.setItem(10, item);
 
         // Savior
-        generateGUI(Material.GOLDEN_CARROT, ChatColor.LIGHT_PURPLE, "Savior", "Swap places with injured followers.", 11);
+        generateGUI(Material.GOLDEN_CARROT, ChatColor.LIGHT_PURPLE, "Savior", "Swap places with injured followers.", 11, player_data.getSavior());
 
         // Taunt
-        generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", "Attract the attention of enemies.", 12);
+        generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", "Attract the attention of enemies.", 12, player_data.getTaunt());
 
         // Insidious
-        generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", "Gain invisibility when crouching.", 13);
+        generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", "Gain invisibility when crouching.", 13, player_data.getInsidious());
 
         // Explosive Landing
-        generateGUI(Material.TNT_MINECART, ChatColor.DARK_RED, "Explosive Landing", "Create an explosion when you hit the ground.", 14);
+        generateGUI(Material.TNT_MINECART, ChatColor.DARK_RED, "Explosive Landing", "Create an explosion when you hit the ground.", 14, player_data.getExplosive_landing());
 
         // Flood
-        generateGUI(Material.WATER_BUCKET, ChatColor.DARK_BLUE, "Flood", "Temporarily flood the area.", 15);
+        generateGUI(Material.WATER_BUCKET, ChatColor.DARK_BLUE, "Flood", "Temporarily flood the area.", 15, player_data.getFlood());
 
         // Close Menu
-        generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", 16);
+        generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", 16, 3);
 
         // Frame
         ItemStack frame = new ItemStack(Material.MAGENTA_STAINED_GLASS_PANE);
@@ -81,12 +89,19 @@ public class GodPowers implements Listener {
         player.openInventory(gui);
     }
 
-    public void generateGUI(Material material, ChatColor color, String display, String lore, int place){
+    public void generateGUI(Material material, ChatColor color, String display, String lore, int place, int data){
         ItemStack item = new ItemStack(material);
         ItemMeta item_meta = item.getItemMeta();
         assert item_meta != null;
         item_meta.setDisplayName(color + display);
-        item_meta.setLore(Collections.singletonList(lore));
+        switch (data){
+            case 0:
+                item_meta.setLore(Arrays.asList(lore, ChatColor.RED + "Not Owned"));
+                break;
+            case 1:
+                item_meta.setLore(Arrays.asList(lore, ChatColor.GREEN + "Owned"));
+                break;
+        }
         item.setItemMeta(item_meta);
         gui.setItem(place, item);
     }
@@ -97,41 +112,65 @@ public class GodPowers implements Listener {
             return;
         }}catch (NullPointerException exception){return;}
 
+        if (gui == null){return;}
+
         e.setCancelled(true);
 
         Player player = (Player) e.getWhoClicked();
+        ItemStack item = e.getCurrentItem();
 
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         switch (e.getSlot()){
             case 10:
-                    player_data.setLions_heart(1);
-                    System.out.println("Lions Heart clicked");
+                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("lions-heart-cost"), player_data.getLions_heart(), item, e.getSlot(), "Your attacks are stronger when you are unarmored")){return;}
+                player_data.setLions_heart(1);
+                // System.out.println("Lions Heart clicked");
                 break;
             case 11:
-                    player_data.setSavior(1);
-                    System.out.println("Savior clicked");
+                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("savior-cost"), player_data.getSavior(), item, e.getSlot(), "Swap places with injured followers.")){return;}
+                player_data.setSavior(1);
+                // System.out.println("Savior clicked");
                 break;
             case 12:
-                    player_data.setTaunt(1);
-                    System.out.println("Taunt clicked");
+                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("taunt-cost"), player_data.getTaunt(), item, e.getSlot(), "Attract the attention of enemies.")){return;}
+                player_data.setTaunt(1);
+                // System.out.println("Taunt clicked");
                 break;
             case 13:
-                    player_data.setInsidious(1);
-                    System.out.println("Insidious clicked");
+                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("insidious-cost"), player_data.getInsidious(), item, e.getSlot(), "Gain invisibility when crouching.")){return;}
+                player_data.setInsidious(1);
+                // System.out.println("Insidious clicked");
                 break;
             case 14:
+                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("explosive-cost"), player_data.getExplosive_landing(), item, e.getSlot(), "Create an explosion when you hit the ground.")){return;}
                 player_data.setExplosive_landing(1);
-                System.out.println("Explosive Landing clicked");
+                // System.out.println("Explosive Landing clicked");
                 break;
             case 15:
+                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("flood-cost"), player_data.getFlood(), item, e.getSlot(), "Temporarily flood the area.")){return;}
                 player_data.setFlood(1);
-                System.out.println("Flood clicked");
+                // System.out.println("Flood clicked");
                 break;
             case 16:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
                 break;
         }
        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+    }
+
+    public boolean faithPointsChecker(PlayerData player_data, Player p, int cost, int data, ItemStack item, int slot, String lore){
+        if (data > 0){return true;}
+        if (!(player_data.getFaith_points() >= cost)){
+            p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
+            return true;
+        }
+        player_data.setFaith_points(player_data.getFaith_points() - cost);
+        p.sendMessage(player_data.getFaith_points() + " Faith Points remaining.");
+        ItemMeta item_meta = item.getItemMeta();
+        item_meta.setLore(Arrays.asList(lore, ChatColor.GREEN + "Owned"));
+        item.setItemMeta(item_meta);
+        gui.setItem(slot, item);
+        return false;
     }
 
     @EventHandler
@@ -143,18 +182,11 @@ public class GodPowers implements Listener {
     // Lions Heart
     @EventHandler
     public void lionsHeartEvent(PlayerMoveEvent e){
+        if (e.isCancelled()){return;}
+
         Player player = e.getPlayer();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
-        // TODO Fix Lions Heart Giving level 1 strength with a full armor set
             if (player_data.getLions_heart() > 0 && player_data.isLions_heart_active()){
-                int amplifier = 0;
-                if (Objects.requireNonNull(player.getEquipment()).getBoots() != null){amplifier += 1;}
-                if (player.getEquipment().getLeggings() != null){amplifier += 1;}
-                if (player.getEquipment().getChestplate() != null){amplifier += 1;}
-                if (player.getEquipment().getHelmet() != null){amplifier += 1;}
-                // System.out.println(amplifier);
-                player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                player.addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(Integer.MAX_VALUE, 3 - amplifier));
             }
     }
 
@@ -177,16 +209,16 @@ public class GodPowers implements Listener {
 
             PlayerData leader_data = PlayerHashMap.player_data_hashmap.get(leader.getUniqueId());
 
-            if (use_powers.checkCoolDown("Savior", player, 10)){return;}
+            if (use_powers.checkCoolDown("Savior", player, TWFaith.getPlugin().getConfig().getLong("savior-cooldown"))){return;}
             // If power is not on cool down, put power on cool down
             player_data.getCool_downs().put("Savior", System.currentTimeMillis() / 1000);
             PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
-            if (player_data.getStamina() < 10){
+            if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("savior-stamina")){
                 player.sendMessage(ChatColor.RED + "Not enough stamina.");
                 return;
             }
-            player_data.setStamina(player_data.getStamina() - 10);
+            player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("savior-stamina"));
 
             if (leader_data.getSavior() > 0 && leader_data.isSavior_active()){
                 System.out.println("Leader has Savior");
@@ -209,7 +241,7 @@ public class GodPowers implements Listener {
         // Toggle Sneak event takes the sneak state of the player before the toggle happens
         // So we have to check if the player is standing before sneak is toggled.
         if (!player.isSneaking()){
-            player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 0));
+            player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(80, 0));
         } else{player.removePotionEffect(PotionEffectType.INVISIBILITY);}
     }
 
@@ -223,16 +255,16 @@ public class GodPowers implements Listener {
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         if (player_data.getExplosive_landing() < 1 || !player_data.isExplosive_landing_active()){return;}
 
-        if (use_powers.checkCoolDown("Explosive Landing", player, 10)){return;}
+        if (use_powers.checkCoolDown("Explosive Landing", player, TWFaith.getPlugin().getConfig().getLong("explosive-cooldown"))){return;}
         // If power is not on cool down, put power on cool down
         player_data.getCool_downs().put("Explosive Landing", System.currentTimeMillis() / 1000);
         PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
-        if (player_data.getStamina() < 10){
+        if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("explosive-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
             return;
         }
-        player_data.setStamina(player_data.getStamina() - 10);
+        player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("explosive-stamina"));
         float fall_distance = player.getFallDistance();
         e.setDamage(0);
         player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 5));

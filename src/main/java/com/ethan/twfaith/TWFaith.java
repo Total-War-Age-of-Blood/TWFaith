@@ -1,10 +1,12 @@
 package com.ethan.twfaith;
 
 import com.ethan.twfaith.customevents.FaithTab;
+import com.ethan.twfaith.customevents.GodDeath;
 import com.ethan.twfaith.data.BossBars;
 import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.commands.FaithCommand;
 import com.ethan.twfaith.commands.Pray;
+import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.customevents.UsePowers;
 import com.ethan.twfaith.guis.*;
@@ -13,8 +15,11 @@ import com.ethan.twfaith.powers.blessings.*;
 import com.ethan.twfaith.powers.curses.*;
 import com.ethan.twfaith.powers.godpowers.Flood;
 import com.ethan.twfaith.powers.godpowers.Taunt;
+import com.ethan.twfaith.tasks.EffectsGiver;
 import com.ethan.twfaith.tasks.StaminaChecker;
+import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -24,11 +29,6 @@ import java.util.Objects;
 
 public final class TWFaith extends JavaPlugin implements Listener {
     private static TWFaith plugin;
-
-    // TODO add cool powers that are unlocked with faith points
-    // TODO Replace hard-coded values with configurable ones where applicable
-    // TODO Load PlayerData into hashmap when a player joins
-    //  and save it to file when player leaves or when server shuts down
 
     @Override
     public void onEnable() {
@@ -65,6 +65,7 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new TerrainBonusUpgrade(), this);
         Bukkit.getPluginManager().registerEvents(new TerrainBonusEquip(), this);
         Bukkit.getPluginManager().registerEvents(new BossBars(), this);
+        Bukkit.getPluginManager().registerEvents(new GodDeath(), this);
 
         // Plugin Commands
         Objects.requireNonNull(getCommand("faith")).setExecutor(new FaithCommand());
@@ -83,6 +84,7 @@ public final class TWFaith extends JavaPlugin implements Listener {
 
         // Timer Tasks for Cooldowns and Stamina
         BukkitTask stamina_checker = new StaminaChecker().runTaskTimer(this, 20, 20);
+        BukkitTask effects_giver = new EffectsGiver().runTaskTimer(this, 20, 20);
 
     }
 
@@ -91,6 +93,40 @@ public final class TWFaith extends JavaPlugin implements Listener {
         // Save Faiths data to files
         FaithHashMap player_faith_hashmap = new FaithHashMap();
         player_faith_hashmap.saveFaiths();
+
+        // Save PlayerData to files
+        for (PlayerData player_data : PlayerHashMap.player_data_hashmap.values()){
+            Player player = Bukkit.getPlayer(player_data.getUuid());
+            // Switching off the player's powers
+            player_data.setExplosive_landing_active(false);
+            player_data.setInsidious_active(false);
+            player_data.setSavior_active(false);
+            player_data.setCrumbling_active(false);
+            player_data.setHeavy_boots_active(false);
+            player_data.setLions_heart_active(false);
+            player_data.setTerrain_bonus_active(false);
+            player_data.setSummon_god_active(false);
+            player_data.setHells_fury_active(false);
+            player_data.setPowerful_flock_active(false);
+            player_data.setIn_flock(false);
+            player_data.setIntoxicate_victim(false);
+            player_data.setCrumbling_victim(false);
+            player_data.setDiscombobulate_victim(false);
+            player_data.setEntangle_victim(false);
+            player_data.setHeavy_boots_victim(false);
+
+            // Saving data from HashMap to File
+            Gson gson = new Gson();
+            try{
+                File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
+                File player_file = new File(player_folder, player.getUniqueId() + ".json");
+                FileWriter player_data_writer = new FileWriter(player_file, false);
+                gson.toJson(player_data, player_data_writer);
+                player_data_writer.flush();
+                player_data_writer.close();
+                System.out.println("Player File Saved!");
+            }catch (IOException exception){exception.printStackTrace();}
+        }
     }
 
     public static TWFaith getPlugin() {

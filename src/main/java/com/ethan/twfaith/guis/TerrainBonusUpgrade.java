@@ -70,7 +70,7 @@ public class TerrainBonusUpgrade implements Listener {
 
         player.openInventory(gui);
     }
-    // TODO this may need to be reworked
+
     public void generateGUI(Material block, ChatColor color, String display, int data, int spot){
         ItemStack item = new ItemStack(block);
         ItemMeta item_meta = item.getItemMeta();
@@ -101,61 +101,94 @@ public class TerrainBonusUpgrade implements Listener {
             return;
         }}catch (NullPointerException exception){return;}
 
+        if (gui == null){return;}
+
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
         Faith faith_data = FaithHashMap.player_faith_hashmap.get(player_data.getUuid());
+        ItemStack item = e.getCurrentItem();
 
         switch (e.getSlot()){
             case 0:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_snowy(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_snowy(1);
                 break;
             case 1:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_cold(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_cold(1);
                 break;
             case 2:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_temperate(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_temperate(1);
                 break;
             case 3:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_warm(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_warm(1);
                 break;
             case 4:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_aquatic(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_aquatic(1);
                 break;
             case 5:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_cave(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_cave(1);
                 break;
             case 6:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_nether(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_nether(1);
                 break;
             case 7:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_end(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_end(1);
                 break;
             case 8:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Blessings"));
                 break;
             case 18:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_strength(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_strength(1);
                 break;
             case 19:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_haste(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_haste(1);
                 break;
             case 20:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_speed(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_speed(1);
                 break;
             case 21:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_resistance(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_resistance(1);
                 break;
             case 22:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_fire_resistance(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_fire_resistance(1);
                 break;
             case 23:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_water_breathing(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_water_breathing(1);
                 break;
             case 24:
+                if (faithPointsChecker(player_data, p, 5, faith_data.getTerrain_dolphins_grace(), gui, item, e.getSlot())){return;}
                 faith_data.setTerrain_dolphins_grace(1);
                 break;
         }
+    }
+
+    public boolean faithPointsChecker(PlayerData player_data, Player p, int cost, int data, Inventory gui, ItemStack item, int slot){
+        if (data > 0){return true;}
+        if (!(player_data.getFaith_points() >= cost)){
+            p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
+            return true;
+        }
+        player_data.setFaith_points(player_data.getFaith_points() - cost);
+        p.sendMessage(player_data.getFaith_points() + " Faith Points remaining.");
+        ItemMeta item_meta = item.getItemMeta();
+        item_meta.setLore(Collections.singletonList(ChatColor.GREEN + "Owned"));
+        item.setItemMeta(item_meta);
+        gui.setItem(slot, item);
+        return false;
     }
 }

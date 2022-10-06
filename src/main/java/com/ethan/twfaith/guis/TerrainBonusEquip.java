@@ -95,7 +95,6 @@ public class TerrainBonusEquip implements Listener {
 
     }
 
-    // TODO this may need to be reworked
     public void generateGUI(Material block, ChatColor color, String display, int data, int spot){
         ItemStack item = new ItemStack(block);
         ItemMeta item_meta = item.getItemMeta();
@@ -138,6 +137,8 @@ public class TerrainBonusEquip implements Listener {
         try{        if(!Objects.equals(e.getClickedInventory(), gui)){
             return;
         }}catch (NullPointerException exception){return;}
+
+        if (gui == null){return;}
 
         e.setCancelled(true);
 
