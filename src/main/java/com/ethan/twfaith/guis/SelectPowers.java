@@ -167,6 +167,7 @@ public class SelectPowers implements Listener {
                 break;
             case 14:
                 inventoryClickSwitch(player_data.getDivine_intervention(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Divine Intervention", p);
+                break;
             case 15:
                 inventoryClickSwitch(player_data.getMana(), Material.YELLOW_TERRACOTTA, ChatColor.GOLD, "Mana", p);
                 break;

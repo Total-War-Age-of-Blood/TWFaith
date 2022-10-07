@@ -152,6 +152,9 @@ public class FaithCommand implements CommandExecutor {
                 }catch(Exception e){e.printStackTrace();}
             }
 
+            // TODO fix issues where renamed faith is still referred to by original name in some cases
+            // TODO either make the rename change the faith name for all offline players or determine that the faith
+            //  value in PlayerData is deprecated and remove it
             if (Objects.equals(args[0], "rename")){
                 try{
                     if (sender_faith_file.exists()){
@@ -339,8 +342,11 @@ public class FaithCommand implements CommandExecutor {
                 SummonGod.summon_requests.remove(player.getUniqueId());
             }
 
-            if (Objects.equals(args[0], "balance")){
-                player.sendMessage("You have " + player_data.getFaith_points() + " Faith Points");
+            if (Objects.equals(args[0], "balance") && player_data.getLeader()){
+                Faith faith = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+                player.sendMessage("You have " + faith.getFaith_points() + " Faith Points");
+            } else if (Objects.equals(args[0], "balance") && !player_data.getLeader()){
+                player.sendMessage(ChatColor.RED + "Only the god can use this command.");
             }
 
             if (Objects.equals(args[0], "kick") && args.length == 2) {

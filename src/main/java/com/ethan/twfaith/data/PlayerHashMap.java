@@ -1,11 +1,8 @@
 package com.ethan.twfaith.data;
 
-import com.ethan.twfaith.customevents.UsePowers;
-import com.ethan.twfaith.powers.curses.Crumbling;
-import com.ethan.twfaith.powers.curses.HeavyBoots;
-import com.ethan.twfaith.powers.curses.Intoxicate;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -90,7 +87,27 @@ public class PlayerHashMap implements Listener {
         player_data.setTerrain_bonus_active(false);
         player_data.setSummon_god_active(false);
         player_data.setHells_fury_active(false);
-        player_data.setPowerful_flock_active(false);
+        // We need to remove the powerful flock health bonus when the god logs off.
+        if (player_data.powerful_flock_active){
+            // System.out.println("Powerful flock active");
+            player_data.setPowerful_flock_active(false);
+            for (Player follower : Bukkit.getOnlinePlayers()){
+                PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getUniqueId());
+                if (follower_data.isIn_flock() && follower_data.getLed_by().equals(player_data.getLed_by())){
+                    // System.out.println("Follower needs to be deactivated");
+                    int nearby_friends = 0;
+                    for (Player nearby : Bukkit.getOnlinePlayers()){
+                        PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+                        if (nearby.getLocation().distance(follower.getLocation()) <= 30 && nearby_data.getLed_by().equals(follower_data.getLed_by())){
+                            nearby_friends ++;
+                            // System.out.println(nearby_friends + " nearby friends");
+                        }
+                    }
+                    Objects.requireNonNull(follower.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() - nearby_friends);
+                    follower_data.setIn_flock(false);
+                }
+            }
+        }
         player_data.setIn_flock(false);
         player_data.setIntoxicate_victim(false);
         player_data.setCrumbling_victim(false);

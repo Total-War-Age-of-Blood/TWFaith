@@ -2,6 +2,8 @@ package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -114,7 +116,8 @@ public class Curses implements Listener {
 
     public boolean faithPointsChecker(PlayerData player_data, Player p, int cost, int data, ItemStack item, int slot, String lore){
         if (data > 0){return true;}
-        if (!(player_data.getFaith_points() >= cost)){
+        Faith faith = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
+        if (!(faith.getFaith_points() >= cost)){
             p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
             return true;
         }

@@ -60,6 +60,11 @@ public class EffectsGiver extends BukkitRunnable {
                 player.addPotionEffect(PotionEffectType.CONFUSION.createEffect(100, 0));
             }
 
+            // Taunt
+            if (player_data.isTaunted()){
+                player.addPotionEffect(PotionEffectType.HUNGER.createEffect(100, 0));
+            }
+
             // This code block is for effects that require the player to be in a faith to bestow. Currently, only Terrain Bonus
             if (player_data.getIn_faith()){
                 Faith faith = FaithHashMap.player_faith_hashmap.get(player_data.getLed_by());
