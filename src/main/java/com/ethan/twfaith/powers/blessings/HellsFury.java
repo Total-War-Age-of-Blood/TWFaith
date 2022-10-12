@@ -19,6 +19,7 @@ public class HellsFury implements Listener {
     public void onHellsFuryTrigger(Player player, PlayerData player_data, ItemStack chosen_item, ItemMeta chosen_item_meta){
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
+            if (!player.getWorld().equals(nearby.getWorld())){continue;}
             if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLed_by().equals(nearby_data.getLed_by())){continue;}
             if (nearby_data.isHells_fury_active()){
                 nearby_data.setHells_fury_active(false);

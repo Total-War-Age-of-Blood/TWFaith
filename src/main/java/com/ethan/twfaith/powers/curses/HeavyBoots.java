@@ -26,7 +26,9 @@ public class HeavyBoots implements Listener {
         // Checks if player should be a victim
         boolean heavy_victim = false;
         for (String heavy_caster : heavy_boots){
-            if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(heavy_caster)).getLocation()) <= 30){
+            Player heavy_player = Bukkit.getPlayer(heavy_caster);
+            if (!player.getWorld().equals(heavy_player.getWorld())){continue;}
+            if (player.getLocation().distance(Objects.requireNonNull(heavy_player).getLocation()) <= 30){
                 heavy_victim = true;
                 break;
             }

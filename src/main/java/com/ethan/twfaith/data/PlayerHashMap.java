@@ -98,6 +98,7 @@ public class PlayerHashMap implements Listener {
                     int nearby_friends = 0;
                     for (Player nearby : Bukkit.getOnlinePlayers()){
                         PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+                        if (!player.getWorld().equals(nearby.getWorld())){continue;}
                         if (nearby.getLocation().distance(follower.getLocation()) <= 30 && nearby_data.getLed_by().equals(follower_data.getLed_by())){
                             nearby_friends ++;
                             // System.out.println(nearby_friends + " nearby friends");

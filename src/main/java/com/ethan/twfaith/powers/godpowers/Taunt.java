@@ -22,7 +22,9 @@ public class Taunt implements Listener {
         Player player = e.getPlayer();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
             if (!player_data.isTaunted()){return;}
-            if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(player_data.getTaunter())).getLocation()) <= 30){
+            Player taunter = Bukkit.getPlayer(player_data.getTaunter());
+            if (!player.getWorld().equals(taunter.getWorld())){return;}
+            if (player.getLocation().distance(Objects.requireNonNull(taunter).getLocation()) <= 30){
                 player.addPotionEffect(PotionEffectType.HUNGER.createEffect(80, 0));
             }else{
                 player_data.setTaunted(false);
@@ -73,6 +75,7 @@ public class Taunt implements Listener {
         if (!player_data.getLeader() || player_data.getTaunt() < 1){return;}
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(3000, 0));
         for (Player heathen : Bukkit.getOnlinePlayers()){
+            if (!player.getWorld().equals(heathen.getWorld())){continue;}
             if (heathen.getLocation().distance(player.getLocation()) < 30){
                 PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
                 if (heathen_data.getIn_faith()){

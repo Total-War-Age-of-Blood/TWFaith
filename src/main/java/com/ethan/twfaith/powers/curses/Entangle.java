@@ -35,6 +35,7 @@ public class Entangle implements Listener {
 
         for (Player heathen : Bukkit.getOnlinePlayers()){
             PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
+            if (!player.getWorld().equals(heathen.getWorld())){continue;}
             if (heathen.getLocation().distance(player.getLocation()) > 30 || heathen_data.getFaith().equals(player_data.getFaith())){continue;}
             Location heathen_loc = heathen.getLocation();
             // We find the coordinates we need to place the blocks by looping a 1 block radius around the player.
@@ -71,7 +72,7 @@ public class Entangle implements Listener {
                     // We will randomly choose one of the valid tree types by shuffling the list
                     // and generating the tree that is first in the list
                     Collections.shuffle(possible_trees);
-
+                    if (possible_trees.size() == 0){continue;}
                     boolean generate = world.generateTree(block.getLocation(), possible_trees.get(0));
                     System.out.println(generate);
                 }

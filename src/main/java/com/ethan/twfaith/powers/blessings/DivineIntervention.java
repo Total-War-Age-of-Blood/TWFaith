@@ -32,6 +32,7 @@ public class DivineIntervention implements Listener {
 
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
+            if (!player.getWorld().equals(nearby.getWorld())){continue;}
             if (player.getLocation().distance(nearby.getLocation()) <= 30 && nearby_data.getLed_by().equals(player_data.getLed_by())){
                 // Launches player straight up
                 nearby.setVelocity(new Vector(0, 5, 0));

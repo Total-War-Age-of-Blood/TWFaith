@@ -202,6 +202,7 @@ public class GodPowers implements Listener {
             Player leader = Bukkit.getPlayer(player_data.getLed_by());
             System.out.println("Player is in faith and is not leader.");
             assert leader != null;
+            if (!player.getWorld().equals(leader.getWorld())){return;}
             if (leader.getLocation().distance(player.getLocation()) > 30){return;}
             System.out.println("Player and leader are within 30 blocks");
             if (leader.getHealth() < 10){return;}

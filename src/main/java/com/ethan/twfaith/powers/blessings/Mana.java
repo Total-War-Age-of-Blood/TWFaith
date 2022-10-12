@@ -22,6 +22,7 @@ public class Mana implements Listener {
         player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("mana-stamina"));
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
+            if (!player.getWorld().equals(nearby.getWorld())){continue;}
             if(!player_data.getLed_by().equals(nearby_data.getLed_by()) || player.getLocation().distance(nearby.getLocation()) > 30){continue;}
             ItemStack mana = new ItemStack(Material.BREAD, 16);
             ItemMeta mana_meta = mana.getItemMeta();

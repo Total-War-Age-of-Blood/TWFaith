@@ -27,6 +27,7 @@ public class PowerfulFlock implements Listener {
         double nearby_friends = 0;
         for (Player friend : Bukkit.getOnlinePlayers()){
             PlayerData friend_data = PlayerHashMap.player_data_hashmap.get(friend.getUniqueId());
+            if (!player.getWorld().equals(friend.getWorld())){continue;}
             if (player.getLocation().distance(friend.getLocation()) >= 30 || !player_data.getLed_by().equals(friend_data.getLed_by()) || player.getUniqueId().equals(friend.getUniqueId())){continue;}
             nearby_friends ++;
         }

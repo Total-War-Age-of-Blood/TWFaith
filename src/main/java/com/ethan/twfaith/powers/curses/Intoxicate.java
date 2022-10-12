@@ -25,7 +25,9 @@ public class Intoxicate implements Listener {
 
         boolean intoxicated = false;
         for (String intox : intoxicators){
-            if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(intox)).getLocation()) <= 30 && !player.equals(Bukkit.getPlayer(intox))){
+            Player intox_player = Bukkit.getPlayer(intox);
+            if (!player.getWorld().equals(intox_player.getWorld())){return;}
+            if (player.getLocation().distance(Objects.requireNonNull(intox_player).getLocation()) <= 30 && !player.equals(Bukkit.getPlayer(intox))){
                 intoxicated = true;
             }
         }

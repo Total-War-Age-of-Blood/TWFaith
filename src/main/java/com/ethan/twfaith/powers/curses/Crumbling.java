@@ -20,7 +20,9 @@ public class Crumbling implements Listener {
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         boolean is_crumbling = false;
         for (String crumbler : UsePowers.crumblers){
-            if (player.getLocation().distance(Objects.requireNonNull(Bukkit.getPlayer(crumbler)).getLocation()) <= 30){is_crumbling = true;}
+            Player crumbler_player = Bukkit.getPlayer(crumbler);
+            if (!player.getWorld().equals(crumbler_player.getWorld())){continue;}
+            if (player.getLocation().distance(Objects.requireNonNull(crumbler_player).getLocation()) <= 30){is_crumbling = true;}
         }
         player_data.setCrumbling_victim(is_crumbling);
         PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);

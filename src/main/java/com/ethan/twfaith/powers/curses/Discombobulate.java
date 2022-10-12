@@ -27,7 +27,9 @@ public class Discombobulate implements Listener {
 
         // See who is in range of the power
         for (Player heathen : Bukkit.getOnlinePlayers()){
+            if (!heathen.getWorld().equals(player.getWorld())){continue;}
             PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
+            if (!player.getWorld().equals(heathen.getWorld())){continue;}
             if (heathen.getLocation().distance(player.getLocation()) <= 30 && !heathen_data.getFaith().equals(player_data.getFaith())){
 
                 // Clear the inventory of affected players and record their items for redistribution
