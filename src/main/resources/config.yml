@@ -5,7 +5,7 @@
 pray-cool-down: 10
 
 # Base stamina regeneration per second
-base-stamina-regen: 10
+base-stamina-regen: 1
 
 # Powers
 # cost: The number of faith points to purchase the upgrade
@@ -14,21 +14,21 @@ base-stamina-regen: 10
 
 # Divine Intervention
 divine-cost: 5
-divine-stamina: 11
+divine-stamina: 20
 divine-cooldown: 10
 
 # Hell's Fury
 hells-cost: 5
-hells-stamina: 11
+hells-stamina: 5
 
 # Mana
 mana-cost: 5
-mana-stamina: 11
+mana-stamina: 10
 mana-cooldown: 10
 
 # Powerful Flock
 flock-cost: 5
-flock-stamina: 11
+flock-stamina: 5
 
 # Summon God
 summon-cost: 5
@@ -37,54 +37,54 @@ summon-cooldown: 10
 
 # Terrain Bonus
 terrain-cost: 5
-terrain-stamina: 11
+terrain-stamina: 5
 
 # Lion's Heart
 lions-heart-cost: 5
-lions-heart-stamina: 11
+lions-heart-stamina: 5
 
 # Savior
 savior-cost: 5
-savior-stamina: 11
+savior-stamina: 20
 savior-cooldown: 10
 
 # Taunt
 taunt-cost: 5
-taunt-stamina: 11
+taunt-stamina: 20
 taunt-cooldown: 10
 
 # Insidious
 insidious-cost: 5
-insidious-stamina: 11
+insidious-stamina: 5
 
 # Explosive Landing
 explosive-cost: 5
-explosive-stamina: 11
+explosive-stamina: 20
 explosive-cooldown: 10
 
 # Flood
 flood-cost: 5
-flood-stamina: 11
+flood-stamina: 30
 flood-cooldown: 10
 
 # Crumbling
 crumbling-cost: 5
-crumbling-stamina: 11
+crumbling-stamina: 5
 
 # Discombobulation
-discombobulation-cost: 5
-discombobulation-stamina: 11
-discombobulation-cooldown: 10
+discombobulate-cost: 5
+discombobulate-stamina: 100
+discombobulate-cooldown: 300
 
 # Entangle
 entangle-cost: 5
-entangle-stamina: 11
-entangle-cooldown: 10
+entangle-stamina: 50
+entangle-cooldown: 60
 
 # Heavy Boots
 heavy-cost: 5
-heavy-stamina: 11
+heavy-stamina: 5
 
 # Intoxicate
 intoxicate-cost: 5
-intoxicate-stamina: 11
+intoxicate-stamina: 5

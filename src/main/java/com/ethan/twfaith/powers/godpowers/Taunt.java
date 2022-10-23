@@ -22,16 +22,18 @@ public class Taunt implements Listener {
         Player player = e.getPlayer();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
             if (!player_data.isTaunted()){return;}
+            if (Bukkit.getPlayer(player_data.getTaunter()) == null){return;}
             Player taunter = Bukkit.getPlayer(player_data.getTaunter());
             if (!player.getWorld().equals(taunter.getWorld())){return;}
             if (player.getLocation().distance(Objects.requireNonNull(taunter).getLocation()) <= 30){
                 player.addPotionEffect(PotionEffectType.HUNGER.createEffect(80, 0));
             }else{
                 player_data.setTaunted(false);
-                player_data.setTaunter(null);
+                player_data.setTaunter(player.getUniqueId());
                 PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
 
                 player.removePotionEffect(PotionEffectType.HUNGER);
+                player.sendMessage("You have escaped your taunter.");
             }
     }
 
@@ -56,6 +58,17 @@ public class Taunt implements Listener {
     public void leaveTauntCancel(PlayerQuitEvent e){
         Player player = e.getPlayer();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+
+        // Checking if anybody was taunted by the player who left and removing their taunt status to prevent
+        // infinite taunts.
+        for (Player taunted : Bukkit.getOnlinePlayers()){
+            PlayerData taunted_data = PlayerHashMap.player_data_hashmap.get(taunted.getUniqueId());
+            if (!taunted_data.isTaunted() || taunted_data.getTaunter() != player.getUniqueId()){continue;}
+            taunted_data.setTaunted(false);
+            taunted_data.setTaunter(taunted.getUniqueId());
+            PlayerHashMap.player_data_hashmap.put(taunted.getUniqueId(), taunted_data);
+            taunted.sendMessage("You are no longer taunted.");
+        }
 
         if (player_data.isTaunted()){player.removePotionEffect(PotionEffectType.HUNGER);}
         player_data.setTaunter(e.getPlayer().getUniqueId());

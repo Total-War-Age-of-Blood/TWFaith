@@ -67,6 +67,9 @@ public class UsePowers implements Listener {
         boolean main_null = held_item.getItemMeta() == null;
         boolean off_null = other_item.getItemMeta() == null;
 
+        // Prevents the event from running twice when the player has an item in the offhand
+        if (!main_null && !off_null && e.getHand().equals(EquipmentSlot.OFF_HAND)){return;}
+        // This fixes issues with event running twice when player has no item in the offhand
         if (main_null && !off_null && e.getHand().equals(EquipmentSlot.OFF_HAND)){
             if (!other_item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Bukkit.getPluginManager().getPlugin("TWFaith"), "Power"), PersistentDataType.STRING)){return;}
             chosen_item = other_item;
