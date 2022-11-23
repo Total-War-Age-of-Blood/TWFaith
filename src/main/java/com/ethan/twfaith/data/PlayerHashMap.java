@@ -1,5 +1,6 @@
 package com.ethan.twfaith.data;
 
+import com.ethan.twfaith.tasks.Heavy_Boots_Checker;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -83,6 +84,7 @@ public class PlayerHashMap implements Listener {
         player_data.setSavior_active(false);
         player_data.setCrumbling_active(false);
         player_data.setHeavy_boots_active(false);
+        Heavy_Boots_Checker.heavy_boots.remove(player.getUniqueId());
         player_data.setLions_heart_active(false);
         player_data.setTerrain_bonus_active(false);
         player_data.setSummon_god_active(false);

@@ -16,6 +16,7 @@ import com.ethan.twfaith.powers.curses.*;
 import com.ethan.twfaith.powers.godpowers.Flood;
 import com.ethan.twfaith.powers.godpowers.Taunt;
 import com.ethan.twfaith.tasks.EffectsGiver;
+import com.ethan.twfaith.tasks.Heavy_Boots_Checker;
 import com.ethan.twfaith.tasks.StaminaChecker;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -52,7 +53,6 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new UsePowers(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerHashMap(), this);
         Bukkit.getPluginManager().registerEvents(new Crumbling(), this);
-        Bukkit.getPluginManager().registerEvents(new HeavyBoots(), this);
         Bukkit.getPluginManager().registerEvents(new Intoxicate(), this);
         Bukkit.getPluginManager().registerEvents(new Discombobulate(), this);
         Bukkit.getPluginManager().registerEvents(new Entangle(), this);
@@ -83,8 +83,9 @@ public final class TWFaith extends JavaPlugin implements Listener {
         player_faith_hashmap.loadFaiths();
 
         // Timer Tasks for Cooldowns and Stamina
-        BukkitTask stamina_checker = new StaminaChecker().runTaskTimer(this, 20, 20);
-        BukkitTask effects_giver = new EffectsGiver().runTaskTimer(this, 20, 20);
+        BukkitTask stamina_checker = new StaminaChecker().runTaskTimer(this, 0, 20);
+        BukkitTask effects_giver = new EffectsGiver().runTaskTimer(this, 0, 20);
+        BukkitTask heavy_boots_checker = new Heavy_Boots_Checker().runTaskTimer(this, 0, 20);
 
     }
 

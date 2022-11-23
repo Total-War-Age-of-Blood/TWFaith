@@ -179,12 +179,13 @@ public class TerrainBonusUpgrade implements Listener {
 
     public boolean faithPointsChecker(PlayerData player_data, Player p, int cost, int data, Inventory gui, ItemStack item, int slot){
         if (data > 0){return true;}
-        if (!(player_data.getFaith_points() >= cost)){
+        Faith faith = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
+        if (!(faith.getFaith_points() >= cost)){
             p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
             return true;
         }
-        player_data.setFaith_points(player_data.getFaith_points() - cost);
-        p.sendMessage(player_data.getFaith_points() + " Faith Points remaining.");
+        faith.setFaith_points(player_data.getFaith_points() - cost);
+        p.sendMessage(faith.getFaith_points() + " Faith Points remaining.");
         ItemMeta item_meta = item.getItemMeta();
         item_meta.setLore(Collections.singletonList(ChatColor.GREEN + "Owned"));
         item.setItemMeta(item_meta);

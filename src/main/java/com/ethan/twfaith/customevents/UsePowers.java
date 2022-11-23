@@ -9,10 +9,10 @@ import com.ethan.twfaith.powers.blessings.Mana;
 import com.ethan.twfaith.powers.blessings.TerrainBonus;
 import com.ethan.twfaith.powers.curses.Discombobulate;
 import com.ethan.twfaith.powers.curses.Entangle;
-import com.ethan.twfaith.powers.curses.HeavyBoots;
 import com.ethan.twfaith.powers.curses.Intoxicate;
 import com.ethan.twfaith.powers.godpowers.Flood;
 import com.ethan.twfaith.powers.godpowers.Taunt;
+import com.ethan.twfaith.tasks.Heavy_Boots_Checker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -20,16 +20,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -239,7 +236,7 @@ public class UsePowers implements Listener {
                 case "Heavy Boots":
                     if (player_data.isHeavy_boots_active()){
                         player_data.setHeavy_boots_active(false);
-                        HeavyBoots.heavy_boots.remove(player.getDisplayName());
+                        Heavy_Boots_Checker.heavy_boots.remove(player.getUniqueId());
                         player.sendMessage(ChatColor.RED + "Heavy Boots Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
                             chosen_item_meta.removeEnchant(Enchantment.DURABILITY);
@@ -247,7 +244,7 @@ public class UsePowers implements Listener {
                         }
                     }else{
                         player_data.setHeavy_boots_active(true);
-                        HeavyBoots.heavy_boots.add(player.getDisplayName());
+                        Heavy_Boots_Checker.heavy_boots.add(player.getUniqueId());
                         player.sendMessage(ChatColor.GREEN + "Heavy Boots Activated");
                         chosen_item_meta.addEnchant(Enchantment.DURABILITY, 1, false);
                         chosen_item.setItemMeta(chosen_item_meta);
