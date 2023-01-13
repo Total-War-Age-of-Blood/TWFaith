@@ -30,6 +30,8 @@ import java.util.Objects;
 
 public final class TWFaith extends JavaPlugin implements Listener {
     private static TWFaith plugin;
+    private static Gson gson = new Gson();
+    public static Gson getGson() {return gson;}
 
     @Override
     public void onEnable() {
@@ -117,7 +119,6 @@ public final class TWFaith extends JavaPlugin implements Listener {
             player_data.setHeavy_boots_victim(false);
 
             // Saving data from HashMap to File
-            Gson gson = new Gson();
             try{
                 File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
                 File player_file = new File(player_folder, player.getUniqueId() + ".json");

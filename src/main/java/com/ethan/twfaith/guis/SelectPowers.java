@@ -103,7 +103,7 @@ public class SelectPowers implements Listener {
         generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", player_data.getCrumbling(), 28);
 
         // Heavy Boots
-        generateGUI(Material.DIAMOND_BOOTS, ChatColor.BLACK, "Heavy Boots", player_data.getHeavy_boots(), 29);
+        generateGUI(Material.DIAMOND_BOOTS, ChatColor.BLACK, "Heavy Boots", player_data.getHeavyBoots(), 29);
 
         // Intoxicate
         generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", player_data.getIntoxicate(), 30);
@@ -193,7 +193,7 @@ public class SelectPowers implements Listener {
                 inventoryClickSwitch(player_data.getCrumbling(), Material.GRAY_TERRACOTTA, ChatColor.GRAY, "Crumbling", p);
                 break;
             case 29:
-                inventoryClickSwitch(player_data.getHeavy_boots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
+                inventoryClickSwitch(player_data.getHeavyBoots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
                 break;
             case 30:
                 inventoryClickSwitch(player_data.getIntoxicate(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Intoxicate", p);

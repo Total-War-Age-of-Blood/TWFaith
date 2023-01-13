@@ -4,7 +4,6 @@ import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.tasks.RemoveFlood;
-import com.google.gson.Gson;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -33,8 +32,7 @@ public class Flood implements Listener {
             File[] flood_files = flood_folder.listFiles();
             for (File flood : flood_files){
                 FileReader flood_reader = new FileReader(flood);
-                Gson gson = new Gson();
-                com.ethan.twfaith.data.Flood flood_data = gson.fromJson(flood_reader, com.ethan.twfaith.data.Flood.class);
+                com.ethan.twfaith.data.Flood flood_data = TWFaith.getGson().fromJson(flood_reader, com.ethan.twfaith.data.Flood.class);
 
                 ArrayList<Integer> event_block = new ArrayList<>();
                 event_block.add(event.getBlock().getX());
@@ -54,7 +52,6 @@ public class Flood implements Listener {
 
     public void floodTrigger(Player player){
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
-        Gson gson = new Gson();
 
         if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("flood-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
@@ -93,7 +90,7 @@ public class Flood implements Listener {
             if (!flood_file.exists()){flood_file.createNewFile();}
 
             FileWriter flood_writer = new FileWriter(flood_file);
-            gson.toJson(flood, flood_writer);
+            TWFaith.getGson().toJson(flood, flood_writer);
             flood_writer.flush();
             flood_writer.close();
 

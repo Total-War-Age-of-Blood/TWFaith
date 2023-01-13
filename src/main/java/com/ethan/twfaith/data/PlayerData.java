@@ -222,7 +222,7 @@ public class PlayerData {
         this.crumbling = crumbling;
     }
 
-    public int getHeavy_boots() {
+    public int getHeavyBoots() {
         return heavy_boots;
     }
 

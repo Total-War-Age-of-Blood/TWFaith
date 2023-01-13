@@ -64,7 +64,7 @@ public class Faith {
         return leader;
     }
 
-    public int getFaith_points() {
+    public int getFaithPoints() {
         return faith_points;
     }
 
@@ -84,8 +84,8 @@ public class Faith {
         this.leader = leader;
     }
 
-    public void setFaith_points(int faith_points) {
-        this.faith_points = faith_points;
+    public void setFaithPoints(int faithPoints) {
+        this.faith_points = faithPoints;
     }
 
     public void setInvited_players(List<UUID> invited_players){

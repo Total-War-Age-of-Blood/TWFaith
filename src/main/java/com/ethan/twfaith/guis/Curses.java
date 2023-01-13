@@ -31,7 +31,7 @@ public class Curses implements Listener {
         generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", "Heathen's items lose durability quickly.", 10, player_data.getCrumbling());
 
         // Heavy Boots
-        generateGUI(Material.DIAMOND_BOOTS, ChatColor.GRAY, "Heavy Boots", "Heathens wearing boots are slowed down", 11, player_data.getHeavy_boots());
+        generateGUI(Material.DIAMOND_BOOTS, ChatColor.GRAY, "Heavy Boots", "Heathens wearing boots are slowed down", 11, player_data.getHeavyBoots());
 
         // Intoxicate
         generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", "Nearby heathens gain nausea.", 12, player_data.getIntoxicate());
@@ -82,47 +82,48 @@ public class Curses implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
+        PlayerData playerData = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
+        Faith faithData = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
         ItemStack item = e.getCurrentItem();
 
         switch (e.getSlot()){
             case 10:
-                if (faithPointsChecker(player_data, p, TWFaith.getPlugin().getConfig().getInt("crumbling-cost"), player_data.getCrumbling(), item, e.getSlot(), "Heathen's items lose durability quickly.")){return;}
-                player_data.setCrumbling(1);
+                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("crumbling-cost"), playerData.getCrumbling(), item, e.getSlot(), "Heathen's items lose durability quickly.")){return;}
+                playerData.setCrumbling(1);
                 break;
             case 11:
-                if (faithPointsChecker(player_data, p, TWFaith.getPlugin().getConfig().getInt("heavy-cost"), player_data.getHeavy_boots(), item, e.getSlot(), "Heathens wearing boots are slowed down.")){return;}
-                player_data.setHeavy_boots(1);
+                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("heavy-cost"), playerData.getHeavyBoots(), item, e.getSlot(), "Heathens wearing boots are slowed down.")){return;}
+                playerData.setHeavy_boots(1);
                 break;
             case 12:
-                if (faithPointsChecker(player_data, p, TWFaith.getPlugin().getConfig().getInt("intoxicate-cost"), player_data.getIntoxicate(), item, e.getSlot(), "Nearby heathens gain nausea.")){return;}
-                player_data.setIntoxicate(1);
+                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("intoxicate-cost"), playerData.getIntoxicate(), item, e.getSlot(), "Nearby heathens gain nausea.")){return;}
+                playerData.setIntoxicate(1);
                 break;
             case 13:
-                if (faithPointsChecker(player_data, p, TWFaith.getPlugin().getConfig().getInt("discombobulate-cost"), player_data.getDiscombobulate(), item, e.getSlot(),"Scramble inventories of nearby heathens.")){return;}
-                player_data.setDiscombobulate(1);
+                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("discombobulate-cost"), playerData.getDiscombobulate(), item, e.getSlot(),"Scramble inventories of nearby heathens.")){return;}
+                playerData.setDiscombobulate(1);
                 break;
             case 14:
-                if (faithPointsChecker(player_data, p, TWFaith.getPlugin().getConfig().getInt("entangle-cost"), player_data.getEntangle(), item, e.getSlot(), "Nearby heathens are caged.")){return;}
-                player_data.setEntangle(1);
+                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("entangle-cost"), playerData.getEntangle(), item, e.getSlot(), "Nearby heathens are caged.")){return;}
+                playerData.setEntangle(1);
                 break;
             case 16:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));
                 break;
         }
 
-        PlayerHashMap.player_data_hashmap.put(p.getUniqueId(), player_data);
+        PlayerHashMap.player_data_hashmap.put(p.getUniqueId(), playerData);
     }
 
-    public boolean faithPointsChecker(PlayerData player_data, Player p, int cost, int data, ItemStack item, int slot, String lore){
+    public boolean faithPointsChecker(Faith faithData, Player p, int cost, int data, ItemStack item, int slot, String lore){
         if (data > 0){return true;}
         Faith faith = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
-        if (!(faith.getFaith_points() >= cost)){
+        if (!(faith.getFaithPoints() >= cost)){
             p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
             return true;
         }
-        player_data.setFaith_points(player_data.getFaith_points() - cost);
-        p.sendMessage(player_data.getFaith_points() + " Faith Points remaining.");
+        faithData.setFaithPoints(faithData.getFaithPoints() - cost);
+        p.sendMessage(faithData.getFaithPoints() + " Faith Points remaining.");
         ItemMeta item_meta = item.getItemMeta();
         item_meta.setLore(Arrays.asList(lore, ChatColor.GREEN + "Owned"));
         item.setItemMeta(item_meta);

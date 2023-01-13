@@ -38,7 +38,7 @@ public class Pray implements CommandExecutor {
             if (player_data.getIn_faith() && (current_time - last_prayer) > twFaith.getConfig().getLong("pray-cool-down")){
 
                 // Giving god a faith point
-                faith.setFaith_points(faith.getFaith_points() + 1);
+                faith.setFaithPoints(faith.getFaithPoints() + 1);
 
                 // Setting player cooldown and giving player a faith point
                 player_data.setLast_prayer(current_time);

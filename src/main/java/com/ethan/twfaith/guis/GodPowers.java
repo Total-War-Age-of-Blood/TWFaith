@@ -3,6 +3,8 @@ package com.ethan.twfaith.guis;
 import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.customevents.UsePowers;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -26,7 +28,6 @@ import org.bukkit.profile.PlayerProfile;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -120,34 +121,35 @@ public class GodPowers implements Listener {
         ItemStack item = e.getCurrentItem();
 
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        Faith faithData = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
         switch (e.getSlot()){
             case 10:
-                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("lions-heart-cost"), player_data.getLions_heart(), item, e.getSlot(), "Your attacks are stronger when you are unarmored")){return;}
+                if (faithPointsChecker(faithData, player, TWFaith.getPlugin().getConfig().getInt("lions-heart-cost"), player_data.getLions_heart(), item, e.getSlot(), "Your attacks are stronger when you are unarmored")){return;}
                 player_data.setLions_heart(1);
                 // System.out.println("Lions Heart clicked");
                 break;
             case 11:
-                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("savior-cost"), player_data.getSavior(), item, e.getSlot(), "Swap places with injured followers.")){return;}
+                if (faithPointsChecker(faithData, player, TWFaith.getPlugin().getConfig().getInt("savior-cost"), player_data.getSavior(), item, e.getSlot(), "Swap places with injured followers.")){return;}
                 player_data.setSavior(1);
                 // System.out.println("Savior clicked");
                 break;
             case 12:
-                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("taunt-cost"), player_data.getTaunt(), item, e.getSlot(), "Attract the attention of enemies.")){return;}
+                if (faithPointsChecker(faithData, player, TWFaith.getPlugin().getConfig().getInt("taunt-cost"), player_data.getTaunt(), item, e.getSlot(), "Attract the attention of enemies.")){return;}
                 player_data.setTaunt(1);
                 // System.out.println("Taunt clicked");
                 break;
             case 13:
-                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("insidious-cost"), player_data.getInsidious(), item, e.getSlot(), "Gain invisibility when crouching.")){return;}
+                if (faithPointsChecker(faithData, player, TWFaith.getPlugin().getConfig().getInt("insidious-cost"), player_data.getInsidious(), item, e.getSlot(), "Gain invisibility when crouching.")){return;}
                 player_data.setInsidious(1);
                 // System.out.println("Insidious clicked");
                 break;
             case 14:
-                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("explosive-cost"), player_data.getExplosive_landing(), item, e.getSlot(), "Create an explosion when you hit the ground.")){return;}
+                if (faithPointsChecker(faithData, player, TWFaith.getPlugin().getConfig().getInt("explosive-cost"), player_data.getExplosive_landing(), item, e.getSlot(), "Create an explosion when you hit the ground.")){return;}
                 player_data.setExplosive_landing(1);
                 // System.out.println("Explosive Landing clicked");
                 break;
             case 15:
-                if (faithPointsChecker(player_data, player, TWFaith.getPlugin().getConfig().getInt("flood-cost"), player_data.getFlood(), item, e.getSlot(), "Temporarily flood the area.")){return;}
+                if (faithPointsChecker(faithData, player, TWFaith.getPlugin().getConfig().getInt("flood-cost"), player_data.getFlood(), item, e.getSlot(), "Temporarily flood the area.")){return;}
                 player_data.setFlood(1);
                 // System.out.println("Flood clicked");
                 break;
@@ -158,14 +160,14 @@ public class GodPowers implements Listener {
        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
     }
 
-    public boolean faithPointsChecker(PlayerData player_data, Player p, int cost, int data, ItemStack item, int slot, String lore){
+    public boolean faithPointsChecker(Faith faithData, Player p, int cost, int data, ItemStack item, int slot, String lore){
         if (data > 0){return true;}
-        if (!(player_data.getFaith_points() >= cost)){
+        if (!(faithData.getFaithPoints() >= cost)){
             p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
             return true;
         }
-        player_data.setFaith_points(player_data.getFaith_points() - cost);
-        p.sendMessage(player_data.getFaith_points() + " Faith Points remaining.");
+        faithData.setFaithPoints(faithData.getFaithPoints() - cost);
+        p.sendMessage(faithData.getFaithPoints() + " Faith Points remaining.");
         ItemMeta item_meta = item.getItemMeta();
         item_meta.setLore(Arrays.asList(lore, ChatColor.GREEN + "Owned"));
         item.setItemMeta(item_meta);

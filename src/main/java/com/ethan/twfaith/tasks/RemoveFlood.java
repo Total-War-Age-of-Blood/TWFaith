@@ -1,7 +1,7 @@
 package com.ethan.twfaith.tasks;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.Flood;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,8 +38,7 @@ public class RemoveFlood extends BukkitRunnable implements Listener {
             File[] flood_files = flood_folder.listFiles();
             for (File file : flood_files){
                 FileReader flood_reader = new FileReader(file);
-                Gson gson = new Gson();
-                Flood flood_data = gson.fromJson(flood_reader, Flood.class);
+                Flood flood_data = TWFaith.getGson().fromJson(flood_reader, Flood.class);
                 if (flood_data.getUuid().equals(uuid)){
                     file.delete();
                     break;

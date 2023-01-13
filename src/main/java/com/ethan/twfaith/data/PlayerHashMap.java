@@ -1,7 +1,7 @@
 package com.ethan.twfaith.data;
 
+import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.tasks.Heavy_Boots_Checker;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -33,11 +33,10 @@ public class PlayerHashMap implements Listener {
             if (!file_name.equals(player.getUniqueId() + ".json")) {continue;}
             System.out.println("Player has file on record.");
             File player_file = new File(player_folder, e.getPlayer().getUniqueId() + ".json");
-            Gson gson = new Gson();
             try{
                 System.out.println("Putting PlayerData in HashMap.");
                 FileReader player_file_reader = new FileReader(player_file);
-                PlayerData player_data = gson.fromJson(player_file_reader, PlayerData.class);
+                PlayerData player_data = TWFaith.getGson().fromJson(player_file_reader, PlayerData.class);
                 player_data_hashmap.put(player.getUniqueId(), player_data);
             }catch (IOException exception){exception.printStackTrace();}
             found_player = true;
@@ -60,9 +59,8 @@ public class PlayerHashMap implements Listener {
             File file = new File(player_data_folder, e.getPlayer().getUniqueId() + ".json");
             if (!file.exists()) {file.createNewFile();}
 
-            Gson gson = new Gson();
             Writer writer = new FileWriter(file, false);
-            gson.toJson(player_data, writer);
+            TWFaith.getGson().toJson(player_data, writer);
             writer.flush();
             writer.close();
 
@@ -119,12 +117,11 @@ public class PlayerHashMap implements Listener {
         player_data.setHeavy_boots_victim(false);
 
         // Saving data from HashMap to File
-        Gson gson = new Gson();
         try{
             File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
             File player_file = new File(player_folder, player.getUniqueId() + ".json");
             FileWriter player_data_writer = new FileWriter(player_file, false);
-            gson.toJson(player_data, player_data_writer);
+            TWFaith.getGson().toJson(player_data, player_data_writer);
             player_data_writer.flush();
             player_data_writer.close();
             System.out.println("Player File Saved!");
