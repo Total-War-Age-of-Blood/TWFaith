@@ -27,37 +27,37 @@ public class TerrainBonusUpgrade implements Listener {
         gui = Bukkit.createInventory(null, 27, "Biome Groups");
 
         // Snowy Biomes
-        generateGUI(Material.SNOW_BLOCK, ChatColor.WHITE, "Snowy Biomes", faith_data.getTerrain_snowy(), 0);
+        generateGUI(Material.SNOW_BLOCK, ChatColor.WHITE, "Snowy Biomes", faith_data.getTerrainSnowy(), 0);
         // Cold Biomes
-        generateGUI(Material.PODZOL, ChatColor.WHITE, "Cold Biomes", faith_data.getTerrain_cold(), 1);
+        generateGUI(Material.PODZOL, ChatColor.WHITE, "Cold Biomes", faith_data.getTerrainCold(), 1);
         // Temperate Biomes
-        generateGUI(Material.GRASS_BLOCK, ChatColor.WHITE, "Temperate Biomes", faith_data.getTerrain_temperate(), 2);
+        generateGUI(Material.GRASS_BLOCK, ChatColor.WHITE, "Temperate Biomes", faith_data.getTerrainTemperate(), 2);
         // Warm biomes
-        generateGUI(Material.SAND, ChatColor.WHITE, "Warm Biomes", faith_data.getTerrain_warm(), 3);
+        generateGUI(Material.SAND, ChatColor.WHITE, "Warm Biomes", faith_data.getTerrainWarm(), 3);
         // Aquatic biomes
-        generateGUI(Material.WATER_BUCKET, ChatColor.WHITE, "Aquatic Biomes", faith_data.getTerrain_aquatic(), 4);
+        generateGUI(Material.WATER_BUCKET, ChatColor.WHITE, "Aquatic Biomes", faith_data.getTerrainAquatic(), 4);
         // Cave biomes
-        generateGUI(Material.DEEPSLATE, ChatColor.WHITE, "Cave Biomes", faith_data.getTerrain_cave(), 5);
+        generateGUI(Material.DEEPSLATE, ChatColor.WHITE, "Cave Biomes", faith_data.getTerrainCave(), 5);
         // The Nether
-        generateGUI(Material.NETHERRACK, ChatColor.WHITE, "Nether", faith_data.getTerrain_nether(), 6);
+        generateGUI(Material.NETHERRACK, ChatColor.WHITE, "Nether", faith_data.getTerrainNether(), 6);
         // The End
-        generateGUI(Material.END_STONE, ChatColor.WHITE, "End", faith_data.getTerrain_end(), 7);
+        generateGUI(Material.END_STONE, ChatColor.WHITE, "End", faith_data.getTerrainEnd(), 7);
 
         // Powers
         // Strength
-        generateGUI(Material.IRON_SWORD, ChatColor.RED, "Strength", faith_data.getTerrain_strength(), 18);
+        generateGUI(Material.IRON_SWORD, ChatColor.RED, "Strength", faith_data.getTerrainStrength(), 18);
         // Haste
-        generateGUI(Material.GOLDEN_PICKAXE, ChatColor.GOLD, "Haste", faith_data.getTerrain_haste(), 19);
+        generateGUI(Material.GOLDEN_PICKAXE, ChatColor.GOLD, "Haste", faith_data.getTerrainHaste(), 19);
         // Speed
-        generateGUI(Material.CHAINMAIL_BOOTS, ChatColor.BLUE, "Speed", faith_data.getTerrain_speed(), 20);
+        generateGUI(Material.CHAINMAIL_BOOTS, ChatColor.BLUE, "Speed", faith_data.getTerrainSpeed(), 20);
         // Resistance
-        generateGUI(Material.SHIELD, ChatColor.GRAY, "Resistance", faith_data.getTerrain_resistance(), 21);
+        generateGUI(Material.SHIELD, ChatColor.GRAY, "Resistance", faith_data.getTerrainResistance(), 21);
         // Fire Resistance
-        generateGUI(Material.FIRE_CHARGE, ChatColor.YELLOW, "Fire Resistance", faith_data.getTerrain_fire_resistance(), 22);
+        generateGUI(Material.FIRE_CHARGE, ChatColor.YELLOW, "Fire Resistance", faith_data.getTerrainFireResistance(), 22);
         // Water Breathing
-        generateGUI(Material.PUFFERFISH, ChatColor.DARK_BLUE, "Water Breathing", faith_data.getTerrain_water_breathing(), 23);
+        generateGUI(Material.PUFFERFISH, ChatColor.DARK_BLUE, "Water Breathing", faith_data.getTerrainWaterBreathing(), 23);
         // Dolphin's Grace
-        generateGUI(Material.HEART_OF_THE_SEA, ChatColor.BLUE, "Dolphin's Grace", faith_data.getTerrain_dolphins_grace(), 24);
+        generateGUI(Material.HEART_OF_THE_SEA, ChatColor.BLUE, "Dolphin's Grace", faith_data.getTerrainDolphinsGrace(), 24);
 
         // Close Menu
         ItemStack item = new ItemStack(Material.BARRIER);
@@ -92,7 +92,7 @@ public class TerrainBonusUpgrade implements Listener {
     public void faithUpgradeEvent(OpenGUIEvent e){
         // When custom event is triggered, check to see if it wants to open this gui
         // if so, open the gui
-        if(e.getGui_name().equals("Biome Groups")){openTerrainBonusGUI(e.getPlayer());}
+        if(e.getGuiName().equals("Biome Groups")){openTerrainBonusGUI(e.getPlayer());}
     }
 
     @EventHandler
@@ -112,67 +112,67 @@ public class TerrainBonusUpgrade implements Listener {
 
         switch (e.getSlot()){
             case 0:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_snowy(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_snowy(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainSnowy(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainSnowy(1);
                 break;
             case 1:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_cold(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_cold(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainCold(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainCold(1);
                 break;
             case 2:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_temperate(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_temperate(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainTemperate(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainTemperate(1);
                 break;
             case 3:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_warm(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_warm(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainWarm(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainWarm(1);
                 break;
             case 4:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_aquatic(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_aquatic(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainAquatic(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainAquatic(1);
                 break;
             case 5:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_cave(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_cave(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainCave(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainCave(1);
                 break;
             case 6:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_nether(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_nether(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainNether(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainNether(1);
                 break;
             case 7:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_end(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_end(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainEnd(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainEnd(1);
                 break;
             case 8:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Blessings"));
                 break;
             case 18:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_strength(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_strength(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainStrength(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainStrength(1);
                 break;
             case 19:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_haste(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_haste(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainHaste(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainHaste(1);
                 break;
             case 20:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_speed(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_speed(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainSpeed(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainSpeed(1);
                 break;
             case 21:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_resistance(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_resistance(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainResistance(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainResistance(1);
                 break;
             case 22:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_fire_resistance(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_fire_resistance(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainFireResistance(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainFireResistance(1);
                 break;
             case 23:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_water_breathing(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_water_breathing(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainWaterBreathing(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainWaterBreathing(1);
                 break;
             case 24:
-                if (faithPointsChecker(faithData, p, 5, faithData.getTerrain_dolphins_grace(), gui, item, e.getSlot())){return;}
-                faithData.setTerrain_dolphins_grace(1);
+                if (faithPointsChecker(faithData, p, 5, faithData.getTerrainDolphinsGrace(), gui, item, e.getSlot())){return;}
+                faithData.setTerrainDolphinsGrace(1);
                 break;
         }
     }

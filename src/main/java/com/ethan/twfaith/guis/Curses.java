@@ -133,6 +133,6 @@ public class Curses implements Listener {
 
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
-        if(e.getGui_name().equals("Curses")){openCursesGui(e.getPlayer());}
+        if(e.getGuiName().equals("Curses")){openCursesGui(e.getPlayer());}
     }
 }

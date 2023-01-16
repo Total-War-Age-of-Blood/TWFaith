@@ -35,37 +35,37 @@ public class TerrainBonusEquip implements Listener {
         gui = Bukkit.createInventory(null, 27, "Equip Terrain Bonus");
         // Biome Groups
         // Snowy
-        generateGUI(Material.SNOW_BLOCK, ChatColor.WHITE, "Snowy Terrain Bonus", faith_data.getTerrain_snowy(), 0);
+        generateGUI(Material.SNOW_BLOCK, ChatColor.WHITE, "Snowy Terrain Bonus", faith_data.getTerrainSnowy(), 0);
         // Cold
-        generateGUI(Material.PODZOL, ChatColor.WHITE, "Cold Terrain Bonus", faith_data.getTerrain_cold(), 1);
+        generateGUI(Material.PODZOL, ChatColor.WHITE, "Cold Terrain Bonus", faith_data.getTerrainCold(), 1);
         // Temperate
-        generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Temperate Terrain Bonus", faith_data.getTerrain_temperate(), 2);
+        generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Temperate Terrain Bonus", faith_data.getTerrainTemperate(), 2);
         // Warm
-        generateGUI(Material.SAND, ChatColor.YELLOW, "Warm Terrain Bonus", faith_data.getTerrain_warm(), 3);
+        generateGUI(Material.SAND, ChatColor.YELLOW, "Warm Terrain Bonus", faith_data.getTerrainWarm(), 3);
         // Aquatic
-        generateGUI(Material.WATER_BUCKET, ChatColor.BLUE, "Aquatic Terrain Bonus", faith_data.getTerrain_aquatic(), 4);
+        generateGUI(Material.WATER_BUCKET, ChatColor.BLUE, "Aquatic Terrain Bonus", faith_data.getTerrainAquatic(), 4);
         // Cave
-        generateGUI(Material.DEEPSLATE, ChatColor.GRAY, "Cave Terrain Bonus", faith_data.getTerrain_cave(), 5);
+        generateGUI(Material.DEEPSLATE, ChatColor.GRAY, "Cave Terrain Bonus", faith_data.getTerrainCave(), 5);
         // Nether
-        generateGUI(Material.NETHERRACK, ChatColor.RED, "Nether Terrain Bonus", faith_data.getTerrain_nether(), 6);
+        generateGUI(Material.NETHERRACK, ChatColor.RED, "Nether Terrain Bonus", faith_data.getTerrainNether(), 6);
         // End
-        generateGUI(Material.END_STONE, ChatColor.LIGHT_PURPLE, "End Terrain Bonus", faith_data.getTerrain_end(), 7);
+        generateGUI(Material.END_STONE, ChatColor.LIGHT_PURPLE, "End Terrain Bonus", faith_data.getTerrainEnd(), 7);
 
         // Powers
         // Strength
-        generateGUI(Material.IRON_SWORD, ChatColor.RED, "Strength", faith_data.getTerrain_strength(), 18);
+        generateGUI(Material.IRON_SWORD, ChatColor.RED, "Strength", faith_data.getTerrainStrength(), 18);
         // Haste
-        generateGUI(Material.GOLDEN_PICKAXE, ChatColor.GOLD, "Haste", faith_data.getTerrain_haste(), 19);
+        generateGUI(Material.GOLDEN_PICKAXE, ChatColor.GOLD, "Haste", faith_data.getTerrainHaste(), 19);
         // Speed
-        generateGUI(Material.CHAINMAIL_BOOTS, ChatColor.BLUE, "Speed", faith_data.getTerrain_speed(), 20);
+        generateGUI(Material.CHAINMAIL_BOOTS, ChatColor.BLUE, "Speed", faith_data.getTerrainSpeed(), 20);
         // Resistance
-        generateGUI(Material.SHIELD, ChatColor.GRAY, "Resistance", faith_data.getTerrain_resistance(), 21);
+        generateGUI(Material.SHIELD, ChatColor.GRAY, "Resistance", faith_data.getTerrainResistance(), 21);
         // Fire Resistance
-        generateGUI(Material.FIRE_CHARGE, ChatColor.YELLOW, "Fire Resistance", faith_data.getTerrain_fire_resistance(), 22);
+        generateGUI(Material.FIRE_CHARGE, ChatColor.YELLOW, "Fire Resistance", faith_data.getTerrainFireResistance(), 22);
         // Water Breathing
-        generateGUI(Material.PUFFERFISH, ChatColor.DARK_BLUE, "Water Breathing", faith_data.getTerrain_water_breathing(), 23);
+        generateGUI(Material.PUFFERFISH, ChatColor.DARK_BLUE, "Water Breathing", faith_data.getTerrainWaterBreathing(), 23);
         // Dolphin's Grace
-        generateGUI(Material.HEART_OF_THE_SEA, ChatColor.BLUE, "Dolphin's Grace", faith_data.getTerrain_dolphins_grace(), 24);
+        generateGUI(Material.HEART_OF_THE_SEA, ChatColor.BLUE, "Dolphin's Grace", faith_data.getTerrainDolphinsGrace(), 24);
 
         // Close Menu
         ItemStack close = new ItemStack(Material.BARRIER);
@@ -129,7 +129,7 @@ public class TerrainBonusEquip implements Listener {
     public void faithUpgradeEvent(OpenGUIEvent e){
         // When custom event is triggered, check to see if it wants to open this gui
         // if so, open the gui
-        if(e.getGui_name().equals("Equip Terrain Bonus")){openTerrainBonusEquip(e.getPlayer());}
+        if(e.getGuiName().equals("Equip Terrain Bonus")){openTerrainBonusEquip(e.getPlayer());}
     }
 
     @EventHandler
@@ -148,52 +148,52 @@ public class TerrainBonusEquip implements Listener {
 
         switch (e.getSlot()){
             case 0:
-                enchantmentChecker(e, false, faith_data.getTerrain_snowy());
+                enchantmentChecker(e, false, faith_data.getTerrainSnowy());
                 break;
             case 1:
-                enchantmentChecker(e, false, faith_data.getTerrain_cold());
+                enchantmentChecker(e, false, faith_data.getTerrainCold());
                 break;
             case 2:
-                enchantmentChecker(e, false, faith_data.getTerrain_temperate());
+                enchantmentChecker(e, false, faith_data.getTerrainTemperate());
                 break;
             case 3:
-                enchantmentChecker(e, false, faith_data.getTerrain_warm());
+                enchantmentChecker(e, false, faith_data.getTerrainWarm());
                 break;
             case 4:
-                enchantmentChecker(e, false, faith_data.getTerrain_aquatic());
+                enchantmentChecker(e, false, faith_data.getTerrainAquatic());
                 break;
             case 5:
-                enchantmentChecker(e, false, faith_data.getTerrain_cave());
+                enchantmentChecker(e, false, faith_data.getTerrainCave());
                 break;
             case 6:
-                enchantmentChecker(e, false, faith_data.getTerrain_nether());
+                enchantmentChecker(e, false, faith_data.getTerrainNether());
                 break;
             case 7:
-                enchantmentChecker(e, false, faith_data.getTerrain_end());
+                enchantmentChecker(e, false, faith_data.getTerrainEnd());
                 break;
             case 8:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Select Powers"));
                 break;
             case 18:
-                enchantmentChecker(e, true, faith_data.getTerrain_strength());
+                enchantmentChecker(e, true, faith_data.getTerrainStrength());
                 break;
             case 19:
-                enchantmentChecker(e, true, faith_data.getTerrain_haste());
+                enchantmentChecker(e, true, faith_data.getTerrainHaste());
                 break;
             case 20:
-                enchantmentChecker(e, true, faith_data.getTerrain_speed());
+                enchantmentChecker(e, true, faith_data.getTerrainSpeed());
                 break;
             case 21:
-                enchantmentChecker(e, true, faith_data.getTerrain_resistance());
+                enchantmentChecker(e, true, faith_data.getTerrainResistance());
                 break;
             case 22:
-                enchantmentChecker(e, true, faith_data.getTerrain_fire_resistance());
+                enchantmentChecker(e, true, faith_data.getTerrainFireResistance());
                 break;
             case 23:
-                enchantmentChecker(e, true, faith_data.getTerrain_water_breathing());
+                enchantmentChecker(e, true, faith_data.getTerrainWaterBreathing());
                 break;
             case 24:
-                enchantmentChecker(e, true, faith_data.getTerrain_dolphins_grace());
+                enchantmentChecker(e, true, faith_data.getTerrainDolphinsGrace());
                 break;
             case 26:
                 List<String> selections = new ArrayList<>();

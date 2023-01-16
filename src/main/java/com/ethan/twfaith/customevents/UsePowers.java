@@ -190,7 +190,7 @@ public class UsePowers implements Listener {
                     }
                     break;
                 case "Explosive Landing":
-                    if (player_data.isExplosive_landing_active()){
+                    if (player_data.isExplosiveLandingActive()){
                         player_data.setExplosive_landing_active(false);
                         player.sendMessage(ChatColor.RED + "Explosive Landing Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){

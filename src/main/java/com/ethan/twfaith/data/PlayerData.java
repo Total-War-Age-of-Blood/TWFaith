@@ -254,7 +254,7 @@ public class PlayerData {
         this.entangle = entangle;
     }
 
-    public int getLions_heart() {
+    public int getLionsHeart() {
         return lions_heart;
     }
 
@@ -340,7 +340,7 @@ public class PlayerData {
         this.insidious_active = insidious_active;
     }
 
-    public boolean isExplosive_landing_active() {
+    public boolean isExplosiveLandingActive() {
         return explosive_landing_active;
     }
 

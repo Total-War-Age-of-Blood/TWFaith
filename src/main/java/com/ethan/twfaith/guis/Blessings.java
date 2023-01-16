@@ -151,6 +151,6 @@ public class Blessings implements Listener {
     }
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
-        if(e.getGui_name().equals("Blessings")){openBlessingsGui(e.getPlayer());}
+        if(e.getGuiName().equals("Blessings")){openBlessingsGui(e.getPlayer());}
     }
 }

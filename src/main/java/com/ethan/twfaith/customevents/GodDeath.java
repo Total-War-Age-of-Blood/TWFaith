@@ -17,6 +17,7 @@ import java.util.List;
 public class GodDeath implements Listener {
     @EventHandler
     public void onGodDeath(PlayerDeathEvent event){
+        // Removes power items when god dies
         Player player = event.getEntity();
         PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
         if (!player_data.getLeader()){return;}

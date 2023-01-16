@@ -20,7 +20,7 @@ public class OpenGUIEvent extends Event {
         return player;
     }
 
-    public String getGui_name(){
+    public String getGuiName(){
         return gui_name;
     }
 

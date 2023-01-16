@@ -72,7 +72,7 @@ public class SelectPowers implements Listener {
 
         assert lion_head_meta != null;
         lion_head_meta.setDisplayName(ChatColor.DARK_RED + "Lion's Heart");
-        switch (player_data.getLions_heart()){
+        switch (player_data.getLionsHeart()){
             case 0:
                 lion_head_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored", ChatColor.RED + "Not Owned"));
                 break;
@@ -172,7 +172,7 @@ public class SelectPowers implements Listener {
                 inventoryClickSwitch(player_data.getMana(), Material.YELLOW_TERRACOTTA, ChatColor.GOLD, "Mana", p);
                 break;
             case 19:
-                inventoryClickSwitch(player_data.getLions_heart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
+                inventoryClickSwitch(player_data.getLionsHeart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
                 break;
             case 20:
                 inventoryClickSwitch(player_data.getSavior(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Savior", p);
@@ -209,7 +209,7 @@ public class SelectPowers implements Listener {
 
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
-        if(e.getGui_name().equals("Select Powers")){
+        if(e.getGuiName().equals("Select Powers")){
             PlayerData player_data = PlayerHashMap.player_data_hashmap.get(e.getPlayer().getUniqueId());
             openSelectPowersGui(e.getPlayer(), player_data);
         }

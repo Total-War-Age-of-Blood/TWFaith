@@ -34,8 +34,8 @@ public class StaminaChecker extends BukkitRunnable {
             }
             // Because multiple terrain effects can be active at once, we deduct 11 stamina for each terrain bonus
             // in the active terrain bonus list.
-            if (faith.getTerrain_active_powers().size() > 0){
-                stamina -= (TWFaith.getPlugin().getConfig().getInt("terrain-stamina") * faith.getTerrain_active_powers().size());
+            if (faith.getTerrainActivePowers().size() > 0){
+                stamina -= (TWFaith.getPlugin().getConfig().getInt("terrain-stamina") * faith.getTerrainActivePowers().size());
             }
             if (player_data.isCrumbling_active()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("crumbling-stamina");
@@ -65,7 +65,7 @@ public class StaminaChecker extends BukkitRunnable {
                 player_data.setHells_fury_active(false);
                 player_data.setSummon_god_active(false);
                 player_data.setTerrain_bonus_active(false);
-                faith.getTerrain_active_powers().clear();
+                faith.getTerrainActivePowers().clear();
                 player_data.setCrumbling_active(false);
                 player_data.setHeavy_boots_active(false);
                 player_data.setIntoxicate_active(false);

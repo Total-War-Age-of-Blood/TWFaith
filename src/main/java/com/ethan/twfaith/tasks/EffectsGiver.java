@@ -74,7 +74,7 @@ public class EffectsGiver extends BukkitRunnable {
                 // Finally, apply those powers to the player.
                 Biome biome = player.getLocation().getBlock().getBiome();
                 String biome_group = biomeSearch(biome);
-                for (String power : faith.getTerrain_active_powers()){
+                for (String power : faith.getTerrainActivePowers()){
                     if (power.contains(biome_group)){
                         if (power.contains("Strength")){
                             player.addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(100, 0));

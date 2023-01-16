@@ -86,6 +86,6 @@ public class FaithUpgrade implements Listener {
     public void faithUpgradeEvent(OpenGUIEvent e){
         // When custom event is triggered, check to see if it wants to open this gui
         // if so, open the gui
-        if(e.getGui_name().equals("Faith Upgrade")){openNewGui(e.getPlayer());}
+        if(e.getGuiName().equals("Faith Upgrade")){openNewGui(e.getPlayer());}
     }
 }
