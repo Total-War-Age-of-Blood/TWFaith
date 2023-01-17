@@ -20,7 +20,7 @@ public class BossBars implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
         // If the player is a god, generate their stamina bar when they log in. The stamina bar will be updated by the
         // Stamina Checker.
         if (player_data.getIn_faith() && player_data.getLeader()){

@@ -19,7 +19,7 @@ public class Intoxicate implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
 
         boolean intox_victim = player_data.isIntoxicate_victim();
 
@@ -44,6 +44,6 @@ public class Intoxicate implements Listener {
             player.sendMessage(ChatColor.GREEN + "Fresh air clears your lungs.");
         }
 
-        PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+        PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
     }
 }

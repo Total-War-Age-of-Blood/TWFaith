@@ -15,9 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Curses implements Listener {
@@ -25,25 +23,27 @@ public class Curses implements Listener {
 
     public void openCursesGui(Player player){
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+
+        Util util = new Util();
 
         // Crumbling
-        generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", "Heathen's items lose durability quickly.", 10, player_data.getCrumbling());
+        util.generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", "Heathen's items lose durability quickly.", 10, player_data.getCrumbling(), gui);
 
         // Heavy Boots
-        generateGUI(Material.DIAMOND_BOOTS, ChatColor.GRAY, "Heavy Boots", "Heathens wearing boots are slowed down", 11, player_data.getHeavyBoots());
+        util.generateGUI(Material.DIAMOND_BOOTS, ChatColor.GRAY, "Heavy Boots", "Heathens wearing boots are slowed down", 11, player_data.getHeavyBoots(), gui);
 
         // Intoxicate
-        generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", "Nearby heathens gain nausea.", 12, player_data.getIntoxicate());
+        util.generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", "Nearby heathens gain nausea.", 12, player_data.getIntoxicate(), gui);
 
         // Discombobulate
-        generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", "Scramble inventories of nearby heathens.", 13, player_data.getDiscombobulate());
+        util.generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", "Scramble inventories of nearby heathens.", 13, player_data.getDiscombobulate(), gui);
 
         // Entangle
-        generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", "Nearby heathens are caged.", 14, player_data.getEntangle());
+        util.generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", "Nearby heathens are caged.", 14, player_data.getEntangle(), gui);
 
         // Close Menu
-        generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", 16, 3);
+        util.generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", 16, 3, gui);
 
         // Frame
         ItemStack frame = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
@@ -52,23 +52,6 @@ public class Curses implements Listener {
         }
 
         player.openInventory(gui);
-    }
-
-    public void generateGUI(Material material, ChatColor color, String display, String lore, int place, int data){
-        ItemStack item = new ItemStack(material);
-        ItemMeta item_meta = item.getItemMeta();
-        assert item_meta != null;
-        item_meta.setDisplayName(color + display);
-        switch (data){
-            case 0:
-                item_meta.setLore(Arrays.asList(lore, ChatColor.RED + "Not Owned"));
-                break;
-            case 1:
-                item_meta.setLore(Arrays.asList(lore, ChatColor.GREEN + "Owned"));
-                break;
-        }
-        item.setItemMeta(item_meta);
-        gui.setItem(place, item);
     }
 
     @EventHandler
@@ -82,29 +65,30 @@ public class Curses implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData playerData = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
-        Faith faithData = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(p.getUniqueId());
+        Faith faithData = FaithHashMap.playerFaithHashmap.get(p.getUniqueId());
         ItemStack item = e.getCurrentItem();
+        Util util = new Util();
 
         switch (e.getSlot()){
             case 10:
-                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("crumbling-cost"), playerData.getCrumbling(), item, e.getSlot(), "Heathen's items lose durability quickly.")){return;}
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("crumbling-cost"), playerData.getCrumbling(), item, e.getSlot(), "Heathen's items lose durability quickly.", gui)){return;}
                 playerData.setCrumbling(1);
                 break;
             case 11:
-                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("heavy-cost"), playerData.getHeavyBoots(), item, e.getSlot(), "Heathens wearing boots are slowed down.")){return;}
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("heavy-cost"), playerData.getHeavyBoots(), item, e.getSlot(), "Heathens wearing boots are slowed down.", gui)){return;}
                 playerData.setHeavy_boots(1);
                 break;
             case 12:
-                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("intoxicate-cost"), playerData.getIntoxicate(), item, e.getSlot(), "Nearby heathens gain nausea.")){return;}
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("intoxicate-cost"), playerData.getIntoxicate(), item, e.getSlot(), "Nearby heathens gain nausea.", gui)){return;}
                 playerData.setIntoxicate(1);
                 break;
             case 13:
-                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("discombobulate-cost"), playerData.getDiscombobulate(), item, e.getSlot(),"Scramble inventories of nearby heathens.")){return;}
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("discombobulate-cost"), playerData.getDiscombobulate(), item, e.getSlot(),"Scramble inventories of nearby heathens.", gui)){return;}
                 playerData.setDiscombobulate(1);
                 break;
             case 14:
-                if (faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("entangle-cost"), playerData.getEntangle(), item, e.getSlot(), "Nearby heathens are caged.")){return;}
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("entangle-cost"), playerData.getEntangle(), item, e.getSlot(), "Nearby heathens are caged.", gui)){return;}
                 playerData.setEntangle(1);
                 break;
             case 16:
@@ -112,25 +96,8 @@ public class Curses implements Listener {
                 break;
         }
 
-        PlayerHashMap.player_data_hashmap.put(p.getUniqueId(), playerData);
+        PlayerHashMap.playerDataHashMap.put(p.getUniqueId(), playerData);
     }
-
-    public boolean faithPointsChecker(Faith faithData, Player p, int cost, int data, ItemStack item, int slot, String lore){
-        if (data > 0){return true;}
-        Faith faith = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
-        if (!(faith.getFaithPoints() >= cost)){
-            p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
-            return true;
-        }
-        faithData.setFaithPoints(faithData.getFaithPoints() - cost);
-        p.sendMessage(faithData.getFaithPoints() + " Faith Points remaining.");
-        ItemMeta item_meta = item.getItemMeta();
-        item_meta.setLore(Arrays.asList(lore, ChatColor.GREEN + "Owned"));
-        item.setItemMeta(item_meta);
-        gui.setItem(slot, item);
-        return false;
-    }
-
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGuiName().equals("Curses")){openCursesGui(e.getPlayer());}

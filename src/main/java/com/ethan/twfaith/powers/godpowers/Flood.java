@@ -51,7 +51,7 @@ public class Flood implements Listener {
     }
 
     public void floodTrigger(Player player){
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
 
         if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("flood-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");

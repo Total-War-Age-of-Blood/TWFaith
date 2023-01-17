@@ -28,7 +28,7 @@ public class CreateFaith {
             return;
         }
 
-        for (Faith faith : FaithHashMap.player_faith_hashmap.values()){
+        for (Faith faith : FaithHashMap.playerFaithHashmap.values()){
             if (!(args[1].toLowerCase().equals(faith.getFaithName().toLowerCase(Locale.ROOT)))){continue;}
             player.sendMessage(ChatColor.RED + "A faith with that name already exists.");
             return;
@@ -38,7 +38,7 @@ public class CreateFaith {
         Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>(),
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, false, new ArrayList<>());
-        FaithHashMap.player_faith_hashmap.put(player.getUniqueId(), faith);
+        FaithHashMap.playerFaithHashmap.put(player.getUniqueId(), faith);
 
         // Give the player a Stamina Boss Bar
         BossBar bossBar = Bukkit.createBossBar(ChatColor.YELLOW + "Stamina", BarColor.YELLOW, BarStyle.SEGMENTED_10);
@@ -58,11 +58,11 @@ public class CreateFaith {
             // Changing Founder's Player Data to reflect creating the faith
 
             playerData.setFaith(args[1]);
-            playerData.setIn_faith(true);
+            playerData.setInFaith(true);
             playerData.setLeader(true);
-            playerData.setLed_by(player.getUniqueId());
+            playerData.setLedBy(player.getUniqueId());
 
-            PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), playerData);
+            PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
 
             System.out.println("Saved data!");
         }catch(IOException e){e.printStackTrace();}}

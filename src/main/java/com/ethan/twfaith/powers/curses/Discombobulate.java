@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Discombobulate implements Listener {
     public void discombobulateTrigger(Player player){
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
 
         // Because this is a triggered power, not a toggle power, we check and deduct stamina here
         if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("discombobulate-stamina")){
@@ -28,7 +28,7 @@ public class Discombobulate implements Listener {
         // See who is in range of the power
         for (Player heathen : Bukkit.getOnlinePlayers()){
             if (!heathen.getWorld().equals(player.getWorld())){continue;}
-            PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
+            PlayerData heathen_data = PlayerHashMap.playerDataHashMap.get(heathen.getUniqueId());
             if (!player.getWorld().equals(heathen.getWorld())){continue;}
             if (heathen.getLocation().distance(player.getLocation()) <= 30 && !heathen_data.getFaith().equals(player_data.getFaith())){
 

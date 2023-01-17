@@ -16,16 +16,16 @@ import java.util.UUID;
 
 public class RemoveFlood extends BukkitRunnable implements Listener {
     UUID uuid;
-    List<Block> block_list;
+    List<Block> blockList;
     public RemoveFlood(UUID uuid, List<Block> block_list) {
         this.uuid = uuid;
-        this.block_list = block_list;
+        this.blockList = block_list;
     }
 
     @Override
     public void run() {
         System.out.println("Removing Flood");
-        for (Block block : block_list){
+        for (Block block : blockList){
             // System.out.println(block.getType());
             if (block.getType().equals(Material.WATER)){
                 //System.out.println("Draining water");
@@ -35,11 +35,11 @@ public class RemoveFlood extends BukkitRunnable implements Listener {
         // Iterate through the flood files to figure out which one we are removing and then delete the file.
         try{
             File flood_folder = new File(Bukkit.getPluginManager().getPlugin("TWFaith").getDataFolder(), "Floods");
-            File[] flood_files = flood_folder.listFiles();
-            for (File file : flood_files){
-                FileReader flood_reader = new FileReader(file);
-                Flood flood_data = TWFaith.getGson().fromJson(flood_reader, Flood.class);
-                if (flood_data.getUuid().equals(uuid)){
+            File[] floodFiles = flood_folder.listFiles();
+            for (File file : floodFiles){
+                FileReader floodReader = new FileReader(file);
+                Flood floodData = TWFaith.getGson().fromJson(floodReader, Flood.class);
+                if (floodData.getUuid().equals(uuid)){
                     file.delete();
                     break;
                 }

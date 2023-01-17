@@ -134,7 +134,7 @@ public class SelectPowers implements Listener {
 
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(p.getUniqueId());
 
         // Check if player has any empty hotbar slots
         Inventory player_inventory = p.getInventory();
@@ -210,7 +210,7 @@ public class SelectPowers implements Listener {
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGuiName().equals("Select Powers")){
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(e.getPlayer().getUniqueId());
+            PlayerData player_data = PlayerHashMap.playerDataHashMap.get(e.getPlayer().getUniqueId());
             openSelectPowersGui(e.getPlayer(), player_data);
         }
     }

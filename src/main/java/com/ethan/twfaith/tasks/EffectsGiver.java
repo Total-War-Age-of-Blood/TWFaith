@@ -32,7 +32,7 @@ public class EffectsGiver extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()){
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+            PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
 
 
             // Powers that grant potion effects
@@ -67,7 +67,7 @@ public class EffectsGiver extends BukkitRunnable {
 
             // This code block is for effects that require the player to be in a faith to bestow. Currently, only Terrain Bonus
             if (player_data.getIn_faith()){
-                Faith faith = FaithHashMap.player_faith_hashmap.get(player_data.getLed_by());
+                Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLed_by());
 
                 // Terrain Bonus
                 // First, get the biome the player is in. Then, see if there are any powers that apply to the biome.

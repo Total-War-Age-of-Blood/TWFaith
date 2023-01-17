@@ -18,18 +18,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class HellsFury implements Listener {
     public void onHellsFuryTrigger(Player player, PlayerData player_data, ItemStack chosen_item, ItemMeta chosen_item_meta){
         for (Player nearby : Bukkit.getOnlinePlayers()){
-            PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(nearby.getUniqueId());
+            PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
             if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLed_by().equals(nearby_data.getLed_by())){continue;}
             if (nearby_data.isHells_fury_active()){
-                nearby_data.setHells_fury_active(false);
+                nearby_data.setHellsFuryActive(false);
                 player.sendMessage("Your foot flames cease.");
                 if (!chosen_item.getEnchantments().isEmpty()){
                     chosen_item_meta.removeEnchant(Enchantment.DURABILITY);
                     chosen_item.setItemMeta(chosen_item_meta);
                 }
             }else{
-                nearby_data.setHells_fury_active(true);
+                nearby_data.setHellsFuryActive(true);
                 player.sendMessage("Fiery flames spring from your feet!");
                 chosen_item_meta.addEnchant(Enchantment.DURABILITY, 1, false);
                 chosen_item.setItemMeta(chosen_item_meta);
@@ -40,7 +40,7 @@ public class HellsFury implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
         if (!player_data.isHells_fury_active()){return;}
         Location player_loc = player.getLocation();
         World world = player.getWorld();

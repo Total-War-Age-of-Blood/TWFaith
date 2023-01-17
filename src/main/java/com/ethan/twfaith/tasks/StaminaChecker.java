@@ -19,9 +19,9 @@ public class StaminaChecker extends BukkitRunnable {
     public void run() {
         // This method will run every second and deduct or give stamina from each player based on their active powers.
         for (Player player : Bukkit.getOnlinePlayers()){
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+            PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
             if (!player_data.getLeader() || !player_data.getIn_faith()){continue;}
-            Faith faith = FaithHashMap.player_faith_hashmap.get(player_data.getLed_by());
+            Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLed_by());
 
             double stamina = player_data.getStamina();
             double max_stamina = player_data.getMax_stamina();
@@ -61,18 +61,18 @@ public class StaminaChecker extends BukkitRunnable {
             // Also, set stamina to 0. If calculated stamina is above max, set to max.
             // Otherwise, set stamina to new calculated stamina.
             if (stamina < 0){
-                player_data.setPowerful_flock_active(false);
-                player_data.setHells_fury_active(false);
-                player_data.setSummon_god_active(false);
-                player_data.setTerrain_bonus_active(false);
+                player_data.setPowerfulFlockActive(false);
+                player_data.setHellsFuryActive(false);
+                player_data.setSummonGodActive(false);
+                player_data.setTerrainBonusActive(false);
                 faith.getTerrainActivePowers().clear();
-                player_data.setCrumbling_active(false);
-                player_data.setHeavy_boots_active(false);
+                player_data.setCrumblingActive(false);
+                player_data.setHeavyBootsActive(false);
                 player_data.setIntoxicate_active(false);
-                player_data.setLions_heart_active(false);
-                player_data.setSavior_active(false);
-                player_data.setInsidious_active(false);
-                player_data.setExplosive_landing_active(false);
+                player_data.setLionsHeartActive(false);
+                player_data.setSaviorActive(false);
+                player_data.setInsidiousActive(false);
+                player_data.setExplosiveLandingActive(false);
                 player_data.setStamina(0);
                 player.sendMessage(ChatColor.RED + "Your energy runs out, and your powers fade.");
 
@@ -99,7 +99,7 @@ public class StaminaChecker extends BukkitRunnable {
                 boss_bar.setProgress(stamina / max_stamina);
             }
 
-            PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+            PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
         }
     }
 }

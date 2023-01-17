@@ -33,7 +33,7 @@ public class TerrainBonus implements Listener {
     ArrayList<Biome> END = new ArrayList<>(Arrays.asList(Biome.THE_END, Biome.SMALL_END_ISLANDS, Biome.END_MIDLANDS, Biome.END_HIGHLANDS, Biome.END_BARRENS));
 
     public void terrainToggle(String display_name, Player player, ItemStack power_block){
-        Faith faith_data = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+        Faith faith_data = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
         List<String> terrain_active_powers = faith_data.getTerrainActivePowers();
         ItemMeta power_block_meta = power_block.getItemMeta();
         // If the power was already listed as active, remove it from the list to deactivate it.
@@ -59,9 +59,9 @@ public class TerrainBonus implements Listener {
     @EventHandler
     public void onTerrainTrigger(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
         if (!player_data.getIn_faith() || !player_data.isLeader()){return;}
-        Faith faith = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
         // if (!faith.isTerrain_bonus_active()){return;}
 

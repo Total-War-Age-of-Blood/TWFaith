@@ -34,7 +34,7 @@ public class Entangle implements Listener {
         player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("entangle-stamina"));
 
         for (Player heathen : Bukkit.getOnlinePlayers()){
-            PlayerData heathen_data = PlayerHashMap.player_data_hashmap.get(heathen.getUniqueId());
+            PlayerData heathen_data = PlayerHashMap.playerDataHashMap.get(heathen.getUniqueId());
             if (!player.getWorld().equals(heathen.getWorld())){continue;}
             if (heathen.getLocation().distance(player.getLocation()) > 30 || heathen_data.getFaith().equals(player_data.getFaith())){continue;}
             Location heathen_loc = heathen.getLocation();

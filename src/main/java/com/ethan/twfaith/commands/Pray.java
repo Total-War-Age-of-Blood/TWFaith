@@ -25,13 +25,13 @@ public class Pray implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player){
             Player player = (Player) sender;
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+            PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
             // Check if the player is a leader because gods cannot pray to themselves
             if (player_data.getLeader()){
                 player.sendMessage(ChatColor.RED + "You cannot pray to yourself.");
                 return true;
             }
-            Faith faith = FaithHashMap.player_faith_hashmap.get(player_data.getLed_by());
+            Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLed_by());
             // Check if the player is on prayer cooldown
             long last_prayer = player_data.getLast_prayer();
             long current_time = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
@@ -44,8 +44,8 @@ public class Pray implements CommandExecutor {
                 player_data.setLast_prayer(current_time);
                 player_data.setFaith_points(player_data.getFaith_points() + 1);
 
-                PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
-                FaithHashMap.player_faith_hashmap.put(player.getUniqueId(), faith);
+                PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
+                FaithHashMap.playerFaithHashmap.put(player.getUniqueId(), faith);
 
                 player.sendMessage("You pray to your god.");
 

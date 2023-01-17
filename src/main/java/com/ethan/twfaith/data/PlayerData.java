@@ -132,7 +132,7 @@ public class PlayerData {
 
     public UUID getLed_by() { return led_by; }
 
-    public void setLed_by(UUID led_by) { this.led_by = led_by; }
+    public void setLedBy(UUID led_by) { this.led_by = led_by; }
 
     public String getFaith() {
         return faith;
@@ -146,7 +146,7 @@ public class PlayerData {
         return in_faith;
     }
 
-    public void setIn_faith(boolean in_faith) {
+    public void setInFaith(boolean in_faith) {
         this.in_faith = in_faith;
     }
 
@@ -320,7 +320,7 @@ public class PlayerData {
         return lions_heart_active;
     }
 
-    public void setLions_heart_active(boolean lions_heart_active) {
+    public void setLionsHeartActive(boolean lions_heart_active) {
         this.lions_heart_active = lions_heart_active;
     }
 
@@ -328,7 +328,7 @@ public class PlayerData {
         return savior_active;
     }
 
-    public void setSavior_active(boolean savior_active) {
+    public void setSaviorActive(boolean savior_active) {
         this.savior_active = savior_active;
     }
 
@@ -336,7 +336,7 @@ public class PlayerData {
         return insidious_active;
     }
 
-    public void setInsidious_active(boolean insidious_active) {
+    public void setInsidiousActive(boolean insidious_active) {
         this.insidious_active = insidious_active;
     }
 
@@ -344,7 +344,7 @@ public class PlayerData {
         return explosive_landing_active;
     }
 
-    public void setExplosive_landing_active(boolean explosive_landing_active) {
+    public void setExplosiveLandingActive(boolean explosive_landing_active) {
         this.explosive_landing_active = explosive_landing_active;
     }
 
@@ -352,7 +352,7 @@ public class PlayerData {
         return crumbling_active;
     }
 
-    public void setCrumbling_active(boolean crumbling_active) {
+    public void setCrumblingActive(boolean crumbling_active) {
         this.crumbling_active = crumbling_active;
     }
 
@@ -368,7 +368,7 @@ public class PlayerData {
         return heavy_boots_active;
     }
 
-    public void setHeavy_boots_active(boolean heavy_boots_active) {
+    public void setHeavyBootsActive(boolean heavy_boots_active) {
         this.heavy_boots_active = heavy_boots_active;
     }
 
@@ -448,7 +448,7 @@ public class PlayerData {
         return terrain_bonus_active;
     }
 
-    public void setTerrain_bonus_active(boolean terrain_bonus_active) {
+    public void setTerrainBonusActive(boolean terrain_bonus_active) {
         this.terrain_bonus_active = terrain_bonus_active;
     }
 
@@ -456,7 +456,7 @@ public class PlayerData {
         return summon_god_active;
     }
 
-    public void setSummon_god_active(boolean summon_god_active) {
+    public void setSummonGodActive(boolean summon_god_active) {
         this.summon_god_active = summon_god_active;
     }
 
@@ -464,15 +464,15 @@ public class PlayerData {
         return powerful_flock_active;
     }
 
-    public void setPowerful_flock_active(boolean powerful_flock_active) {
+    public void setPowerfulFlockActive(boolean powerful_flock_active) {
         this.powerful_flock_active = powerful_flock_active;
     }
 
-    public boolean isIn_flock() {
+    public boolean isInFlock() {
         return in_flock;
     }
 
-    public void setIn_flock(boolean in_flock) {
+    public void setInFlock(boolean in_flock) {
         this.in_flock = in_flock;
     }
 
@@ -488,7 +488,7 @@ public class PlayerData {
         return hells_fury_active;
     }
 
-    public void setHells_fury_active(boolean hells_fury_active) {
+    public void setHellsFuryActive(boolean hells_fury_active) {
         this.hells_fury_active = hells_fury_active;
     }
 

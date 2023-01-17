@@ -9,11 +9,11 @@ public class OpenGUIEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     Player player;
-    String gui_name;
+    String guiName;
 
     public OpenGUIEvent(Player player, String gui_name){
         this.player = player;
-        this.gui_name = gui_name;
+        this.guiName = gui_name;
     }
 
     public Player getPlayer(){
@@ -21,7 +21,7 @@ public class OpenGUIEvent extends Event {
     }
 
     public String getGuiName(){
-        return gui_name;
+        return guiName;
     }
 
 

@@ -23,7 +23,7 @@ public class TerrainBonusUpgrade implements Listener {
     private Inventory gui;
 
     public void openTerrainBonusGUI(Player player){
-        Faith faith_data = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+        Faith faith_data = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
         gui = Bukkit.createInventory(null, 27, "Biome Groups");
 
         // Snowy Biomes
@@ -106,8 +106,8 @@ public class TerrainBonusUpgrade implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData playerData = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
-        Faith faithData = FaithHashMap.player_faith_hashmap.get(p.getUniqueId());
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(p.getUniqueId());
+        Faith faithData = FaithHashMap.playerFaithHashmap.get(p.getUniqueId());
         ItemStack item = e.getCurrentItem();
 
         switch (e.getSlot()){
@@ -183,9 +183,6 @@ public class TerrainBonusUpgrade implements Listener {
             p.sendMessage(ChatColor.RED + "You need more Faith Points to purchase this upgrade.");
             return true;
         }
-        System.out.println(faithData.getFaithPoints());
-        System.out.println(cost);
-        System.out.println(faithData.getFaithPoints() - cost);
         faithData.setFaithPoints(faithData.getFaithPoints() - cost);
         p.sendMessage(faithData.getFaithPoints() + " Faith Points remaining.");
         ItemMeta item_meta = item.getItemMeta();

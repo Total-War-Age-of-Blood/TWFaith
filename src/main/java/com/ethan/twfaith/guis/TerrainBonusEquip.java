@@ -31,7 +31,7 @@ public class TerrainBonusEquip implements Listener {
     private Inventory gui;
 
     public void openTerrainBonusEquip(Player player){
-        Faith faith_data = FaithHashMap.player_faith_hashmap.get(player.getUniqueId());
+        Faith faith_data = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
         gui = Bukkit.createInventory(null, 27, "Equip Terrain Bonus");
         // Biome Groups
         // Snowy
@@ -143,8 +143,8 @@ public class TerrainBonusEquip implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.player_data_hashmap.get(p.getUniqueId());
-        Faith faith_data = FaithHashMap.player_faith_hashmap.get(player_data.getUuid());
+        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(p.getUniqueId());
+        Faith faith_data = FaithHashMap.playerFaithHashmap.get(player_data.getUuid());
 
         switch (e.getSlot()){
             case 0:

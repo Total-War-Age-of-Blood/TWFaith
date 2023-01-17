@@ -19,7 +19,7 @@ public class Heavy_Boots_Checker extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()){
-            PlayerData player_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+            PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
             boolean was_victim = player_data.isHeavy_boots_victim();
             // Checks if player should be a victim
             boolean heavy_victim = false;
@@ -40,7 +40,7 @@ public class Heavy_Boots_Checker extends BukkitRunnable {
                         player.setWalkSpeed(Math.min(player.getWalkSpeed() * 2F, 1F));
                     }
                     player_data.setHeavy_boots_victim(false);
-                    PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+                    PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     return;
                 } else{
                     player.sendMessage(ChatColor.RED + "Your boots weigh you down!");
@@ -69,7 +69,7 @@ public class Heavy_Boots_Checker extends BukkitRunnable {
                 player.sendMessage("You feel lighter without boots");
             }
             player_data.setHeavy_boots_victim(heavy_victim);
-            PlayerHashMap.player_data_hashmap.put(player.getUniqueId(), player_data);
+            PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
         }
     }
 }

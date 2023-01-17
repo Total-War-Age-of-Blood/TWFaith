@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class PlayerHashMap implements Listener {
     // Creates the Hashmap for managing PlayerData
-    public static HashMap<UUID, PlayerData> player_data_hashmap = new HashMap<>();
+    public static HashMap<UUID, PlayerData> playerDataHashMap = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
@@ -37,7 +37,7 @@ public class PlayerHashMap implements Listener {
                 System.out.println("Putting PlayerData in HashMap.");
                 FileReader player_file_reader = new FileReader(player_file);
                 PlayerData player_data = TWFaith.getGson().fromJson(player_file_reader, PlayerData.class);
-                player_data_hashmap.put(player.getUniqueId(), player_data);
+                playerDataHashMap.put(player.getUniqueId(), player_data);
             }catch (IOException exception){exception.printStackTrace();}
             found_player = true;
         }
@@ -67,7 +67,7 @@ public class PlayerHashMap implements Listener {
         } catch (Exception ex) {ex.printStackTrace();}
 
         // Add the player's data to the hashmap
-        player_data_hashmap.put(e.getPlayer().getUniqueId(), player_data);
+        playerDataHashMap.put(e.getPlayer().getUniqueId(), player_data);
         System.out.println("Player " + e.getPlayer().getDisplayName() + " added to HashMap.");
     }
 
@@ -76,28 +76,28 @@ public class PlayerHashMap implements Listener {
     public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
         // Switching off the player's powers
-        PlayerData player_data = player_data_hashmap.get(player.getUniqueId());
-        player_data.setExplosive_landing_active(false);
-        player_data.setInsidious_active(false);
-        player_data.setSavior_active(false);
-        player_data.setCrumbling_active(false);
-        player_data.setHeavy_boots_active(false);
+        PlayerData player_data = playerDataHashMap.get(player.getUniqueId());
+        player_data.setExplosiveLandingActive(false);
+        player_data.setInsidiousActive(false);
+        player_data.setSaviorActive(false);
+        player_data.setCrumblingActive(false);
+        player_data.setHeavyBootsActive(false);
         Heavy_Boots_Checker.heavy_boots.remove(player.getUniqueId());
-        player_data.setLions_heart_active(false);
-        player_data.setTerrain_bonus_active(false);
-        player_data.setSummon_god_active(false);
-        player_data.setHells_fury_active(false);
+        player_data.setLionsHeartActive(false);
+        player_data.setTerrainBonusActive(false);
+        player_data.setSummonGodActive(false);
+        player_data.setHellsFuryActive(false);
         // We need to remove the powerful flock health bonus when the god logs off.
         if (player_data.powerful_flock_active){
             // System.out.println("Powerful flock active");
-            player_data.setPowerful_flock_active(false);
+            player_data.setPowerfulFlockActive(false);
             for (Player follower : Bukkit.getOnlinePlayers()){
-                PlayerData follower_data = PlayerHashMap.player_data_hashmap.get(follower.getUniqueId());
-                if (follower_data.isIn_flock() && follower_data.getLed_by().equals(player_data.getLed_by())){
+                PlayerData follower_data = PlayerHashMap.playerDataHashMap.get(follower.getUniqueId());
+                if (follower_data.isInFlock() && follower_data.getLed_by().equals(player_data.getLed_by())){
                     // System.out.println("Follower needs to be deactivated");
                     int nearby_friends = 0;
                     for (Player nearby : Bukkit.getOnlinePlayers()){
-                        PlayerData nearby_data = PlayerHashMap.player_data_hashmap.get(player.getUniqueId());
+                        PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
                         if (!player.getWorld().equals(nearby.getWorld())){continue;}
                         if (nearby.getLocation().distance(follower.getLocation()) <= 30 && nearby_data.getLed_by().equals(follower_data.getLed_by())){
                             nearby_friends ++;
@@ -105,11 +105,11 @@ public class PlayerHashMap implements Listener {
                         }
                     }
                     Objects.requireNonNull(follower.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() - nearby_friends);
-                    follower_data.setIn_flock(false);
+                    follower_data.setInFlock(false);
                 }
             }
         }
-        player_data.setIn_flock(false);
+        player_data.setInFlock(false);
         player_data.setIntoxicate_victim(false);
         player_data.setCrumbling_victim(false);
         player_data.setDiscombobulate_victim(false);
@@ -128,7 +128,7 @@ public class PlayerHashMap implements Listener {
         }catch (IOException exception){exception.printStackTrace();}
 
         // Remove player from HashMap
-        player_data_hashmap.remove(player.getUniqueId());
+        playerDataHashMap.remove(player.getUniqueId());
         System.out.println(player.getDisplayName() + " has been removed from HashMap.");
     }
 }

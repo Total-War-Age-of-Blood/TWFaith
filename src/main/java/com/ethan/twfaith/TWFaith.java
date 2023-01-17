@@ -32,7 +32,9 @@ public final class TWFaith extends JavaPlugin implements Listener {
     private static TWFaith plugin;
     private static Gson gson = new Gson();
     public static Gson getGson() {return gson;}
-
+    public static TWFaith getPlugin() {
+        return plugin;
+    }
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -77,61 +79,57 @@ public final class TWFaith extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
 
         // Check to see if the necessary directories already exist.
-        File player_data_folder = new File(getDataFolder(), "PlayerData");
-        if (!player_data_folder.exists()) {player_data_folder.mkdir();}
+        File playerData = new File(getDataFolder(), "PlayerData");
+        if (!playerData.exists()) {playerData.mkdir();}
 
         // Load Faiths data from files
-        FaithHashMap player_faith_hashmap = new FaithHashMap();
-        player_faith_hashmap.loadFaiths();
+        FaithHashMap playerFaithHashmap = new FaithHashMap();
+        playerFaithHashmap.loadFaiths();
 
         // Timer Tasks for Cooldowns and Stamina
-        BukkitTask stamina_checker = new StaminaChecker().runTaskTimer(this, 0, 20);
-        BukkitTask effects_giver = new EffectsGiver().runTaskTimer(this, 0, 20);
-        BukkitTask heavy_boots_checker = new Heavy_Boots_Checker().runTaskTimer(this, 0, 20);
+        BukkitTask staminaChecker = new StaminaChecker().runTaskTimer(this, 0, 20);
+        BukkitTask effectsGiver = new EffectsGiver().runTaskTimer(this, 0, 20);
+        BukkitTask heavyBootsChecker = new Heavy_Boots_Checker().runTaskTimer(this, 0, 20);
 
     }
 
     @Override
     public void onDisable() {
         // Save Faiths data to files
-        FaithHashMap player_faith_hashmap = new FaithHashMap();
-        player_faith_hashmap.saveFaiths();
+        FaithHashMap playerFaithHashmap = new FaithHashMap();
+        playerFaithHashmap.saveFaiths();
 
         // Save PlayerData to files
-        for (PlayerData player_data : PlayerHashMap.player_data_hashmap.values()){
-            Player player = Bukkit.getPlayer(player_data.getUuid());
+        for (PlayerData playerData : PlayerHashMap.playerDataHashMap.values()){
+            Player player = Bukkit.getPlayer(playerData.getUuid());
             // Switching off the player's powers
-            player_data.setExplosive_landing_active(false);
-            player_data.setInsidious_active(false);
-            player_data.setSavior_active(false);
-            player_data.setCrumbling_active(false);
-            player_data.setHeavy_boots_active(false);
-            player_data.setLions_heart_active(false);
-            player_data.setTerrain_bonus_active(false);
-            player_data.setSummon_god_active(false);
-            player_data.setHells_fury_active(false);
-            player_data.setPowerful_flock_active(false);
-            player_data.setIn_flock(false);
-            player_data.setIntoxicate_victim(false);
-            player_data.setCrumbling_victim(false);
-            player_data.setDiscombobulate_victim(false);
-            player_data.setEntangle_victim(false);
-            player_data.setHeavy_boots_victim(false);
+            playerData.setExplosiveLandingActive(false);
+            playerData.setInsidiousActive(false);
+            playerData.setSaviorActive(false);
+            playerData.setCrumblingActive(false);
+            playerData.setHeavyBootsActive(false);
+            playerData.setLionsHeartActive(false);
+            playerData.setTerrainBonusActive(false);
+            playerData.setSummonGodActive(false);
+            playerData.setHellsFuryActive(false);
+            playerData.setPowerfulFlockActive(false);
+            playerData.setInFlock(false);
+            playerData.setIntoxicate_victim(false);
+            playerData.setCrumbling_victim(false);
+            playerData.setDiscombobulate_victim(false);
+            playerData.setEntangle_victim(false);
+            playerData.setHeavy_boots_victim(false);
 
             // Saving data from HashMap to File
             try{
                 File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
                 File player_file = new File(player_folder, player.getUniqueId() + ".json");
                 FileWriter player_data_writer = new FileWriter(player_file, false);
-                gson.toJson(player_data, player_data_writer);
+                gson.toJson(playerData, player_data_writer);
                 player_data_writer.flush();
                 player_data_writer.close();
                 System.out.println("Player File Saved!");
             }catch (IOException exception){exception.printStackTrace();}
         }
-    }
-
-    public static TWFaith getPlugin() {
-        return plugin;
     }
 }

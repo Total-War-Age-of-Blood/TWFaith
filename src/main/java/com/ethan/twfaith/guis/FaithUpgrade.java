@@ -44,11 +44,11 @@ public class FaithUpgrade implements Listener {
 
     public void generateGUI(Material material, ChatColor color, String display, String lore, int place){
         ItemStack item = new ItemStack(material);
-        ItemMeta item_meta = item.getItemMeta();
-        assert item_meta != null;
-        item_meta.setDisplayName(color + display);
-        item_meta.setLore(Collections.singletonList(lore));
-        item.setItemMeta(item_meta);
+        ItemMeta itemMeta = item.getItemMeta();
+        assert itemMeta != null;
+        itemMeta.setDisplayName(color + display);
+        itemMeta.setLore(Collections.singletonList(lore));
+        item.setItemMeta(itemMeta);
         gui.setItem(place, item);
     }
 
