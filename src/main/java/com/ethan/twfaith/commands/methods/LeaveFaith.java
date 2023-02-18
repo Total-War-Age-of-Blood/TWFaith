@@ -13,14 +13,14 @@ import java.util.UUID;
 
 public class LeaveFaith {
     public void leaveFaith(PlayerData playerData, Player player, File faithFolder){
-        if (playerData.getLeader()){
+        if (playerData.isLeader()){
         player.sendMessage(ChatColor.RED + "A leader cannot leave the faith. You must disband it.");
         return;
     }
         try{
-            if (playerData.getIn_faith()){
+            if (playerData.isInFaith()){
                 // Removing the player from the faith data file
-                File faith_file = new File (faithFolder, playerData.getLed_by() + ".json");
+                File faith_file = new File (faithFolder, playerData.getLedBy() + ".json");
                 Reader faith_reader = new FileReader(faith_file);
                 Faith read_faith = TWFaith.getGson().fromJson(faith_reader, Faith.class);
                 List<UUID> followers = read_faith.getFollowers();

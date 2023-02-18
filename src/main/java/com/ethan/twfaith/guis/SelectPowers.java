@@ -1,6 +1,8 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -29,7 +31,7 @@ import java.util.UUID;
 
 public class SelectPowers implements Listener {
     private Inventory gui;
-    public void openSelectPowersGui(Player player, PlayerData player_data){
+    public void openSelectPowersGui(Player player, PlayerData player_data, Faith faith){
         gui = Bukkit.createInventory(null, 45, "Select Powers");
 
         // Blessings
@@ -42,19 +44,19 @@ public class SelectPowers implements Listener {
         gui.setItem(10, item);
 
         // Summon God
-        generateGUI(Material.WHITE_CANDLE, ChatColor.WHITE, "Summon God", player_data.getSummon_god(), 11);
+        generateGUI(Material.WHITE_CANDLE, ChatColor.WHITE, "Summon God", faith.getSummonGod(), 11);
 
         // Hell's Fury
-        generateGUI(Material.FLINT_AND_STEEL, ChatColor.YELLOW, "Hell's Fury", player_data.getHells_fury(), 12);
+        generateGUI(Material.FLINT_AND_STEEL, ChatColor.YELLOW, "Hell's Fury", faith.getHellsFury(), 12);
 
         // Powerful Flock
-        generateGUI(Material.WHITE_WOOL, ChatColor.RED, "Powerful Flock", player_data.getPowerful_flock(), 13);
+        generateGUI(Material.WHITE_WOOL, ChatColor.RED, "Powerful Flock", faith.getPowerfulFlock(), 13);
 
         // Divine Intervention
-        generateGUI(Material.ELYTRA, ChatColor.GOLD, "Divine Intervention", player_data.getDivine_intervention(), 14);
+        generateGUI(Material.ELYTRA, ChatColor.GOLD, "Divine Intervention", faith.getDivineIntervention(), 14);
 
         // Mana
-        generateGUI(Material.BREAD, ChatColor.GOLD, "Mana", player_data.getMana(), 15);
+        generateGUI(Material.BREAD, ChatColor.GOLD, "Mana", faith.getMana(), 15);
 
         // God Powers
         // Lion's Heart
@@ -72,7 +74,7 @@ public class SelectPowers implements Listener {
 
         assert lion_head_meta != null;
         lion_head_meta.setDisplayName(ChatColor.DARK_RED + "Lion's Heart");
-        switch (player_data.getLionsHeart()){
+        switch (faith.getLionsHeart()){
             case 0:
                 lion_head_meta.setLore(Arrays.asList("Your attacks are stronger when you are unarmored", ChatColor.RED + "Not Owned"));
                 break;
@@ -84,35 +86,35 @@ public class SelectPowers implements Listener {
         gui.setItem(19, lion_head);
 
         // Savior
-        generateGUI(Material.GOLDEN_CARROT, ChatColor.RED, "Savior", player_data.getSavior(), 20);
+        generateGUI(Material.GOLDEN_CARROT, ChatColor.RED, "Savior", faith.getSavior(), 20);
 
         // Taunt
-        generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", player_data.getTaunt(), 21);
+        generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", faith.getTaunt(), 21);
 
         // Insidious
-        generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", player_data.getInsidious(), 22);
+        generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", faith.getInsidious(), 22);
 
         // Explosive Landing
-        generateGUI(Material.TNT_MINECART, ChatColor.RED, "Explosive Landing", player_data.getExplosive_landing(), 23);
+        generateGUI(Material.TNT_MINECART, ChatColor.RED, "Explosive Landing", faith.getExplosiveLanding(), 23);
 
         // Flood Power
-        generateGUI(Material.WATER_BUCKET, ChatColor.BLUE, "Flood", player_data.getFlood(), 24);
+        generateGUI(Material.WATER_BUCKET, ChatColor.BLUE, "Flood", faith.getFlood(), 24);
 
         // Curses
         // Crumbling
-        generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", player_data.getCrumbling(), 28);
+        generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", faith.getCrumbling(), 28);
 
         // Heavy Boots
-        generateGUI(Material.DIAMOND_BOOTS, ChatColor.BLACK, "Heavy Boots", player_data.getHeavyBoots(), 29);
+        generateGUI(Material.DIAMOND_BOOTS, ChatColor.BLACK, "Heavy Boots", faith.getHeavyBoots(), 29);
 
         // Intoxicate
-        generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", player_data.getIntoxicate(), 30);
+        generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", faith.getIntoxicate(), 30);
 
         // Discombobulate
-        generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", player_data.getDiscombobulate(), 31);
+        generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", faith.getDiscombobulate(), 31);
 
         // Entangle
-        generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", player_data.getEntangle(), 32);
+        generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", faith.getEntangle(), 32);
 
         // Frame
         ItemStack frame = new ItemStack(Material.ORANGE_STAINED_GLASS_PANE);
@@ -135,6 +137,7 @@ public class SelectPowers implements Listener {
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(p.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(p.getUniqueId());
 
         // Check if player has any empty hotbar slots
         Inventory player_inventory = p.getInventory();
@@ -157,52 +160,52 @@ public class SelectPowers implements Listener {
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Equip Terrain Bonus"));
                 break;
             case 11:
-                inventoryClickSwitch(player_data.getSummon_god(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Summon God", p);
+                inventoryClickSwitch(faith.getSummonGod(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Summon God", p);
                 break;
             case 12:
-                inventoryClickSwitch(player_data.getHells_fury(), Material.RED_TERRACOTTA, ChatColor.RED, "Hell's Fury", p);
+                inventoryClickSwitch(faith.getHellsFury(), Material.RED_TERRACOTTA, ChatColor.RED, "Hell's Fury", p);
                 break;
             case 13:
-                inventoryClickSwitch(player_data.getPowerful_flock(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Powerful Flock", p);
+                inventoryClickSwitch(faith.getPowerfulFlock(), Material.WHITE_TERRACOTTA, ChatColor.WHITE, "Powerful Flock", p);
                 break;
             case 14:
-                inventoryClickSwitch(player_data.getDivine_intervention(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Divine Intervention", p);
+                inventoryClickSwitch(faith.getDivineIntervention(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Divine Intervention", p);
                 break;
             case 15:
-                inventoryClickSwitch(player_data.getMana(), Material.YELLOW_TERRACOTTA, ChatColor.GOLD, "Mana", p);
+                inventoryClickSwitch(faith.getMana(), Material.YELLOW_TERRACOTTA, ChatColor.GOLD, "Mana", p);
                 break;
             case 19:
-                inventoryClickSwitch(player_data.getLionsHeart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
+                inventoryClickSwitch(faith.getLionsHeart(), Material.RED_TERRACOTTA, ChatColor.RED, "Lion's Heart", p);
                 break;
             case 20:
-                inventoryClickSwitch(player_data.getSavior(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Savior", p);
+                inventoryClickSwitch(faith.getSavior(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Savior", p);
                 break;
             case 21:
-                inventoryClickSwitch(player_data.getTaunt(), Material.ORANGE_TERRACOTTA, ChatColor.GOLD, "Taunt", p);
+                inventoryClickSwitch(faith.getTaunt(), Material.ORANGE_TERRACOTTA, ChatColor.GOLD, "Taunt", p);
                 break;
             case 22:
-                inventoryClickSwitch(player_data.getInsidious(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Insidious", p);
+                inventoryClickSwitch(faith.getInsidious(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Insidious", p);
                 break;
             case 23:
-                inventoryClickSwitch(player_data.getExplosive_landing(), Material.RED_TERRACOTTA, ChatColor.RED, "Explosive Landing", p);
+                inventoryClickSwitch(faith.getExplosiveLanding(), Material.RED_TERRACOTTA, ChatColor.RED, "Explosive Landing", p);
                 break;
             case 24:
-                inventoryClickSwitch(player_data.getFlood(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Flood", p);
+                inventoryClickSwitch(faith.getFlood(), Material.BLUE_TERRACOTTA, ChatColor.BLUE, "Flood", p);
                 break;
             case 28:
-                inventoryClickSwitch(player_data.getCrumbling(), Material.GRAY_TERRACOTTA, ChatColor.GRAY, "Crumbling", p);
+                inventoryClickSwitch(faith.getCrumbling(), Material.GRAY_TERRACOTTA, ChatColor.GRAY, "Crumbling", p);
                 break;
             case 29:
-                inventoryClickSwitch(player_data.getHeavyBoots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
+                inventoryClickSwitch(faith.getHeavyBoots(), Material.BLACK_TERRACOTTA, ChatColor.BLACK, "Heavy Boots", p);
                 break;
             case 30:
-                inventoryClickSwitch(player_data.getIntoxicate(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Intoxicate", p);
+                inventoryClickSwitch(faith.getIntoxicate(), Material.MAGENTA_TERRACOTTA, ChatColor.LIGHT_PURPLE, "Intoxicate", p);
                 break;
             case 31:
-                inventoryClickSwitch(player_data.getDiscombobulate(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Discombobulate", p);
+                inventoryClickSwitch(faith.getDiscombobulate(), Material.YELLOW_TERRACOTTA, ChatColor.YELLOW, "Discombobulate", p);
                 break;
             case 32:
-                inventoryClickSwitch(player_data.getEntangle(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Entangle", p);
+                inventoryClickSwitch(faith.getEntangle(), Material.GREEN_TERRACOTTA, ChatColor.GREEN, "Entangle", p);
                 break;
         }
     }
@@ -211,7 +214,8 @@ public class SelectPowers implements Listener {
     public void faithUpgradeEvent(OpenGUIEvent e){
         if(e.getGuiName().equals("Select Powers")){
             PlayerData player_data = PlayerHashMap.playerDataHashMap.get(e.getPlayer().getUniqueId());
-            openSelectPowersGui(e.getPlayer(), player_data);
+            Faith faith = FaithHashMap.playerFaithHashmap.get(e.getPlayer().getUniqueId());
+            openSelectPowersGui(e.getPlayer(), player_data, faith);
         }
     }
 

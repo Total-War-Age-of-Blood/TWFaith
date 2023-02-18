@@ -19,8 +19,8 @@ public class PowerfulFlock implements Listener {
         PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
 
         // Make sure the leader is online and has the power active
-        if (Bukkit.getPlayer(playerData.getLed_by()) == null){return;}
-        Player leader = Bukkit.getPlayer(playerData.getLed_by());
+        if (Bukkit.getPlayer(playerData.getLedBy()) == null){return;}
+        Player leader = Bukkit.getPlayer(playerData.getLedBy());
         assert leader != null;
         PlayerData leaderData = PlayerHashMap.playerDataHashMap.get(leader.getUniqueId());
 
@@ -28,11 +28,11 @@ public class PowerfulFlock implements Listener {
         for (Player friend : Bukkit.getOnlinePlayers()){
             PlayerData friend_data = PlayerHashMap.playerDataHashMap.get(friend.getUniqueId());
             if (!player.getWorld().equals(friend.getWorld())){continue;}
-            if (player.getLocation().distance(friend.getLocation()) >= 30 || !playerData.getLed_by().equals(friend_data.getLed_by()) || player.getUniqueId().equals(friend.getUniqueId())){continue;}
+            if (player.getLocation().distance(friend.getLocation()) >= 30 || !playerData.getLedBy().equals(friend_data.getLedBy()) || player.getUniqueId().equals(friend.getUniqueId())){continue;}
             nearbyFriends ++;
         }
 
-        if (!leaderData.isPowerful_flock_active()){
+        if (!leaderData.isPowerfulFlockActive()){
             if (playerData.isInFlock()){
                 playerData.setInFlock(false);
                 Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() - nearbyFriends);
@@ -47,15 +47,15 @@ public class PowerfulFlock implements Listener {
             player.sendMessage("The flock gives you strength");
             // To avoid the complications of using potion effects, we are instead changing the max health attribute of the player
             Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(20 + nearbyFriends);
-            playerData.setNearby_friends(nearbyFriends);
+            playerData.setNearbyFriends(nearbyFriends);
         } else if (nearbyFriends < 1 && playerData.isInFlock()){
             playerData.setInFlock(false);
             player.sendMessage("You stray from the flock, losing your strength");
             Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(20);
-            playerData.setNearby_friends(nearbyFriends);
-        } else if (nearbyFriends > 0 && playerData.isInFlock() && nearbyFriends != playerData.getNearby_friends()){
+            playerData.setNearbyFriends(nearbyFriends);
+        } else if (nearbyFriends > 0 && playerData.isInFlock() && nearbyFriends != playerData.getNearbyFriends()){
             Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(20 + (nearbyFriends));
-            playerData.setNearby_friends(nearbyFriends);
+            playerData.setNearbyFriends(nearbyFriends);
         }
     }
 }

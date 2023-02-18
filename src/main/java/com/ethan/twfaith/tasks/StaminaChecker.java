@@ -20,16 +20,16 @@ public class StaminaChecker extends BukkitRunnable {
         // This method will run every second and deduct or give stamina from each player based on their active powers.
         for (Player player : Bukkit.getOnlinePlayers()){
             PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-            if (!player_data.getLeader() || !player_data.getIn_faith()){continue;}
-            Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLed_by());
+            if (!player_data.isLeader() || !player_data.isInFaith()){continue;}
+            Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLedBy());
 
             double stamina = player_data.getStamina();
-            double max_stamina = player_data.getMax_stamina();
+            double max_stamina = player_data.getMaxStamina();
             // subtract the stamina from the active powers
-            if (player_data.isPowerful_flock_active()){
+            if (player_data.isPowerfulFlockActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("flock-stamina");
             }
-            if (player_data.isHells_fury_active()){
+            if (player_data.isHellsFuryActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("hells-stamina");
             }
             // Because multiple terrain effects can be active at once, we deduct 11 stamina for each terrain bonus
@@ -37,19 +37,19 @@ public class StaminaChecker extends BukkitRunnable {
             if (faith.getTerrainActivePowers().size() > 0){
                 stamina -= (TWFaith.getPlugin().getConfig().getInt("terrain-stamina") * faith.getTerrainActivePowers().size());
             }
-            if (player_data.isCrumbling_active()){
+            if (player_data.isCrumblingActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("crumbling-stamina");
             }
-            if (player_data.isHeavy_boots_active()){
+            if (player_data.isHeavyBootsActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("heavy-stamina");
             }
-            if (player_data.isIntoxicate_active()){
+            if (player_data.isIntoxicateActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("intoxicate-stamina");
             }
-            if (player_data.isLions_heart_active()){
+            if (player_data.isLionsHeartActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("lions-heart-stamina");
             }
-            if (player_data.isInsidious_active()){
+            if (player_data.isInsidiousActive()){
                 stamina -= TWFaith.getPlugin().getConfig().getInt("insidious-stamina");
             }
 
@@ -68,7 +68,7 @@ public class StaminaChecker extends BukkitRunnable {
                 faith.getTerrainActivePowers().clear();
                 player_data.setCrumblingActive(false);
                 player_data.setHeavyBootsActive(false);
-                player_data.setIntoxicate_active(false);
+                player_data.setIntoxicateActive(false);
                 player_data.setLionsHeartActive(false);
                 player_data.setSaviorActive(false);
                 player_data.setInsidiousActive(false);
@@ -94,7 +94,7 @@ public class StaminaChecker extends BukkitRunnable {
             if (stamina < 0){stamina = 0;}
 
             // Update the player's Boss Bar
-            if (player_data.getLeader() && player_data.getIn_faith()){
+            if (player_data.isLeader() && player_data.isInFaith()){
                 BossBar boss_bar = BossBars.boss_bar_map.get(player.getUniqueId());
                 boss_bar.setProgress(stamina / max_stamina);
             }

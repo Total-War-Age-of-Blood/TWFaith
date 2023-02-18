@@ -12,10 +12,10 @@ public class SummonGod implements Listener {
     public static HashMap<UUID, UUID> summon_requests = new HashMap<>();
 
     public void summonTrigger(Player player, PlayerData player_data){
-        if (Bukkit.getPlayer(player_data.getLed_by()) == null){
+        if (Bukkit.getPlayer(player_data.getLedBy()) == null){
             player.sendMessage("Your god must be online to summon them.");
             return;}
-        Player god = Bukkit.getPlayer(player_data.getLed_by());
+        Player god = Bukkit.getPlayer(player_data.getLedBy());
         // If we put the god's UUID as the key, the player entry will get replaced every time a new player sends a summon request.
         // This means the god will only be responding to the most recent summon request.
         assert god != null;

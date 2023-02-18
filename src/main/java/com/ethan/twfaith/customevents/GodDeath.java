@@ -20,7 +20,7 @@ public class GodDeath implements Listener {
         // Removes power items when god dies
         Player player = event.getEntity();
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        if (!player_data.getLeader()){return;}
+        if (!player_data.isLeader()){return;}
         List<ItemStack> power_items = new ArrayList<>();
         for (ItemStack item : event.getDrops()){
             if (!item.hasItemMeta()){continue;}

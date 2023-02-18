@@ -6,120 +6,74 @@ import java.util.UUID;
 public class PlayerData {
 
     UUID uuid;
-    UUID led_by;
+    UUID ledBy;
     String faith;
-    boolean in_faith;
+    boolean inFaith;
     boolean leader;
-    long last_prayer;
-    int faith_points;
-    int terrain_bonus;
-    int summon_god;
-    int god_proximity_bonus;
-    int name_prophets;
-    int god_of_defense;
-    int god_of_crafstman;
-    int crumbling;
-    int heavy_boots;
-    int intoxicate;
-    int discombobulate;
-    int entangle;
-    int lions_heart;
-    int savior;
-    int taunt;
-    int insidious;
-    int explosive_landing;
-    int flood;
+    long lastPrayer;
+    int faithPoints;
     boolean taunted;
     UUID taunter;
-    boolean lions_heart_active;
-    boolean savior_active;
-    boolean insidious_active;
-    boolean explosive_landing_active;
-    boolean crumbling_active;
-    boolean crumbling_victim;
-    boolean heavy_boots_active;
-    boolean heavy_boots_victim;
-    boolean intoxicate_active;
-    boolean intoxicate_victim;
-    boolean discombobulate_victim;
-    boolean entangle_victim;
-    int powerful_flock;
-    int hells_fury;
-    int divine_intervention;
-    int mana;
-    boolean terrain_bonus_active;
-    boolean summon_god_active;
-    boolean powerful_flock_active;
-    boolean in_flock;
-    double nearby_friends;
-    boolean hells_fury_active;
+    boolean lionsHeartActive;
+    boolean saviorActive;
+    boolean insidiousActive;
+    boolean explosiveLandingActive;
+    boolean crumblingActive;
+    boolean crumblingVictim;
+    boolean heavyBootsActive;
+    boolean heavyBootsVictim;
+    boolean intoxicateActive;
+    boolean intoxicateVictim;
+    boolean discombobulateVictim;
+    boolean entangleVictim;
+    boolean terrainBonusActive;
+    boolean summonGodActive;
+    boolean powerfulFlockActive;
+    boolean inFlock;
+    double nearbyFriends;
+    boolean hellsFuryActive;
     double stamina;
-    double max_stamina;
-    HashMap<String, Long> cool_downs;
+    double maxStamina;
+    HashMap<String, Long> coolDowns;
 
-
-
-    public PlayerData(UUID uuid, UUID led_by, String faith, boolean in_faith, boolean leader, long last_prayer, int faith_points,
-                      int terrain_bonus, int summon_god, int god_proximity_bonus, int name_prophets, int god_of_defense,
-                      int god_of_crafstman, int crumbling, int heavy_boots, int intoxicate, int discombobulate, int entangle,
-                      int lions_heart, int savior, int taunt, int insidious, int explosive_landing, int flood, boolean taunted,
-                      UUID taunter, boolean lions_heart_active, boolean savior_active, boolean insidious_active,
-                      boolean explosive_landing_active, boolean crumbling_active, boolean crumbling_victim, boolean heavy_boots_active, boolean heavy_boots_victim,
-                      boolean intoxicate_active, boolean intoxicate_victim, boolean discombobulate_victim,
-                      boolean entangle_victim, int powerful_flock, int hells_fury, int divine_intervention,
-                      int mana, boolean terrain_bonus_active, boolean summon_god_active, boolean powerful_flock_active, boolean in_flock,
-                      double nearby_friends, boolean hells_fury_active, double stamina, double max_stamina, HashMap<String, Long> cool_downs) {
+    public PlayerData(UUID uuid, UUID ledBy, String faith, boolean in_faith, boolean leader, long lastPrayer,
+                      int faithPoints, boolean taunted, UUID taunter, boolean lionsHeartActive, boolean saviorActive,
+                      boolean insidiousActive, boolean explosiveLandingActive, boolean crumblingActive,
+                      boolean crumblingVictim, boolean heavyBootsActive, boolean heavyBootsVictim,
+                      boolean intoxicateActive, boolean intoxicateVictim, boolean discombobulateVictim,
+                      boolean entangleVictim, boolean terrainBonusActive, boolean summonGodActive,
+                      boolean powerfulFlockActive, boolean inFlock, double nearbyFriends, boolean hellsFuryActive,
+                      double stamina, double maxStamina, HashMap<String, Long> coolDowns) {
         this.uuid = uuid;
-        this.led_by = led_by;
+        this.ledBy = ledBy;
         this.faith = faith;
-        this.in_faith = in_faith;
+        this.inFaith = in_faith;
         this.leader = leader;
-        this.last_prayer = last_prayer;
-        this.faith_points = faith_points;
-        this.terrain_bonus = terrain_bonus;
-        this.summon_god = summon_god;
-        this.god_proximity_bonus = god_proximity_bonus;
-        this.name_prophets = name_prophets;
-        this.god_of_defense = god_of_defense;
-        this.god_of_crafstman = god_of_crafstman;
-        this.crumbling = crumbling;
-        this.heavy_boots = heavy_boots;
-        this.intoxicate = intoxicate;
-        this.discombobulate = discombobulate;
-        this.entangle = entangle;
-        this.lions_heart = lions_heart;
-        this.savior = savior;
-        this.taunt = taunt;
-        this.insidious = insidious;
-        this.explosive_landing = explosive_landing;
-        this.flood = flood;
+        this.lastPrayer = lastPrayer;
+        this.faithPoints = faithPoints;
         this.taunted = taunted;
         this.taunter = taunter;
-        this.lions_heart_active = lions_heart_active;
-        this.savior_active = savior_active;
-        this.insidious_active = insidious_active;
-        this.explosive_landing_active = explosive_landing_active;
-        this.crumbling_active = crumbling_active;
-        this.crumbling_victim = crumbling_victim;
-        this.heavy_boots_active = heavy_boots_active;
-        this.heavy_boots_victim = heavy_boots_victim;
-        this.intoxicate_active = intoxicate_active;
-        this.intoxicate_victim = intoxicate_victim;
-        this.discombobulate_victim = discombobulate_victim;
-        this.entangle_victim = entangle_victim;
-        this.powerful_flock = powerful_flock;
-        this.hells_fury = hells_fury;
-        this.divine_intervention = divine_intervention;
-        this.mana = mana;
-        this.terrain_bonus_active = terrain_bonus_active;
-        this.summon_god_active = summon_god_active;
-        this.powerful_flock_active = powerful_flock_active;
-        this.in_flock = in_flock;
-        this.nearby_friends = nearby_friends;
-        this.hells_fury_active = hells_fury_active;
+        this.lionsHeartActive = lionsHeartActive;
+        this.saviorActive = saviorActive;
+        this.insidiousActive = insidiousActive;
+        this.explosiveLandingActive = explosiveLandingActive;
+        this.crumblingActive = crumblingActive;
+        this.crumblingVictim = crumblingVictim;
+        this.heavyBootsActive = heavyBootsActive;
+        this.heavyBootsVictim = heavyBootsVictim;
+        this.intoxicateActive = intoxicateActive;
+        this.intoxicateVictim = intoxicateVictim;
+        this.discombobulateVictim = discombobulateVictim;
+        this.entangleVictim = entangleVictim;
+        this.terrainBonusActive = terrainBonusActive;
+        this.summonGodActive = summonGodActive;
+        this.powerfulFlockActive = powerfulFlockActive;
+        this.inFlock = inFlock;
+        this.nearbyFriends = nearbyFriends;
+        this.hellsFuryActive = hellsFuryActive;
         this.stamina = stamina;
-        this.max_stamina = max_stamina;
-        this.cool_downs = cool_downs;
+        this.maxStamina = maxStamina;
+        this.coolDowns = coolDowns;
     }
 
     public UUID getUuid() {
@@ -130,9 +84,13 @@ public class PlayerData {
         this.uuid = uuid;
     }
 
-    public UUID getLed_by() { return led_by; }
+    public UUID getLedBy() {
+        return ledBy;
+    }
 
-    public void setLedBy(UUID led_by) { this.led_by = led_by; }
+    public void setLedBy(UUID ledBy) {
+        this.ledBy = ledBy;
+    }
 
     public String getFaith() {
         return faith;
@@ -142,15 +100,15 @@ public class PlayerData {
         this.faith = faith;
     }
 
-    public boolean getIn_faith() {
-        return in_faith;
+    public boolean isInFaith() {
+        return inFaith;
     }
 
-    public void setInFaith(boolean in_faith) {
-        this.in_faith = in_faith;
+    public void setInFaith(boolean inFaith) {
+        this.inFaith = inFaith;
     }
 
-    public boolean getLeader() {
+    public boolean isLeader() {
         return leader;
     }
 
@@ -158,338 +116,180 @@ public class PlayerData {
         this.leader = leader;
     }
 
-    public long getLast_prayer() { return last_prayer;}
-
-    public void setLast_prayer(long last_prayer) { this.last_prayer = last_prayer;}
-
-    public int getFaith_points() { return faith_points;}
-
-    public void setFaith_points(int faith_points) { this.faith_points = faith_points;}
-
-    public int getTerrain_bonus() {
-        return terrain_bonus;
+    public long getLastPrayer() {
+        return lastPrayer;
     }
 
-    public void setTerrain_bonus(int terrain_bonus) {
-        this.terrain_bonus = terrain_bonus;
+    public void setLastPrayer(long lastPrayer) {
+        this.lastPrayer = lastPrayer;
     }
 
-    public int getSummon_god() {
-        return summon_god;
+    public int getFaithPoints() {
+        return faithPoints;
     }
 
-    public void setSummon_god(int summon_god) {
-        this.summon_god = summon_god;
+    public void setFaithPoints(int faithPoints) {
+        this.faithPoints = faithPoints;
     }
 
-    public int getGod_proximity_bonus() {
-        return god_proximity_bonus;
+    public boolean isTaunted() {
+        return taunted;
     }
 
-    public void setGod_proximity_bonus(int god_proximity_bonus) {
-        this.god_proximity_bonus = god_proximity_bonus;
+    public void setTaunted(boolean taunted) {
+        this.taunted = taunted;
     }
 
-    public int getName_prophets() {
-        return name_prophets;
+    public UUID getTaunter() {
+        return taunter;
     }
 
-    public void setName_prophets(int name_prophets) {
-        this.name_prophets = name_prophets;
+    public void setTaunter(UUID taunter) {
+        this.taunter = taunter;
     }
 
-    public int getGod_of_defense() {
-        return god_of_defense;
+    public boolean isLionsHeartActive() {
+        return lionsHeartActive;
     }
 
-    public void setGod_of_defense(int god_of_defense) {
-        this.god_of_defense = god_of_defense;
+    public void setLionsHeartActive(boolean lionsHeartActive) {
+        this.lionsHeartActive = lionsHeartActive;
     }
 
-    public int getGod_of_crafstman() {
-        return god_of_crafstman;
+    public boolean isSaviorActive() {
+        return saviorActive;
     }
 
-    public void setGod_of_crafstman(int god_of_crafstman) {
-        this.god_of_crafstman = god_of_crafstman;
+    public void setSaviorActive(boolean saviorActive) {
+        this.saviorActive = saviorActive;
     }
 
-    public int getCrumbling() {
-        return crumbling;
+    public boolean isInsidiousActive() {
+        return insidiousActive;
     }
 
-    public void setCrumbling(int crumbling) {
-        this.crumbling = crumbling;
-    }
-
-    public int getHeavyBoots() {
-        return heavy_boots;
-    }
-
-    public void setHeavy_boots(int heavy_boots) {
-        this.heavy_boots = heavy_boots;
-    }
-
-    public int getIntoxicate() {
-        return intoxicate;
-    }
-
-    public void setIntoxicate(int intoxicate) {
-        this.intoxicate = intoxicate;
-    }
-
-    public int getDiscombobulate() {
-        return discombobulate;
-    }
-
-    public void setDiscombobulate(int discombobulate) {
-        this.discombobulate = discombobulate;
-    }
-
-    public int getEntangle() {
-        return entangle;
-    }
-
-    public void setEntangle(int entangle) {
-        this.entangle = entangle;
-    }
-
-    public int getLionsHeart() {
-        return lions_heart;
-    }
-
-    public void setLions_heart(int lions_heart) {
-        this.lions_heart = lions_heart;
-    }
-
-    public int getSavior() {
-        return savior;
-    }
-
-    public void setSavior(int savior) {
-        this.savior = savior;
-    }
-
-    public int getTaunt() {
-        return taunt;
-    }
-
-    public void setTaunt(int taunt) {
-        this.taunt = taunt;
-    }
-
-    public int getInsidious() {
-        return insidious;
-    }
-
-    public void setInsidious(int insidious) {
-        this.insidious = insidious;
-    }
-
-    public int getExplosive_landing() {
-        return explosive_landing;
-    }
-
-    public void setExplosive_landing(int explosive_landing) {
-        this.explosive_landing = explosive_landing;
-    }
-
-    public int getFlood() {
-        return flood;
-    }
-
-    public void setFlood(int flood) {
-        this.flood = flood;
-    }
-
-    public boolean isTaunted() {return taunted;}
-
-    public void setTaunted(boolean taunted) {this.taunted = taunted;}
-
-    public UUID getTaunter() {return taunter;}
-
-    public void setTaunter(UUID taunter) {this.taunter = taunter;}
-
-    public boolean isIn_faith() { return in_faith; }
-
-    public boolean isLeader() {
-        return leader;
-    }
-
-    public boolean isLions_heart_active() {
-        return lions_heart_active;
-    }
-
-    public void setLionsHeartActive(boolean lions_heart_active) {
-        this.lions_heart_active = lions_heart_active;
-    }
-
-    public boolean isSavior_active() {
-        return savior_active;
-    }
-
-    public void setSaviorActive(boolean savior_active) {
-        this.savior_active = savior_active;
-    }
-
-    public boolean isInsidious_active() {
-        return insidious_active;
-    }
-
-    public void setInsidiousActive(boolean insidious_active) {
-        this.insidious_active = insidious_active;
+    public void setInsidiousActive(boolean insidiousActive) {
+        this.insidiousActive = insidiousActive;
     }
 
     public boolean isExplosiveLandingActive() {
-        return explosive_landing_active;
+        return explosiveLandingActive;
     }
 
-    public void setExplosiveLandingActive(boolean explosive_landing_active) {
-        this.explosive_landing_active = explosive_landing_active;
+    public void setExplosiveLandingActive(boolean explosiveLandingActive) {
+        this.explosiveLandingActive = explosiveLandingActive;
     }
 
-    public boolean isCrumbling_active() {
-        return crumbling_active;
+    public boolean isCrumblingActive() {
+        return crumblingActive;
     }
 
-    public void setCrumblingActive(boolean crumbling_active) {
-        this.crumbling_active = crumbling_active;
+    public void setCrumblingActive(boolean crumblingActive) {
+        this.crumblingActive = crumblingActive;
     }
 
-    public boolean isCrumbling_victim() {
-        return crumbling_victim;
+    public boolean isCrumblingVictim() {
+        return crumblingVictim;
     }
 
-    public void setCrumbling_victim(boolean crumbling_victim) {
-        this.crumbling_victim = crumbling_victim;
+    public void setCrumblingVictim(boolean crumblingVictim) {
+        this.crumblingVictim = crumblingVictim;
     }
 
-    public boolean isHeavy_boots_active() {
-        return heavy_boots_active;
+    public boolean isHeavyBootsActive() {
+        return heavyBootsActive;
     }
 
-    public void setHeavyBootsActive(boolean heavy_boots_active) {
-        this.heavy_boots_active = heavy_boots_active;
+    public void setHeavyBootsActive(boolean heavyBootsActive) {
+        this.heavyBootsActive = heavyBootsActive;
     }
 
-    public boolean isIntoxicate_active() {
-        return intoxicate_active;
+    public boolean isHeavyBootsVictim() {
+        return heavyBootsVictim;
     }
 
-    public void setIntoxicate_active(boolean intoxicate_active) {
-        this.intoxicate_active = intoxicate_active;
+    public void setHeavyBootsVictim(boolean heavyBootsVictim) {
+        this.heavyBootsVictim = heavyBootsVictim;
     }
 
-    public boolean isHeavy_boots_victim() {
-        return heavy_boots_victim;
+    public boolean isIntoxicateActive() {
+        return intoxicateActive;
     }
 
-    public void setHeavy_boots_victim(boolean heavy_boots_victim) {
-        this.heavy_boots_victim = heavy_boots_victim;
+    public void setIntoxicateActive(boolean intoxicateActive) {
+        this.intoxicateActive = intoxicateActive;
     }
 
-    public boolean isIntoxicate_victim() {
-        return intoxicate_victim;
+    public boolean isIntoxicateVictim() {
+        return intoxicateVictim;
     }
 
-    public void setIntoxicate_victim(boolean intoxicate_victim) {
-        this.intoxicate_victim = intoxicate_victim;
+    public void setIntoxicateVictim(boolean intoxicateVictim) {
+        this.intoxicateVictim = intoxicateVictim;
     }
 
-    public boolean isDiscombobulate_victim() {
-        return discombobulate_victim;
+    public boolean isDiscombobulateVictim() {
+        return discombobulateVictim;
     }
 
-    public void setDiscombobulate_victim(boolean discombobulate_victim) {
-        this.discombobulate_victim = discombobulate_victim;
+    public void setDiscombobulateVictim(boolean discombobulateVictim) {
+        this.discombobulateVictim = discombobulateVictim;
     }
 
-    public boolean isEntangle_victim() {
-        return entangle_victim;
+    public boolean isEntangleVictim() {
+        return entangleVictim;
     }
 
-    public void setEntangle_victim(boolean entangle_victim) {
-        this.entangle_victim = entangle_victim;
+    public void setEntangleVictim(boolean entangleVictim) {
+        this.entangleVictim = entangleVictim;
     }
 
-    public int getPowerful_flock() {
-        return powerful_flock;
+    public boolean isTerrainBonusActive() {
+        return terrainBonusActive;
     }
 
-    public void setPowerful_flock(int powerful_flock) {
-        this.powerful_flock = powerful_flock;
+    public void setTerrainBonusActive(boolean terrainBonusActive) {
+        this.terrainBonusActive = terrainBonusActive;
     }
 
-    public int getHells_fury() {
-        return hells_fury;
+    public boolean isSummonGodActive() {
+        return summonGodActive;
     }
 
-    public void setHells_fury(int hells_fury) {
-        this.hells_fury = hells_fury;
+    public void setSummonGodActive(boolean summonGodActive) {
+        this.summonGodActive = summonGodActive;
     }
 
-    public int getDivine_intervention() {
-        return divine_intervention;
+    public boolean isPowerfulFlockActive() {
+        return powerfulFlockActive;
     }
 
-    public void setDivine_intervention(int divine_intervention) {
-        this.divine_intervention = divine_intervention;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
-
-    public boolean isTerrain_bonus_active() {
-        return terrain_bonus_active;
-    }
-
-    public void setTerrainBonusActive(boolean terrain_bonus_active) {
-        this.terrain_bonus_active = terrain_bonus_active;
-    }
-
-    public boolean isSummon_god_active() {
-        return summon_god_active;
-    }
-
-    public void setSummonGodActive(boolean summon_god_active) {
-        this.summon_god_active = summon_god_active;
-    }
-
-    public boolean isPowerful_flock_active() {
-        return powerful_flock_active;
-    }
-
-    public void setPowerfulFlockActive(boolean powerful_flock_active) {
-        this.powerful_flock_active = powerful_flock_active;
+    public void setPowerfulFlockActive(boolean powerfulFlockActive) {
+        this.powerfulFlockActive = powerfulFlockActive;
     }
 
     public boolean isInFlock() {
-        return in_flock;
+        return inFlock;
     }
 
-    public void setInFlock(boolean in_flock) {
-        this.in_flock = in_flock;
+    public void setInFlock(boolean inFlock) {
+        this.inFlock = inFlock;
     }
 
-    public double getNearby_friends() {
-        return nearby_friends;
+    public double getNearbyFriends() {
+        return nearbyFriends;
     }
 
-    public void setNearby_friends(double nearby_friends) {
-        this.nearby_friends = nearby_friends;
+    public void setNearbyFriends(double nearbyFriends) {
+        this.nearbyFriends = nearbyFriends;
     }
 
-    public boolean isHells_fury_active() {
-        return hells_fury_active;
+    public boolean isHellsFuryActive() {
+        return hellsFuryActive;
     }
 
-    public void setHellsFuryActive(boolean hells_fury_active) {
-        this.hells_fury_active = hells_fury_active;
+    public void setHellsFuryActive(boolean hellsFuryActive) {
+        this.hellsFuryActive = hellsFuryActive;
     }
 
     public double getStamina() {
@@ -500,19 +300,19 @@ public class PlayerData {
         this.stamina = stamina;
     }
 
-    public double getMax_stamina() {
-        return max_stamina;
+    public double getMaxStamina() {
+        return maxStamina;
     }
 
-    public void setMax_stamina(double max_stamina) {
-        this.max_stamina = max_stamina;
+    public void setMaxStamina(double maxStamina) {
+        this.maxStamina = maxStamina;
     }
 
-    public HashMap<String, Long> getCool_downs() {
-        return cool_downs;
+    public HashMap<String, Long> getCoolDowns() {
+        return coolDowns;
     }
 
-    public void setCool_downs(HashMap<String, Long> cool_downs) {
-        this.cool_downs = cool_downs;
+    public void setCoolDowns(HashMap<String, Long> coolDowns) {
+        this.coolDowns = coolDowns;
     }
 }

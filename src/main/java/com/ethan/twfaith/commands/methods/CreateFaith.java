@@ -18,12 +18,12 @@ import java.util.Locale;
 
 public class CreateFaith {
     public void CreateFaith(Player player, PlayerData playerData, String[] args, File senderFaithFile){
-        if (playerData.getIn_faith()){
+        if (playerData.isInFaith()){
         player.sendMessage(ChatColor.RED + "You must leave your current faith before creating a new faith.");
         return;
     }
 
-        if (playerData.getLeader()){
+        if (playerData.isLeader()){
             player.sendMessage(ChatColor.RED + "You are already the leader of a faith.");
             return;
         }
@@ -37,7 +37,10 @@ public class CreateFaith {
         player.sendMessage("You have created the faith named " + args[1]);
         Faith faith = new Faith(args[1], player.getUniqueId(), 0, new ArrayList<>(), new ArrayList<>(),
                 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, false, new ArrayList<>());
+                0, 0, 0, 0, 0, 0, 0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,0,
+                0, 0,0,0,0, false, new ArrayList<>());
         FaithHashMap.playerFaithHashmap.put(player.getUniqueId(), faith);
 
         // Give the player a Stamina Boss Bar

@@ -23,7 +23,7 @@ public class Mana implements Listener {
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
-            if(!player_data.getLed_by().equals(nearby_data.getLed_by()) || player.getLocation().distance(nearby.getLocation()) > 30){continue;}
+            if(!player_data.getLedBy().equals(nearby_data.getLedBy()) || player.getLocation().distance(nearby.getLocation()) > 30){continue;}
             ItemStack mana = new ItemStack(Material.BREAD, 16);
             ItemMeta mana_meta = mana.getItemMeta();
             assert mana_meta != null;

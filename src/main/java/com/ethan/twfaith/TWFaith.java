@@ -114,11 +114,11 @@ public final class TWFaith extends JavaPlugin implements Listener {
             playerData.setHellsFuryActive(false);
             playerData.setPowerfulFlockActive(false);
             playerData.setInFlock(false);
-            playerData.setIntoxicate_victim(false);
-            playerData.setCrumbling_victim(false);
-            playerData.setDiscombobulate_victim(false);
-            playerData.setEntangle_victim(false);
-            playerData.setHeavy_boots_victim(false);
+            playerData.setIntoxicateVictim(false);
+            playerData.setCrumblingVictim(false);
+            playerData.setDiscombobulateVictim(false);
+            playerData.setEntangleVictim(false);
+            playerData.setHeavyBootsVictim(false);
 
             // Saving data from HashMap to File
             try{

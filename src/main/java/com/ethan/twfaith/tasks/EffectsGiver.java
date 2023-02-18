@@ -38,7 +38,7 @@ public class EffectsGiver extends BukkitRunnable {
             // Powers that grant potion effects
 
             // Lion's Heart
-            if (player_data.isLions_heart_active()){
+            if (player_data.isLionsHeartActive()){
                 int amplifier = 0;
                 if (Objects.requireNonNull(player.getEquipment()).getBoots() != null){amplifier += 1;}
                 if (player.getEquipment().getLeggings() != null){amplifier += 1;}
@@ -51,12 +51,12 @@ public class EffectsGiver extends BukkitRunnable {
             }
 
             // Hell's Fury
-            if (player_data.isHells_fury_active()){
+            if (player_data.isHellsFuryActive()){
                 player.addPotionEffect(PotionEffectType.FIRE_RESISTANCE.createEffect(100, 0));
             }
 
             // Intoxicate
-            if (player_data.isIntoxicate_victim()){
+            if (player_data.isIntoxicateVictim()){
                 player.addPotionEffect(PotionEffectType.CONFUSION.createEffect(100, 0));
             }
 
@@ -66,8 +66,8 @@ public class EffectsGiver extends BukkitRunnable {
             }
 
             // This code block is for effects that require the player to be in a faith to bestow. Currently, only Terrain Bonus
-            if (player_data.getIn_faith()){
-                Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLed_by());
+            if (player_data.isInFaith()){
+                Faith faith = FaithHashMap.playerFaithHashmap.get(player_data.getLedBy());
 
                 // Terrain Bonus
                 // First, get the biome the player is in. Then, see if there are any powers that apply to the biome.

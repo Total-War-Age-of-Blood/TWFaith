@@ -13,7 +13,7 @@ import java.util.UUID;
 public class FaithSummon {
 
     public void summonInvite(Player player, PlayerData playerData){
-        if (playerData.getLeader()){
+        if (playerData.isLeader()){
             player.sendMessage(ChatColor.RED + "Leader cannot summon self.");
         }
         SummonGod summon = new SummonGod();
@@ -27,7 +27,7 @@ public class FaithSummon {
         assert requester != null;
         // Handle cooldown
         checkCoolDown("Summon", player, TWFaith.getPlugin().getConfig().getLong("summon-cooldown"));
-        playerData.getCool_downs().put("Summon", System.currentTimeMillis() / 1000);
+        playerData.getCoolDowns().put("Summon", System.currentTimeMillis() / 1000);
         PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
         // Handle stamina
         if (playerData.getStamina() < TWFaith.getPlugin().getConfig().getInt("summon-stamina")){
@@ -42,8 +42,8 @@ public class FaithSummon {
 
     public boolean checkCoolDown(String power, Player player, long cooldown){
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        if (player_data.getCool_downs().get(power) == null){return false;}
-        long last_use = player_data.getCool_downs().get(power);
+        if (player_data.getCoolDowns().get(power) == null){return false;}
+        long last_use = player_data.getCoolDowns().get(power);
         // Convert to seconds
         long current = System.currentTimeMillis() / 1000;
 

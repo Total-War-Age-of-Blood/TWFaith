@@ -23,6 +23,7 @@ public class FaithCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+            Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
             // Variables that can be used by multiple commands go here
             File faithFolder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "Faiths");
@@ -60,12 +61,12 @@ public class FaithCommand implements CommandExecutor {
 
             if (Objects.equals(args[0], "invite") && Objects.equals(args[1], "add") && args.length == 3){
                 InviteFollower inviteFollower = new InviteFollower();
-                inviteFollower.InviteFollower(faithFolder, senderFaithFile, args, player);
+                inviteFollower.InviteFollower(args, player);
             }
 
             if (Objects.equals(args[0], "join") && args.length == 2){
               JoinFaith joinFaith = new JoinFaith();
-              joinFaith.JoinFaith(playerData, player, faithFolder, args);
+              joinFaith.JoinFaith(playerData, player, args);
             }
 
             if (Objects.equals(args[0], "leave")){
@@ -74,7 +75,7 @@ public class FaithCommand implements CommandExecutor {
             }
 
             if (Objects.equals(args[0], "upgrade")){
-                if (playerData.getLeader()){
+                if (playerData.isLeader()){
                     // Runs custom event for opening a gui menu
                     Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Faith Upgrade"));
                     return true;
@@ -83,7 +84,7 @@ public class FaithCommand implements CommandExecutor {
             }
 
             if (Objects.equals(args[0], "powers")){
-                if (playerData.getLeader()){
+                if (playerData.isLeader()){
                     // Runs custom event for opening a gui menu
                     Bukkit.getPluginManager().callEvent(new OpenGUIEvent(player, "Select Powers"));
                     return true;
@@ -101,10 +102,9 @@ public class FaithCommand implements CommandExecutor {
                 faithSummon.summonAccept(player, playerData);
             }
 
-            if (Objects.equals(args[0], "balance") && playerData.getLeader()){
-                Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
+            if (Objects.equals(args[0], "balance") && playerData.isLeader()){
                 player.sendMessage("You have " + faith.getFaithPoints() + " Faith Points");
-            } else if (Objects.equals(args[0], "balance") && !playerData.getLeader()){
+            } else if (Objects.equals(args[0], "balance") && !playerData.isLeader()){
                 player.sendMessage(ChatColor.RED + "Only the god can use this command.");
             }
 
@@ -115,7 +115,8 @@ public class FaithCommand implements CommandExecutor {
 
             //TODO make a command to check a faith's information
             if (Objects.equals(args[0], "info") && args.length == 2){
-
+                FaithInfo faithInfo = new FaithInfo();
+                faithInfo.faithInfo(args[1], player);
             }
 
             if (Objects.equals(args[0], "faithpoints") && args.length == 3){

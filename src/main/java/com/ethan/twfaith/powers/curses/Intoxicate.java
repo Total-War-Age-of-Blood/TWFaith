@@ -21,7 +21,7 @@ public class Intoxicate implements Listener {
         Player player = event.getPlayer();
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
 
-        boolean intox_victim = player_data.isIntoxicate_victim();
+        boolean intox_victim = player_data.isIntoxicateVictim();
 
         boolean intoxicated = false;
         for (String intox : intoxicators){
@@ -34,13 +34,13 @@ public class Intoxicate implements Listener {
 
         if (intoxicated && !intox_victim){
             player.addPotionEffect(PotionEffectType.CONFUSION.createEffect(80, 0));
-            player_data.setIntoxicate_victim(true);
+            player_data.setIntoxicateVictim(true);
             player.sendMessage(ChatColor.RED + "The air here is intoxicating!");
         }else if (intoxicated) {
             player.addPotionEffect(PotionEffectType.CONFUSION.createEffect(80, 0));
         }else if(intox_victim){
             player.removePotionEffect(PotionEffectType.CONFUSION);
-            player_data.setIntoxicate_victim(false);
+            player_data.setIntoxicateVictim(false);
             player.sendMessage(ChatColor.GREEN + "Fresh air clears your lungs.");
         }
 

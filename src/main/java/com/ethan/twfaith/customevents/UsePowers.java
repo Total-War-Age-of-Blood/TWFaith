@@ -79,7 +79,7 @@ public class UsePowers implements Listener {
         ItemMeta chosen_item_meta = chosen_item.getItemMeta();
             switch (Objects.requireNonNull(chosen_item_meta.getPersistentDataContainer().get(new NamespacedKey(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")), "Power"), PersistentDataType.STRING))){
                 case "Summon God":
-                    if (player_data.isSummon_god_active()){
+                    if (player_data.isSummonGodActive()){
                         player_data.setSummonGodActive(false);
                         player.sendMessage(ChatColor.RED + "Summon God Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
@@ -94,7 +94,7 @@ public class UsePowers implements Listener {
                     }
                     break;
                 case "Powerful Flock":
-                    if (player_data.isPowerful_flock_active()){
+                    if (player_data.isPowerfulFlockActive()){
                         player_data.setPowerfulFlockActive(false);
                         player.sendMessage(ChatColor.RED + "Powerful Flock Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
@@ -116,7 +116,7 @@ public class UsePowers implements Listener {
                     // Check if the power is on cool down
                     if (checkCoolDown("Divine Intervention", player, TWFaith.getPlugin().getConfig().getLong("divine-cooldown"))){return;}
                     // If power is not on cool down, put power on cool down
-                    player_data.getCool_downs().put("Divine Intervention", System.currentTimeMillis() / 1000);
+                    player_data.getCoolDowns().put("Divine Intervention", System.currentTimeMillis() / 1000);
                     PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     // Activate power
                     DivineIntervention divine = new DivineIntervention();
@@ -127,14 +127,14 @@ public class UsePowers implements Listener {
                     // Check if the power is on cool down
                     if (checkCoolDown("Mana", player, TWFaith.getPlugin().getConfig().getLong("mana-cooldown"))){return;}
                     // If power is not on cool down, put power on cool down
-                    player_data.getCool_downs().put("Mana", System.currentTimeMillis() / 1000);
+                    player_data.getCoolDowns().put("Mana", System.currentTimeMillis() / 1000);
                     PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     // Activate power
                     Mana mana = new Mana();
                     mana.onManaTrigger(player, player_data);
                     break;
                 case "Lion's Heart":
-                    if (player_data.isLions_heart_active()){
+                    if (player_data.isLionsHeartActive()){
                         player_data.setLionsHeartActive(false);
                         player.sendMessage(ChatColor.RED + "Lions Heart Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
@@ -149,7 +149,7 @@ public class UsePowers implements Listener {
                     }
                     break;
                 case "Savior":
-                    if (player_data.isSavior_active()){
+                    if (player_data.isSaviorActive()){
                         player_data.setSaviorActive(false);
                         player.sendMessage(ChatColor.RED + "Savior Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
@@ -167,7 +167,7 @@ public class UsePowers implements Listener {
                     // Check if the power is on cool down
                     if (checkCoolDown("Taunt", player, TWFaith.getPlugin().getConfig().getLong("taunt-cooldown"))){return;}
                     // If power is not on cool down, put power on cool down
-                    player_data.getCool_downs().put("Taunt", System.currentTimeMillis() / 1000);
+                    player_data.getCoolDowns().put("Taunt", System.currentTimeMillis() / 1000);
                     PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     // Activate power
                     Taunt taunt = new Taunt();
@@ -175,7 +175,7 @@ public class UsePowers implements Listener {
                     player.sendMessage(ChatColor.GOLD + "You taunt your enemies!");
                     break;
                 case "Insidious":
-                    if (player_data.isInsidious_active()){
+                    if (player_data.isInsidiousActive()){
                         player_data.setInsidiousActive(false);
                         player.sendMessage(ChatColor.RED + "Insidious Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
@@ -208,7 +208,7 @@ public class UsePowers implements Listener {
                     // Check if the power is on cool down
                     if (checkCoolDown("Flood", player, TWFaith.getPlugin().getConfig().getLong("flood-cooldown"))){return;}
                     // If power is not on cool down, put power on cool down
-                    player_data.getCool_downs().put("Flood", System.currentTimeMillis() / 1000);
+                    player_data.getCoolDowns().put("Flood", System.currentTimeMillis() / 1000);
                     PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     // Activate power
                     Flood flood = new Flood();
@@ -216,7 +216,7 @@ public class UsePowers implements Listener {
                     player.sendMessage(ChatColor.DARK_BLUE + "The area floods with water.");
                     break;
                 case "Crumbling":
-                    if (player_data.isCrumbling_active()){
+                    if (player_data.isCrumblingActive()){
                         player_data.setCrumblingActive(false);
                         crumblers.remove(player.getDisplayName());
                         player.sendMessage(ChatColor.RED + "Crumbling Deactivated");
@@ -234,7 +234,7 @@ public class UsePowers implements Listener {
                     }
                     break;
                 case "Heavy Boots":
-                    if (player_data.isHeavy_boots_active()){
+                    if (player_data.isHeavyBootsActive()){
                         player_data.setHeavyBootsActive(false);
                         Heavy_Boots_Checker.heavy_boots.remove(player.getUniqueId());
                         player.sendMessage(ChatColor.RED + "Heavy Boots Deactivated");
@@ -251,8 +251,8 @@ public class UsePowers implements Listener {
                     }
                     break;
                 case "Intoxicate":
-                    if (player_data.isIntoxicate_active()){
-                        player_data.setIntoxicate_active(false);
+                    if (player_data.isIntoxicateActive()){
+                        player_data.setIntoxicateActive(false);
                         Intoxicate.intoxicators.remove(player.getDisplayName());
                         player.sendMessage(ChatColor.RED + "Intoxicate Deactivated");
                         if (!chosen_item.getEnchantments().isEmpty()){
@@ -260,7 +260,7 @@ public class UsePowers implements Listener {
                             chosen_item.setItemMeta(chosen_item_meta);
                         }
                     }else{
-                        player_data.setIntoxicate_active(true);
+                        player_data.setIntoxicateActive(true);
                         Intoxicate.intoxicators.add(player.getDisplayName());
                         player.sendMessage(ChatColor.GREEN + "Intoxicate Activated");
                         chosen_item_meta.addEnchant(Enchantment.DURABILITY, 1, false);
@@ -271,7 +271,7 @@ public class UsePowers implements Listener {
                     // Check if the power is on cool down
                     if (checkCoolDown("Discombobulate", player, TWFaith.getPlugin().getConfig().getLong("discombobulate-cooldown"))){return;}
                     // If power is not on cool down, put power on cool down
-                    player_data.getCool_downs().put("Discombobulate", System.currentTimeMillis() / 1000);
+                    player_data.getCoolDowns().put("Discombobulate", System.currentTimeMillis() / 1000);
                     PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     // Activate power
                     Discombobulate discombobulate = new Discombobulate();
@@ -282,7 +282,7 @@ public class UsePowers implements Listener {
                     // Check if the power is on cool down
                     if (checkCoolDown("Entangle", player, TWFaith.getPlugin().getConfig().getLong("entangle-cooldown"))){return;}
                     // If power is not on cool down, put power on cool down
-                    player_data.getCool_downs().put("Entangle", System.currentTimeMillis() / 1000);
+                    player_data.getCoolDowns().put("Entangle", System.currentTimeMillis() / 1000);
                     PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
                     // Activate power
                     Entangle entangle = new Entangle();
@@ -382,8 +382,8 @@ public class UsePowers implements Listener {
 
     public boolean checkCoolDown(String power, Player player, long cooldown){
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        if (player_data.getCool_downs().get(power) == null){return false;}
-        long last_use = player_data.getCool_downs().get(power);
+        if (player_data.getCoolDowns().get(power) == null){return false;}
+        long last_use = player_data.getCoolDowns().get(power);
         // Convert to seconds
         long current = System.currentTimeMillis() / 1000;
 

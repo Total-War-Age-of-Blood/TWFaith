@@ -60,7 +60,7 @@ public class TerrainBonus implements Listener {
     public void onTerrainTrigger(PlayerMoveEvent event){
         Player player = event.getPlayer();
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        if (!player_data.getIn_faith() || !player_data.isLeader()){return;}
+        if (!player_data.isInFaith() || !player_data.isLeader()){return;}
         Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
         // if (!faith.isTerrain_bonus_active()){return;}

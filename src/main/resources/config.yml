@@ -61,6 +61,9 @@ insidious-stamina: 5
 explosive-cost: 5
 explosive-stamina: 20
 explosive-cooldown: 10
+#Limits the size of explosions with explosive landing. This is important because if you set the number too high,
+#you will risk crashing the server with the power.
+explosive-max-mag: 40
 
 # Flood
 flood-cost: 5

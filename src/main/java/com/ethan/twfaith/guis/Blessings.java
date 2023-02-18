@@ -4,8 +4,6 @@ import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.FaithHashMap;
-import com.ethan.twfaith.data.PlayerData;
-import com.ethan.twfaith.data.PlayerHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,21 +14,20 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-
 import java.util.Arrays;
 import java.util.Objects;
 
 
 public class Blessings implements Listener {
     private Inventory gui;
-
+// TODO implement FP cost in lore
     public void openBlessingsGui(Player player){
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
-        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
         Util util = new Util();
 
         // Terrain Bonus
-        util.generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Terrain Bonus", "Buffs for being in favored biome.", 10, 3, gui);
+        util.generateGUI(Material.GRASS_BLOCK, ChatColor.GREEN, "Terrain Bonus", "Buffs for being in favored biome.", "terrain-cost",10, 3, gui);
 
         // Summon God
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
@@ -38,9 +35,9 @@ public class Blessings implements Listener {
         assert itemMeta != null;
         itemMeta.setDisplayName(ChatColor.GOLD + "Summon God");
         itemMeta.setOwningPlayer(player);
-        switch (player_data.getSummon_god()){
+        switch (faith.getSummonGod()){
             case 0:
-                itemMeta.setLore(Arrays.asList("Allows followers to summon the god.", ChatColor.RED + "Not Owned"));
+                itemMeta.setLore(Arrays.asList("Allows followers to summon the god.", ChatColor.RED + "Not Owned", ChatColor.GOLD + "Cost: " + TWFaith.getPlugin().getConfig().getInt("summon-cost") + "FP"));
                 break;
             case 1:
                 itemMeta.setLore(Arrays.asList("Allows followers to summon the god.", ChatColor.GREEN + "Owned"));
@@ -50,19 +47,19 @@ public class Blessings implements Listener {
         gui.setItem(11, item);
 
         // Hell's Fury
-        util.generateGUI(Material.FLINT_AND_STEEL, ChatColor.RED, "Hell's Fury", "Followers leave a trail of fire in their wake.", 12, player_data.getHells_fury(), gui);
+        util.generateGUI(Material.FLINT_AND_STEEL, ChatColor.RED, "Hell's Fury", "Followers leave a trail of fire in their wake.", "hells-cost",12, faith.getHellsFury(), gui);
 
         // Powerful Flock
-        util.generateGUI(Material.WHITE_WOOL, ChatColor.WHITE, "Powerful Flock", "Your followers are stronger together.", 13, player_data.getPowerful_flock(), gui);
+        util.generateGUI(Material.WHITE_WOOL, ChatColor.WHITE, "Powerful Flock", "Your followers are stronger together.", "flock-cost",13, faith.getPowerfulFlock(), gui);
 
         // Divine Intervention
-        util.generateGUI(Material.ELYTRA, ChatColor.GOLD, "Divine Intervention", "Raise your followers out of the devil's grasp.", 14, player_data.getDivine_intervention(), gui);
+        util.generateGUI(Material.ELYTRA, ChatColor.GOLD, "Divine Intervention", "Raise your followers out of the devil's grasp.", "divine-cost",14, faith.getDivineIntervention(), gui);
 
         // Mana
-        util.generateGUI(Material.BREAD, ChatColor.GOLD, "Mana", "Shower mana from the sky.", 15, player_data.getMana(), gui);
+        util.generateGUI(Material.BREAD, ChatColor.GOLD, "Mana", "Shower mana from the sky.", "mana-cost",15, faith.getMana(), gui);
 
         // Close Menu
-        util.generateGUI(Material.BARRIER, ChatColor.RED, "Close Menu", "Return to previous menu.", 16, 3, gui);
+        util.generateGUI(Material.BARRIER, ChatColor.RED, "Close Menu", "Return to previous menu.", "N/A",16, 3, gui);
 
         // Frame
         ItemStack frame = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
@@ -86,7 +83,7 @@ public class Blessings implements Listener {
         e.setCancelled(true);
 
         Player p = (Player) e.getWhoClicked();
-        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(p.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(p.getUniqueId());
         Faith faithData = FaithHashMap.playerFaithHashmap.get(p.getUniqueId());
         ItemStack item = e.getCurrentItem();
 
@@ -97,24 +94,24 @@ public class Blessings implements Listener {
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Biome Groups"));
                 break;
             case 11:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("summon-cost"), player_data.getSummon_god(), item, e.getSlot(), "Allows followers to summon the god.", gui)){return;}
-                player_data.setSummon_god(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("summon-cost"), faith.getSummonGod(), item, e.getSlot(), "Allows followers to summon the god.", gui)){return;}
+                faith.setSummonGod(1);
                 break;
             case 12:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("hells-cost"), player_data.getHells_fury(), item, e.getSlot(), "Followers leave a trail of fire in their wake.", gui)){return;}
-                player_data.setHells_fury(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("hells-cost"), faith.getHellsFury(), item, e.getSlot(), "Followers leave a trail of fire in their wake.", gui)){return;}
+                faith.setHellsFury(1);
                 break;
             case 13:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("flock-cost"), player_data.getPowerful_flock(), item, e.getSlot(), "Your followers are stronger together.", gui)){return;}
-                player_data.setPowerful_flock(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("flock-cost"), faith.getPowerfulFlock(), item, e.getSlot(), "Your followers are stronger together.", gui)){return;}
+                faith.setPowerfulFlock(1);
                 break;
             case 14:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("divine-cost"), player_data.getDivine_intervention(), item, e.getSlot(), "Raise your followers out of the devil's grasp.", gui)){return;}
-                player_data.setDivine_intervention(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("divine-cost"), faith.getDivineIntervention(), item, e.getSlot(), "Raise your followers out of the devil's grasp.", gui)){return;}
+                faith.setDivineIntervention(1);
                 break;
             case 15:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("mana-cost"), player_data.getMana(), item, e.getSlot(), "Shower mana from the sky.", gui)){return;}
-                player_data.setMana(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("mana-cost"), faith.getMana(), item, e.getSlot(), "Shower mana from the sky.", gui)){return;}
+                faith.setMana(1);
                 break;
             case 16:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));

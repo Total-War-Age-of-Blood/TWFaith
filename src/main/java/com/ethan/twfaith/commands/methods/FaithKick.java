@@ -21,7 +21,7 @@ import java.util.UUID;
 public class FaithKick {
     public void FaithKick(PlayerData playerData, Player player, String[] args){
         // Only leaders can use this command
-        if (!playerData.getLeader()){
+        if (!playerData.isLeader()){
             player.sendMessage(ChatColor.RED + "Must be leader to kick follower.");
             return;
         }
@@ -63,20 +63,20 @@ public class FaithKick {
             }
         }
 
-        PlayerData kicked_data = PlayerHashMap.playerDataHashMap.get(kicked.getUniqueId());
+        PlayerData kickedData = PlayerHashMap.playerDataHashMap.get(kicked.getUniqueId());
         Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
         // Kicking the player
-        if (kicked_data.getLed_by().equals(playerData.getLed_by()) && !kicked_data.getLeader()){
-            kicked_data.setLedBy(kicked.getUniqueId());
-            kicked_data.setFaith("");
-            kicked_data.setInFaith(false);
+        if (kickedData.getLedBy().equals(playerData.getLedBy()) && !kickedData.isLeader()){
+            kickedData.setLedBy(kicked.getUniqueId());
+            kickedData.setFaith("");
+            kickedData.setInFaith(false);
             List<UUID> followers = faith.getFollowers();
             followers.remove(kicked.getUniqueId());
             faith.setFollowers(followers);
             player.sendMessage("Kicked " + kicked.getDisplayName() + " from " + playerData.getFaith() + ".");
             kicked.sendMessage("You have been kicked from " + playerData.getFaith() + ".");
-        } else if(!kicked_data.getLed_by().equals(playerData.getLed_by())){
+        } else if(!kickedData.getLedBy().equals(playerData.getLedBy())){
             player.sendMessage(ChatColor.RED + "That player is not in your faction.");
         } else{
             player.sendMessage(ChatColor.RED + "You cannot kick yourself.");

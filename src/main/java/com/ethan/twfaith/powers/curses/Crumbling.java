@@ -24,7 +24,7 @@ public class Crumbling implements Listener {
             if (!player.getWorld().equals(crumbler_player.getWorld())){continue;}
             if (player.getLocation().distance(Objects.requireNonNull(crumbler_player).getLocation()) <= 30){is_crumbling = true;}
         }
-        player_data.setCrumbling_victim(is_crumbling);
+        player_data.setCrumblingVictim(is_crumbling);
         PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), player_data);
     }
 
@@ -34,7 +34,7 @@ public class Crumbling implements Listener {
         Player player = event.getPlayer();
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
         // System.out.println(event.getItem());
-        if (!player_data.isCrumbling_victim()){
+        if (!player_data.isCrumblingVictim()){
             // System.out.println("Not crumbling victim");
             return;}
         // System.out.println(event.getDamage());

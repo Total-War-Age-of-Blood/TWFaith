@@ -1,6 +1,8 @@
 package com.ethan.twfaith.powers.godpowers;
 
 import com.ethan.twfaith.TWFaith;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -78,6 +80,7 @@ public class Taunt implements Listener {
 
     public void tauntTrigger(Player player){
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
         if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("taunt-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
@@ -85,14 +88,14 @@ public class Taunt implements Listener {
         }
         player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("taunt-stamina"));
 
-        if (!player_data.getLeader() || player_data.getTaunt() < 1){return;}
+        if (!player_data.isLeader() || faith.getTaunt() < 1){return;}
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(3000, 0));
         for (Player heathen : Bukkit.getOnlinePlayers()){
             if (!player.getWorld().equals(heathen.getWorld())){continue;}
             if (heathen.getLocation().distance(player.getLocation()) < 30){
                 PlayerData heathen_data = PlayerHashMap.playerDataHashMap.get(heathen.getUniqueId());
-                if (heathen_data.getIn_faith()){
-                    if (!heathen_data.getLed_by().equals(player_data.getUuid())){
+                if (heathen_data.isInFaith()){
+                    if (!heathen_data.getLedBy().equals(player_data.getUuid())){
                         heathen_data.setTaunted(true);
                         heathen_data.setTaunter(player.getUniqueId());
                         PlayerHashMap.playerDataHashMap.put(heathen.getUniqueId(), heathen_data);

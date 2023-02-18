@@ -24,72 +24,119 @@ public class Faith {
     int terrainFireResistance;
     int terrainWaterBreathing;
     int terrainDolphinsGrace;
+    int terrainBonus;
+    int summonGod;
+    int godProximityBonus;
+    int nameProphets;
+    int godOfDefense;
+    int godOfCrafstman;
+    int crumbling;
+    int heavyBoots;
+    int intoxicate;
+    int discombobulate;
+    int entangle;
+    int lionsHeart;
+    int savior;
+    int taunt;
+    int insidious;
+    int explosiveLanding;
+    int flood;
+    int powerfulFlock;
+    int hellsFury;
+    int divineIntervention;
+    int mana;
     boolean terrainBonusActive;
     List<String> terrainActivePowers;
 
 
-    public Faith(String faithName, UUID leader, int faith_points, List<UUID> invited_players, List<UUID> followers,
-                 int terrain_snowy, int terrain_cold, int terrain_warm, int terrain_temperate, int terrain_aquatic,
-                 int terrain_cave, int terrain_nether, int terrain_end, int terrain_strength, int terrain_haste,
-                 int terrain_speed, int terrain_resistance, int terrain_fire_resistance, int terrain_water_breathing, int terrain_dolphins_grace, boolean terrain_bonus_active, List<String> terrain_active_powers) {
+    public Faith(String faithName, UUID leader, int faithPoints, List<UUID> invitedPlayers, List<UUID> followers,
+                 int terrainSnowy, int terrainCold, int terrainWarm, int terrainTemperate, int terrainAquatic,
+                 int terrainCave, int terrainNether, int terrainEnd, int terrainStrength, int terrainHaste,
+                 int terrainSpeed, int terrainResistance, int terrainFireResistance, int terrainWaterBreathing,
+                 int terrainDolphinsGrace, int terrainBonus, int summonGod, int godProximityBonus,
+                 int nameProphets, int godOfDefense, int godOfCrafstman, int crumbling, int heavyBoots,
+                 int intoxicate, int discombobulate, int entangle, int lionsHeart, int savior, int taunt,
+                 int insidious, int explosiveLanding, int flood, int powerfulFlock, int hellsFury,
+                 int divineIntervention, int mana, boolean terrainBonusActive, List<String> terrainActivePowers) {
         this.faithName = faithName;
         this.leader = leader;
-        this.faithPoints = faith_points;
-        this.invitedPlayers = invited_players;
+        this.faithPoints = faithPoints;
+        this.invitedPlayers = invitedPlayers;
         this.followers = followers;
-        this.terrainSnowy = terrain_snowy;
-        this.terrainCold = terrain_cold;
-        this.terrainWarm = terrain_warm;
-        this.terrainTemperate = terrain_temperate;
-        this.terrainAquatic = terrain_aquatic;
-        this.terrainCave = terrain_cave;
-        this.terrainNether = terrain_nether;
-        this.terrainEnd = terrain_end;
-        this.terrainStrength = terrain_strength;
-        this.terrainHaste = terrain_haste;
-        this.terrainSpeed = terrain_speed;
-        this.terrainResistance = terrain_resistance;
-        this.terrainFireResistance = terrain_fire_resistance;
-        this.terrainWaterBreathing = terrain_water_breathing;
-        this.terrainDolphinsGrace = terrain_dolphins_grace;
-        this.terrainBonusActive = terrain_bonus_active;
-        this.terrainActivePowers = terrain_active_powers;
+        this.terrainSnowy = terrainSnowy;
+        this.terrainCold = terrainCold;
+        this.terrainWarm = terrainWarm;
+        this.terrainTemperate = terrainTemperate;
+        this.terrainAquatic = terrainAquatic;
+        this.terrainCave = terrainCave;
+        this.terrainNether = terrainNether;
+        this.terrainEnd = terrainEnd;
+        this.terrainStrength = terrainStrength;
+        this.terrainHaste = terrainHaste;
+        this.terrainSpeed = terrainSpeed;
+        this.terrainResistance = terrainResistance;
+        this.terrainFireResistance = terrainFireResistance;
+        this.terrainWaterBreathing = terrainWaterBreathing;
+        this.terrainDolphinsGrace = terrainDolphinsGrace;
+        this.terrainBonus = terrainBonus;
+        this.summonGod = summonGod;
+        this.godProximityBonus = godProximityBonus;
+        this.nameProphets = nameProphets;
+        this.godOfDefense = godOfDefense;
+        this.godOfCrafstman = godOfCrafstman;
+        this.crumbling = crumbling;
+        this.heavyBoots = heavyBoots;
+        this.intoxicate = intoxicate;
+        this.discombobulate = discombobulate;
+        this.entangle = entangle;
+        this.lionsHeart = lionsHeart;
+        this.savior = savior;
+        this.taunt = taunt;
+        this.insidious = insidious;
+        this.explosiveLanding = explosiveLanding;
+        this.flood = flood;
+        this.powerfulFlock = powerfulFlock;
+        this.hellsFury = hellsFury;
+        this.divineIntervention = divineIntervention;
+        this.mana = mana;
+        this.terrainBonusActive = terrainBonusActive;
+        this.terrainActivePowers = terrainActivePowers;
     }
 
     public String getFaithName() {
         return faithName;
     }
 
-    public UUID getLeader() {
-        return leader;
-    }
-
-    public int getFaithPoints() {
-        return faithPoints;
-    }
-
-    public List<UUID> getInvitedPlayers(){
-        return invitedPlayers;
-    }
-
-    public List<UUID> getFollowers() {
-        return followers;
-    }
-
     public void setFaithName(String faithName) {
         this.faithName = faithName;
+    }
+
+    public UUID getLeader() {
+        return leader;
     }
 
     public void setLeader(UUID leader) {
         this.leader = leader;
     }
 
+    public int getFaithPoints() {
+        return faithPoints;
+    }
+
     public void setFaithPoints(int faithPoints) {
         this.faithPoints = faithPoints;
     }
 
-    public void setInvitedPlayers(List<UUID> invitedPlayers){
+    public List<UUID> getInvitedPlayers() {
+        return invitedPlayers;
+    }
+
+    public void setInvitedPlayers(List<UUID> invitedPlayers) {
         this.invitedPlayers = invitedPlayers;
+    }
+
+    public List<UUID> getFollowers() {
+        return followers;
     }
 
     public void setFollowers(List<UUID> followers) {
@@ -214,6 +261,174 @@ public class Faith {
 
     public void setTerrainDolphinsGrace(int terrainDolphinsGrace) {
         this.terrainDolphinsGrace = terrainDolphinsGrace;
+    }
+
+    public int getTerrainBonus() {
+        return terrainBonus;
+    }
+
+    public void setTerrainBonus(int terrainBonus) {
+        this.terrainBonus = terrainBonus;
+    }
+
+    public int getSummonGod() {
+        return summonGod;
+    }
+
+    public void setSummonGod(int summonGod) {
+        this.summonGod = summonGod;
+    }
+
+    public int getGodProximityBonus() {
+        return godProximityBonus;
+    }
+
+    public void setGodProximityBonus(int godProximityBonus) {
+        this.godProximityBonus = godProximityBonus;
+    }
+
+    public int getNameProphets() {
+        return nameProphets;
+    }
+
+    public void setNameProphets(int nameProphets) {
+        this.nameProphets = nameProphets;
+    }
+
+    public int getGodOfDefense() {
+        return godOfDefense;
+    }
+
+    public void setGodOfDefense(int godOfDefense) {
+        this.godOfDefense = godOfDefense;
+    }
+
+    public int getGodOfCrafstman() {
+        return godOfCrafstman;
+    }
+
+    public void setGodOfCrafstman(int godOfCrafstman) {
+        this.godOfCrafstman = godOfCrafstman;
+    }
+
+    public int getCrumbling() {
+        return crumbling;
+    }
+
+    public void setCrumbling(int crumbling) {
+        this.crumbling = crumbling;
+    }
+
+    public int getHeavyBoots() {
+        return heavyBoots;
+    }
+
+    public void setHeavyBoots(int heavyBoots) {
+        this.heavyBoots = heavyBoots;
+    }
+
+    public int getIntoxicate() {
+        return intoxicate;
+    }
+
+    public void setIntoxicate(int intoxicate) {
+        this.intoxicate = intoxicate;
+    }
+
+    public int getDiscombobulate() {
+        return discombobulate;
+    }
+
+    public void setDiscombobulate(int discombobulate) {
+        this.discombobulate = discombobulate;
+    }
+
+    public int getEntangle() {
+        return entangle;
+    }
+
+    public void setEntangle(int entangle) {
+        this.entangle = entangle;
+    }
+
+    public int getLionsHeart() {
+        return lionsHeart;
+    }
+
+    public void setLionsHeart(int lionsHeart) {
+        this.lionsHeart = lionsHeart;
+    }
+
+    public int getSavior() {
+        return savior;
+    }
+
+    public void setSavior(int savior) {
+        this.savior = savior;
+    }
+
+    public int getTaunt() {
+        return taunt;
+    }
+
+    public void setTaunt(int taunt) {
+        this.taunt = taunt;
+    }
+
+    public int getInsidious() {
+        return insidious;
+    }
+
+    public void setInsidious(int insidious) {
+        this.insidious = insidious;
+    }
+
+    public int getExplosiveLanding() {
+        return explosiveLanding;
+    }
+
+    public void setExplosiveLanding(int explosiveLanding) {
+        this.explosiveLanding = explosiveLanding;
+    }
+
+    public int getFlood() {
+        return flood;
+    }
+
+    public void setFlood(int flood) {
+        this.flood = flood;
+    }
+
+    public int getPowerfulFlock() {
+        return powerfulFlock;
+    }
+
+    public void setPowerfulFlock(int powerfulFlock) {
+        this.powerfulFlock = powerfulFlock;
+    }
+
+    public int getHellsFury() {
+        return hellsFury;
+    }
+
+    public void setHellsFury(int hellsFury) {
+        this.hellsFury = hellsFury;
+    }
+
+    public int getDivineIntervention() {
+        return divineIntervention;
+    }
+
+    public void setDivineIntervention(int divineIntervention) {
+        this.divineIntervention = divineIntervention;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
     }
 
     public boolean isTerrainBonusActive() {

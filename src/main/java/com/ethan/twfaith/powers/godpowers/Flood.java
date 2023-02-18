@@ -1,6 +1,8 @@
 package com.ethan.twfaith.powers.godpowers;
 
 import com.ethan.twfaith.TWFaith;
+import com.ethan.twfaith.data.Faith;
+import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.tasks.RemoveFlood;
@@ -52,6 +54,7 @@ public class Flood implements Listener {
 
     public void floodTrigger(Player player){
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
         if (player_data.getStamina() < TWFaith.getPlugin().getConfig().getInt("flood-stamina")){
             player.sendMessage(ChatColor.RED + "Not enough stamina.");
@@ -60,7 +63,7 @@ public class Flood implements Listener {
         player_data.setStamina(player_data.getStamina() - TWFaith.getPlugin().getConfig().getInt("flood-stamina"));
 
         try{
-            if (player_data.getFlood() < 1){return;}
+            if (faith.getFlood() < 1){return;}
             Location player_location = player.getLocation();
             World world = player_location.getWorld();
             int radius = 30;

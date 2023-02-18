@@ -33,7 +33,7 @@ public class DivineIntervention implements Listener {
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
-            if (player.getLocation().distance(nearby.getLocation()) <= 30 && nearby_data.getLed_by().equals(player_data.getLed_by())){
+            if (player.getLocation().distance(nearby.getLocation()) <= 30 && nearby_data.getLedBy().equals(player_data.getLedBy())){
                 // Launches player straight up
                 nearby.setVelocity(new Vector(0, 5, 0));
                 // Gives the player a second to react before gliding starts

@@ -17,33 +17,34 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
-
+// TODO implement FP cost in lore
 public class Curses implements Listener {
     private Inventory gui;
 
     public void openCursesGui(Player player){
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
-        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
 
         Util util = new Util();
 
         // Crumbling
-        util.generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", "Heathen's items lose durability quickly.", 10, player_data.getCrumbling(), gui);
+        util.generateGUI(Material.DAMAGED_ANVIL, ChatColor.GRAY, "Crumbling", "Heathen's items lose durability quickly.", "crumbling-cost",10, faith.getCrumbling(), gui);
 
         // Heavy Boots
-        util.generateGUI(Material.DIAMOND_BOOTS, ChatColor.GRAY, "Heavy Boots", "Heathens wearing boots are slowed down", 11, player_data.getHeavyBoots(), gui);
+        util.generateGUI(Material.DIAMOND_BOOTS, ChatColor.GRAY, "Heavy Boots", "Heathens wearing boots are slowed down", "heavy-cost",11, faith.getHeavyBoots(), gui);
 
         // Intoxicate
-        util.generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", "Nearby heathens gain nausea.", 12, player_data.getIntoxicate(), gui);
+        util.generateGUI(Material.HONEY_BOTTLE, ChatColor.LIGHT_PURPLE, "Intoxicate", "Nearby heathens gain nausea.", "intoxicate-cost",12, faith.getIntoxicate(), gui);
 
         // Discombobulate
-        util.generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", "Scramble inventories of nearby heathens.", 13, player_data.getDiscombobulate(), gui);
+        util.generateGUI(Material.PUFFERFISH, ChatColor.YELLOW, "Discombobulate", "Scramble inventories of nearby heathens.", "discombobulate-cost",13, faith.getDiscombobulate(), gui);
 
         // Entangle
-        util.generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", "Nearby heathens are caged.", 14, player_data.getEntangle(), gui);
+        util.generateGUI(Material.VINE, ChatColor.GREEN, "Entangle", "Nearby heathens are caged.", "entangle-cost",14, faith.getEntangle(), gui);
 
         // Close Menu
-        util.generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", 16, 3, gui);
+        util.generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.", "N/A",16, 3, gui);
 
         // Frame
         ItemStack frame = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
@@ -72,31 +73,31 @@ public class Curses implements Listener {
 
         switch (e.getSlot()){
             case 10:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("crumbling-cost"), playerData.getCrumbling(), item, e.getSlot(), "Heathen's items lose durability quickly.", gui)){return;}
-                playerData.setCrumbling(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("crumbling-cost"), faithData.getCrumbling(), item, e.getSlot(), "Heathen's items lose durability quickly.", gui)){return;}
+                faithData.setCrumbling(1);
                 break;
             case 11:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("heavy-cost"), playerData.getHeavyBoots(), item, e.getSlot(), "Heathens wearing boots are slowed down.", gui)){return;}
-                playerData.setHeavy_boots(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("heavy-cost"), faithData.getHeavyBoots(), item, e.getSlot(), "Heathens wearing boots are slowed down.", gui)){return;}
+                faithData.setHeavyBoots(1);
                 break;
             case 12:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("intoxicate-cost"), playerData.getIntoxicate(), item, e.getSlot(), "Nearby heathens gain nausea.", gui)){return;}
-                playerData.setIntoxicate(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("intoxicate-cost"), faithData.getIntoxicate(), item, e.getSlot(), "Nearby heathens gain nausea.", gui)){return;}
+                faithData.setIntoxicate(1);
                 break;
             case 13:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("discombobulate-cost"), playerData.getDiscombobulate(), item, e.getSlot(),"Scramble inventories of nearby heathens.", gui)){return;}
-                playerData.setDiscombobulate(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("discombobulate-cost"), faithData.getDiscombobulate(), item, e.getSlot(),"Scramble inventories of nearby heathens.", gui)){return;}
+                faithData.setDiscombobulate(1);
                 break;
             case 14:
-                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("entangle-cost"), playerData.getEntangle(), item, e.getSlot(), "Nearby heathens are caged.", gui)){return;}
-                playerData.setEntangle(1);
+                if (util.faithPointsChecker(faithData, p, TWFaith.getPlugin().getConfig().getInt("entangle-cost"), faithData.getEntangle(), item, e.getSlot(), "Nearby heathens are caged.", gui)){return;}
+                faithData.setEntangle(1);
                 break;
             case 16:
                 Bukkit.getPluginManager().callEvent(new OpenGUIEvent(p, "Faith Upgrade"));
                 break;
         }
 
-        PlayerHashMap.playerDataHashMap.put(p.getUniqueId(), playerData);
+        FaithHashMap.playerFaithHashmap.put(p.getUniqueId(), faithData);
     }
     @EventHandler
     public void faithUpgradeEvent(OpenGUIEvent e){

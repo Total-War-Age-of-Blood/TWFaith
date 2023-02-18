@@ -20,8 +20,8 @@ public class HellsFury implements Listener {
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
-            if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLed_by().equals(nearby_data.getLed_by())){continue;}
-            if (nearby_data.isHells_fury_active()){
+            if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLedBy().equals(nearby_data.getLedBy())){continue;}
+            if (nearby_data.isHellsFuryActive()){
                 nearby_data.setHellsFuryActive(false);
                 player.sendMessage("Your foot flames cease.");
                 if (!chosen_item.getEnchantments().isEmpty()){
@@ -41,7 +41,7 @@ public class HellsFury implements Listener {
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
         PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        if (!player_data.isHells_fury_active()){return;}
+        if (!player_data.isHellsFuryActive()){return;}
         Location player_loc = player.getLocation();
         World world = player.getWorld();
         int radius = 1;
