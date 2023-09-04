@@ -21,10 +21,10 @@ public class HellsFury implements Listener {
             PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
             if (nearby_data.isHellsFuryActive() && player_data.getLedBy().equals(nearby_data.getLedBy())){
+                continue;
                 nearby_data.setHellsFuryActive(false);
                 player.sendMessage("Your foot flames cease.");
                 if (!chosen_item.getEnchantments().isEmpty()){
-                    continue;
                     chosen_item_meta.removeEnchant(Enchantment.DURABILITY);
                     chosen_item.setItemMeta(chosen_item_meta);
                 }
