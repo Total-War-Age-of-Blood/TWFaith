@@ -20,15 +20,16 @@ public class HellsFury implements Listener {
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
-            if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLedBy().equals(nearby_data.getLedBy())){continue;}
-            if (nearby_data.isHellsFuryActive()){
+            if (nearby_data.isHellsFuryActive() && player_data.getLedBy().equals(nearby_data.getLedBy())){
+                continue;
                 nearby_data.setHellsFuryActive(false);
                 player.sendMessage("Your foot flames cease.");
                 if (!chosen_item.getEnchantments().isEmpty()){
                     chosen_item_meta.removeEnchant(Enchantment.DURABILITY);
                     chosen_item.setItemMeta(chosen_item_meta);
                 }
-            }else{
+            }else if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLedBy().equals(nearby_data.getLedBy())){
+                continue;
                 nearby_data.setHellsFuryActive(true);
                 player.sendMessage("Fiery flames spring from your feet!");
                 chosen_item_meta.addEnchant(Enchantment.DURABILITY, 1, false);
