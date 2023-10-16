@@ -1,6 +1,7 @@
 package com.ethan.twfaith.data;
 
 import com.ethan.twfaith.TWFaith;
+import com.ethan.twfaith.Util;
 import com.ethan.twfaith.tasks.Heavy_Boots_Checker;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -73,6 +74,8 @@ public class PlayerHashMap implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
+        Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
+        if (faith != null){Util.clearBlessings(faith);}
         // Switching off the player's powers
         PlayerData player_data = playerDataHashMap.get(player.getUniqueId());
         player_data.setExplosiveLandingActive(false);
@@ -85,6 +88,7 @@ public class PlayerHashMap implements Listener {
         player_data.setTerrainBonusActive(false);
         player_data.setSummonGodActive(false);
         player_data.setHellsFuryActive(false);
+        Util.removeSheen(player);
         // We need to remove the powerful flock health bonus when the god logs off.
         if (player_data.powerfulFlockActive){
             // System.out.println("Powerful flock active");

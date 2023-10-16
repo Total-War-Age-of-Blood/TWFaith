@@ -20,14 +20,16 @@ public class BossBars implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        // Fixing a bug where ledBy is null
+        if (playerData.getLedBy() == null){playerData.setLedBy(player.getUniqueId());}
         // If the player is a god, generate their stamina bar when they log in. The stamina bar will be updated by the
         // Stamina Checker.
-        if (player_data.isInFaith() && player_data.isLeader()){
-            BossBar boss_bar = Bukkit.createBossBar(ChatColor.YELLOW + "Stamina", BarColor.YELLOW, BarStyle.SEGMENTED_10);
-            boss_bar.setProgress(1);
-            boss_bar.addPlayer(player);
-            boss_bar_map.put(player.getUniqueId(), boss_bar);
+        if (playerData.isInFaith() && playerData.isLeader()){
+            BossBar bossBar = Bukkit.createBossBar(ChatColor.YELLOW + "Stamina", BarColor.YELLOW, BarStyle.SEGMENTED_10);
+            bossBar.setProgress(1);
+            bossBar.addPlayer(player);
+            boss_bar_map.put(player.getUniqueId(), bossBar);
         }
     }
 }

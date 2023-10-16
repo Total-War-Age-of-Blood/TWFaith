@@ -1,6 +1,7 @@
 package com.ethan.twfaith.commands.methods;
 
 import com.ethan.twfaith.TWFaith;
+import com.ethan.twfaith.Util;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
@@ -34,9 +35,9 @@ public class LeaveFaith {
                 playerData.setInFaith(false);
                 playerData.setLeader(false);
                 playerData.setFaith("");
-                playerData.setLedBy(null);
+                playerData.setLedBy(player.getUniqueId());
                 PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
-
+                Util.clearBlessings(playerData);
                 player.sendMessage("You have left " + read_faith.getFaithName());
             }
         }catch (IOException e){e.printStackTrace();}}

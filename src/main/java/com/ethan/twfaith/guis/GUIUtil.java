@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.List;
 
-public class Util {
+public class GUIUtil {
     public void generateGUI(Material material, ChatColor color, String display, String lore, String power, int place, int data, Inventory gui){
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
@@ -175,7 +175,6 @@ public class Util {
     }
 
     private final static int CENTER_PX = 154;
-    // TODO modify this for my method of joining strings into a message
     // The original purpose of this code was to send a single centered message to the player
     // Because my method involves using String.join to send everything as one message,
     // it has been changed to add the centered message to the list of Strings and return the updated List

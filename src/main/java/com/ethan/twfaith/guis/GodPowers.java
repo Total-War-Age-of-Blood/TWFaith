@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -36,7 +35,7 @@ public class GodPowers implements Listener {
     UsePowers use_powers = new UsePowers();
     public void openGodPowersGui(Player player){
         PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        Util util = new Util();
+        GUIUtil GUIUtil = new GUIUtil();
         Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
         // Lion's Heart
@@ -66,22 +65,22 @@ public class GodPowers implements Listener {
         gui.setItem(10, item);
 
         // Savior
-        util.generateGUI(Material.GOLDEN_CARROT, ChatColor.LIGHT_PURPLE, "Savior", "Swap places with injured followers.", "savior-cost",11, faith.getSavior(), gui);
+        GUIUtil.generateGUI(Material.GOLDEN_CARROT, ChatColor.LIGHT_PURPLE, "Savior", "Swap places with injured followers.", "savior-cost",11, faith.getSavior(), gui);
 
         // Taunt
-        util.generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", "Attract the attention of enemies.", "taunt-cost",12, faith.getTaunt(), gui);
+        GUIUtil.generateGUI(Material.DIAMOND, ChatColor.GOLD, "Taunt", "Attract the attention of enemies.", "taunt-cost",12, faith.getTaunt(), gui);
 
         // Insidious
-        util.generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", "Gain invisibility when crouching.", "insidious-cost",13, faith.getInsidious(), gui);
+        GUIUtil.generateGUI(Material.ENDER_EYE, ChatColor.BLUE, "Insidious", "Gain invisibility when crouching.", "insidious-cost",13, faith.getInsidious(), gui);
 
         // Explosive Landing
-        util.generateGUI(Material.TNT_MINECART, ChatColor.DARK_RED, "Explosive Landing", "Create an explosion when you hit the ground.", "explosive-cost",14, faith.getExplosiveLanding(), gui);
+        GUIUtil.generateGUI(Material.TNT_MINECART, ChatColor.DARK_RED, "Explosive Landing", "Create an explosion when you hit the ground.", "explosive-cost",14, faith.getExplosiveLanding(), gui);
 
         // Flood
-        util.generateGUI(Material.WATER_BUCKET, ChatColor.DARK_BLUE, "Flood", "Temporarily flood the area.", "flood-cost",15, faith.getFlood(), gui);
+        GUIUtil.generateGUI(Material.WATER_BUCKET, ChatColor.DARK_BLUE, "Flood", "Temporarily flood the area.", "flood-cost",15, faith.getFlood(), gui);
 
         // Close Menu
-        util.generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.","na", 16, 3, gui);
+        GUIUtil.generateGUI(Material.BARRIER, ChatColor.RED, "Back", "Return to previous menu.","na", 16, 3, gui);
 
         // Frame
         ItemStack frame = new ItemStack(Material.MAGENTA_STAINED_GLASS_PANE);

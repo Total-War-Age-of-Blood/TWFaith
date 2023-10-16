@@ -16,23 +16,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class HellsFury implements Listener {
-    public void onHellsFuryTrigger(Player player, PlayerData player_data, ItemStack chosen_item, ItemMeta chosen_item_meta){
+    public void onHellsFuryTrigger(Player player, PlayerData playerData, ItemStack chosenItem, ItemMeta chosenItemMeta){
         for (Player nearby : Bukkit.getOnlinePlayers()){
-            PlayerData nearby_data = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
+            PlayerData nearbyData = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
             if (!player.getWorld().equals(nearby.getWorld())){continue;}
-            if (player.getLocation().distance(nearby.getLocation()) >= 30 || !player_data.getLedBy().equals(nearby_data.getLedBy())){continue;}
-            if (nearby_data.isHellsFuryActive()){
-                nearby_data.setHellsFuryActive(false);
-                player.sendMessage("Your foot flames cease.");
-                if (!chosen_item.getEnchantments().isEmpty()){
-                    chosen_item_meta.removeEnchant(Enchantment.DURABILITY);
-                    chosen_item.setItemMeta(chosen_item_meta);
+            if (nearbyData.isHellsFuryActive() && nearbyData.getLedBy().equals(playerData.getLedBy())){
+                nearbyData.setHellsFuryActive(false);
+                nearby.sendMessage("Your foot flames cease.");
+                if (!chosenItem.getEnchantments().isEmpty()){
+                    chosenItemMeta.removeEnchant(Enchantment.DURABILITY);
+                    chosenItem.setItemMeta(chosenItemMeta);
                 }
-            }else{
-                nearby_data.setHellsFuryActive(true);
-                player.sendMessage("Fiery flames spring from your feet!");
-                chosen_item_meta.addEnchant(Enchantment.DURABILITY, 1, false);
-                chosen_item.setItemMeta(chosen_item_meta);
+            }else if (player.getLocation().distance(nearby.getLocation()) <= 30 && playerData.getLedBy().equals(nearbyData.getLedBy())){
+                nearbyData.setHellsFuryActive(true);
+                nearby.sendMessage("Fiery flames spring from your feet!");
+                chosenItemMeta.addEnchant(Enchantment.DURABILITY, 1, false);
+                chosenItem.setItemMeta(chosenItemMeta);
             }
         }
     }
@@ -40,14 +39,23 @@ public class HellsFury implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
-        if (!player_data.isHellsFuryActive()){return;}
-        Location player_loc = player.getLocation();
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        PlayerData leaderData = PlayerHashMap.playerDataHashMap.get(playerData.getLedBy());
+        if (leaderData != null) {
+            Player leader = Bukkit.getPlayer(playerData.getLedBy());
+            if (!playerData.isHellsFuryActive() && leaderData.isHellsFuryActive() && leader != null && player.getLocation().distance(leader.getLocation()) <= 30) {
+                playerData.setHellsFuryActive(true);
+                player.sendMessage("Fiery flames spring from your feet!");
+                return;
+            }
+        }
+        if (!playerData.isHellsFuryActive()){return;}
+        Location playerLoc = player.getLocation();
         World world = player.getWorld();
         int radius = 1;
         for (int x = -radius; x <= radius; x++){
             for(int z = -radius; z <= radius; z++){
-                Block block = world.getBlockAt(player_loc.getBlockX() + x, player_loc.getBlockY(), player_loc.getBlockZ() + z);
+                Block block = world.getBlockAt(playerLoc.getBlockX() + x, playerLoc.getBlockY(), playerLoc.getBlockZ() + z);
                 if (block.getType().equals(Material.AIR)){
                     block.setType(Material.FIRE);
                 }

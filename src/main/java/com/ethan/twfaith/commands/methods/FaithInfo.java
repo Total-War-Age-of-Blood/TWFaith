@@ -2,7 +2,7 @@ package com.ethan.twfaith.commands.methods;
 
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.FaithHashMap;
-import com.ethan.twfaith.guis.Util;
+import com.ethan.twfaith.guis.GUIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class FaithInfo {
         List<String> messages = new ArrayList<>();
 
         // Faith name
-        messages = Util.addCenteredMessage(ChatColor.GOLD + faith.getFaithName(), messages);
+        messages = GUIUtil.addCenteredMessage(ChatColor.GOLD + faith.getFaithName(), messages);
         // Leader
         messages.add(ChatColor.RED + "Leader: " + Bukkit.getOfflinePlayer(faith.getLeader()).getName() + ChatColor.WHITE);
         // List of followers
