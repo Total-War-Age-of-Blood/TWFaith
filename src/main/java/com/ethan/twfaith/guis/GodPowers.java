@@ -172,9 +172,9 @@ public class GodPowers implements Listener {
         if (e.getEntity() instanceof Player){
             Player player = (Player) e.getEntity();
             PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+            if (playerData.isLeader() || !playerData.isInFaith()){return;}
             Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
             if (player.getHealth() - e.getDamage() > 6){return;}
-            if (playerData.isLeader() || !playerData.isInFaith()){return;}
             Player leader = Bukkit.getPlayer(playerData.getLedBy());
             System.out.println("Player is in faith and is not leader.");
             assert leader != null;
@@ -213,9 +213,10 @@ public class GodPowers implements Listener {
     @EventHandler
     public void insidiousTriggerEvent(PlayerToggleSneakEvent e){
         Player player = e.getPlayer();
-        PlayerData player_data = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        if (!playerData.isInFaith() || !playerData.isLeader()){return;}
         Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
-        if (faith.getInsidious() < 1 || !player_data.isInsidiousActive()){return;}
+        if (faith.getInsidious() < 1 || !playerData.isInsidiousActive()){return;}
         // Toggle Sneak event takes the sneak state of the player before the toggle happens
         // So we have to check if the player is standing before sneak is toggled.
         if (!player.isSneaking()){
