@@ -37,7 +37,7 @@ summon-cooldown: 10
 
 # Terrain Bonus
 terrain-cost: 5
-terrain-stamina: 5
+terrain-stamina: 2
 
 # Lion's Heart
 lions-heart-cost: 5
@@ -47,6 +47,7 @@ lions-heart-stamina: 5
 savior-cost: 5
 savior-stamina: 20
 savior-cooldown: 10
+savior-radius: 30
 
 # Taunt
 taunt-cost: 5

@@ -168,43 +168,42 @@ public class GodPowers implements Listener {
     // Savior
     @EventHandler
     public void saviorTriggerEvent(EntityDamageEvent e){
-        // System.out.println("Entity Damage detected!");
         if (e.getEntity() instanceof Player){
             Player player = (Player) e.getEntity();
             PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
             if (playerData.isLeader() || !playerData.isInFaith()){return;}
-            Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
             if (player.getHealth() - e.getDamage() > 6){return;}
             Player leader = Bukkit.getPlayer(playerData.getLedBy());
             System.out.println("Player is in faith and is not leader.");
-            assert leader != null;
+            if (leader == null){return;}
+            Faith faith = FaithHashMap.playerFaithHashmap.get(leader.getUniqueId());
             if (!player.getWorld().equals(leader.getWorld())){return;}
-            if (leader.getLocation().distance(player.getLocation()) > 30){return;}
+            if (leader.getLocation().distance(player.getLocation()) > TWFaith.getPlugin().getConfig().getInt("savior-radius")){return;}
             System.out.println("Player and leader are within 30 blocks");
-            if (leader.getHealth() < 10){return;}
+            if (leader.getHealth() <= 9){return;}
             System.out.println("Leader has at least 5 hearts");
-
-            PlayerData leader_data = PlayerHashMap.playerDataHashMap.get(leader.getUniqueId());
-
-            if (use_powers.checkCoolDown("Savior", player, TWFaith.getPlugin().getConfig().getLong("savior-cooldown"))){return;}
-            // If power is not on cool down, put power on cool down
-            playerData.getCoolDowns().put("Savior", System.currentTimeMillis() / 1000);
-            PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
-
-            if (playerData.getStamina() < TWFaith.getPlugin().getConfig().getInt("savior-stamina")){
-                player.sendMessage(ChatColor.RED + "Not enough stamina.");
-                return;
-            }
-            playerData.setStamina(playerData.getStamina() - TWFaith.getPlugin().getConfig().getInt("savior-stamina"));
-
-            if (faith.getSavior() > 0 && leader_data.isSaviorActive()){
+            PlayerData leaderData = PlayerHashMap.playerDataHashMap.get(leader.getUniqueId());
+            if (use_powers.checkCoolDown("Savior", leader, TWFaith.getPlugin().getConfig().getLong("savior-cooldown"))){return;}
+            if (faith.getSavior() > 0 && leaderData.isSaviorActive()){
                 System.out.println("Leader has Savior");
+                if (leaderData.getStamina() < TWFaith.getPlugin().getConfig().getInt("savior-stamina")){
+                    leader.sendMessage(ChatColor.RED + "Not enough stamina.");
+                    return;
+                }
+                leaderData.setStamina(leaderData.getStamina() - TWFaith.getPlugin().getConfig().getInt("savior-stamina"));
                 Location player_location = player.getLocation();
                 Location leader_location = leader.getLocation();
                 player.teleport(leader_location);
                 leader.teleport(player_location);
                 player.sendMessage("Savior activates!");
                 leader.sendMessage("Savior activates!");
+                if (player.getHealth() - e.getDamage() <= 0){
+                    e.setCancelled(true);
+                    player.setHealth(1);
+                }
+                leaderData.getCoolDowns().put("Savior", System.currentTimeMillis() / 1000);
+                PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
+                PlayerHashMap.playerDataHashMap.put(leaderData.getUuid(), leaderData);
             }
         }
     }
@@ -220,7 +219,7 @@ public class GodPowers implements Listener {
         // Toggle Sneak event takes the sneak state of the player before the toggle happens
         // So we have to check if the player is standing before sneak is toggled.
         if (!player.isSneaking()){
-            player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(80, 0));
+            player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(40, 0));
         } else{player.removePotionEffect(PotionEffectType.INVISIBILITY);}
     }
 
@@ -233,6 +232,7 @@ public class GodPowers implements Listener {
         Player player = (Player) e.getEntity();
         PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
         Faith faith = FaithHashMap.playerFaithHashmap.get(player.getUniqueId());
+        if (faith == null){return;}
         if (faith.getExplosiveLanding() < 1 || !playerData.isExplosiveLandingActive()){return;}
 
         if (use_powers.checkCoolDown("Explosive Landing", player, TWFaith.getPlugin().getConfig().getLong("explosive-cooldown"))){return;}

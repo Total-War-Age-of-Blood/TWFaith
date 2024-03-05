@@ -11,11 +11,17 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class HellsFury implements Listener {
+    public static List<UUID> fireproof = new ArrayList<>();
     public void onHellsFuryTrigger(Player player, PlayerData playerData, ItemStack chosenItem, ItemMeta chosenItemMeta){
         for (Player nearby : Bukkit.getOnlinePlayers()){
             PlayerData nearbyData = PlayerHashMap.playerDataHashMap.get(nearby.getUniqueId());
@@ -29,6 +35,7 @@ public class HellsFury implements Listener {
                 }
             }else if (player.getLocation().distance(nearby.getLocation()) <= 30 && playerData.getLedBy().equals(nearbyData.getLedBy())){
                 nearbyData.setHellsFuryActive(true);
+                fireproof.add(nearbyData.getUuid());
                 nearby.sendMessage("Fiery flames spring from your feet!");
                 chosenItemMeta.addEnchant(Enchantment.DURABILITY, 1, false);
                 chosenItem.setItemMeta(chosenItemMeta);
@@ -45,6 +52,7 @@ public class HellsFury implements Listener {
             Player leader = Bukkit.getPlayer(playerData.getLedBy());
             if (!playerData.isHellsFuryActive() && leaderData.isHellsFuryActive() && leader != null && player.getLocation().distance(leader.getLocation()) <= 30) {
                 playerData.setHellsFuryActive(true);
+                fireproof.add(playerData.getUuid());
                 player.sendMessage("Fiery flames spring from your feet!");
                 return;
             }
@@ -60,6 +68,19 @@ public class HellsFury implements Listener {
                     block.setType(Material.FIRE);
                 }
             }
+        }
+    }
+    @EventHandler
+    public void onPlayerBurn(EntityDamageEvent event){
+        if (!(event.getEntity() instanceof Player)){return;}
+        Player player = (Player) event.getEntity();
+        PlayerData playerData = PlayerHashMap.playerDataHashMap.get(player.getUniqueId());
+        if (playerData.isHellsFuryActive() && event.getCause().equals(EntityDamageEvent.DamageCause.FIRE)){
+            event.setCancelled(true);
+        }
+        if (!fireproof.contains(player.getUniqueId())){return;}
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)){
+            event.setCancelled(true);
         }
     }
 }

@@ -63,6 +63,8 @@ public class UsePowers implements Listener {
         // you have to catch the error.
         boolean main_null = held_item.getItemMeta() == null;
         boolean off_null = other_item.getItemMeta() == null;
+        boolean handNull = e.getHand() == null;
+        if (handNull){return;}
 
         // Prevents the event from running twice when the player has an item in the offhand
         if (!main_null && !off_null && e.getHand().equals(EquipmentSlot.OFF_HAND)){return;}

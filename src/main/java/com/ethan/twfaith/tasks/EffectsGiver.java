@@ -4,7 +4,9 @@ import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
+import com.ethan.twfaith.powers.blessings.HellsFury;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -53,6 +55,10 @@ public class EffectsGiver extends BukkitRunnable {
             // Hell's Fury
             if (player_data.isHellsFuryActive()){
                 player.addPotionEffect(PotionEffectType.FIRE_RESISTANCE.createEffect(100, 0));
+            } else{
+                if(player.getFireTicks() <= 0 && HellsFury.fireproof.contains(player.getUniqueId())){
+                    HellsFury.fireproof.remove(player.getUniqueId());
+                }
             }
 
             // Intoxicate
