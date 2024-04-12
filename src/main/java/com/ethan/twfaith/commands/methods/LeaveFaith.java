@@ -5,6 +5,7 @@ import com.ethan.twfaith.Util;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
+import com.ethan.twfaith.tasks.AutoSave;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -39,6 +40,7 @@ public class LeaveFaith {
                 PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
                 Util.clearBlessings(playerData);
                 player.sendMessage("You have left " + read_faith.getFaithName());
+                AutoSave.setChange(true);
             }
         }catch (IOException e){e.printStackTrace();}}
 }

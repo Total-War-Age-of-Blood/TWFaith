@@ -92,3 +92,6 @@ heavy-stamina: 5
 # Intoxicate
 intoxicate-cost: 5
 intoxicate-stamina: 5
+
+# How often (minutes) to auto-save:
+auto-save: 10

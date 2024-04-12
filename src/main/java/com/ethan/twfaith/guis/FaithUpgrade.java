@@ -1,6 +1,7 @@
 package com.ethan.twfaith.guis;
 
 import com.ethan.twfaith.customevents.OpenGUIEvent;
+import com.ethan.twfaith.tasks.AutoSave;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ public class FaithUpgrade implements Listener {
     private Inventory gui;
 
     public void openNewGui(Player player){
+        AutoSave.setChange(true);
         gui = Bukkit.createInventory(null, 27, "Faith Upgrade Menu");
 
         // Blessings

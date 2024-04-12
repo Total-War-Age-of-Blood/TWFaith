@@ -1,15 +1,11 @@
 package com.ethan.twfaith.commands.methods;
 
-import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.FaithHashMap;
-import com.ethan.twfaith.data.PlayerData;
-import com.ethan.twfaith.data.PlayerHashMap;
+import com.ethan.twfaith.tasks.AutoSave;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,6 +25,7 @@ public class InviteFollower {
             }
             player.sendMessage("You have invited " + args[2] + " to the faith.");
             Objects.requireNonNull(Bukkit.getPlayerExact(args[2])).sendMessage("You have been invited to the faith " + faith_name);
+            AutoSave.setChange(true);
         }
     }
 }

@@ -4,6 +4,7 @@ import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
+import com.ethan.twfaith.tasks.AutoSave;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -38,6 +39,7 @@ public class RenameFaith {
                 }
 
                 player.sendMessage("Renamed faith to " + args[1]);
+                AutoSave.setChange(true);
 
             }else{player.sendMessage(ChatColor.RED + "ERROR: Could not rename faith. Are you sure you are the" +
                     " leader of a faith?");}

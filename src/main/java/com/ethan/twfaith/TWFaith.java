@@ -15,6 +15,7 @@ import com.ethan.twfaith.powers.blessings.*;
 import com.ethan.twfaith.powers.curses.*;
 import com.ethan.twfaith.powers.godpowers.Flood;
 import com.ethan.twfaith.powers.godpowers.Taunt;
+import com.ethan.twfaith.tasks.AutoSave;
 import com.ethan.twfaith.tasks.EffectsGiver;
 import com.ethan.twfaith.tasks.Heavy_Boots_Checker;
 import com.ethan.twfaith.tasks.StaminaChecker;
@@ -90,7 +91,9 @@ public final class TWFaith extends JavaPlugin implements Listener {
         BukkitTask staminaChecker = new StaminaChecker().runTaskTimer(this, 0, 20);
         BukkitTask effectsGiver = new EffectsGiver().runTaskTimer(this, 0, 20);
         BukkitTask heavyBootsChecker = new Heavy_Boots_Checker().runTaskTimer(this, 0, 20);
-
+        int autoSavePeriod = this.getConfig().getInt("auto-save");
+        autoSavePeriod = autoSavePeriod * 20 * 60;
+        BukkitTask autoSave = new AutoSave().runTaskTimer(this, autoSavePeriod, autoSavePeriod);
     }
 
     @Override
@@ -123,7 +126,7 @@ public final class TWFaith extends JavaPlugin implements Listener {
             // Saving data from HashMap to File
             try{
                 File player_folder = new File(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TWFaith")).getDataFolder(), "PlayerData");
-                File player_file = new File(player_folder, player.getUniqueId() + ".json");
+                File player_file = new File(player_folder, playerData.getUuid() + ".json");
                 FileWriter player_data_writer = new FileWriter(player_file, false);
                 gson.toJson(playerData, player_data_writer);
                 player_data_writer.flush();

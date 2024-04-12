@@ -5,6 +5,7 @@ import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerHashMap;
 import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.PlayerData;
+import com.ethan.twfaith.tasks.AutoSave;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -48,12 +49,10 @@ public class Pray implements CommandExecutor {
                 FaithHashMap.playerFaithHashmap.put(player.getUniqueId(), faith);
 
                 player.sendMessage("You pray to your god.");
-
+                AutoSave.setChange(true);
             } else if(!((currentTime - lastPrayer) > twFaith.getConfig().getLong("pray-cool-down"))){
                 player.sendMessage("Your prayer is still on cool-down for " + (twFaith.getConfig().getLong("pray-cool-down") - (currentTime - lastPrayer)) + " hours.");
             }
-
-
         }
         return false;
     }

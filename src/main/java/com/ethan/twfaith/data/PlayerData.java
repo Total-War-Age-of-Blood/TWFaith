@@ -76,6 +76,39 @@ public class PlayerData {
         this.coolDowns = coolDowns;
     }
 
+    public PlayerData(PlayerData playerData){
+        this.uuid = playerData.getUuid();
+        this.ledBy = playerData.getLedBy();
+        this.faith = playerData.getFaith();
+        this.inFaith = playerData.isInFaith();
+        this.leader = playerData.isLeader();
+        this.lastPrayer = playerData.getLastPrayer();
+        this.faithPoints = playerData.getFaithPoints();
+        this.taunted = playerData.isTaunted();
+        this.taunter = playerData.getTaunter();
+        this.lionsHeartActive = playerData.isLionsHeartActive();
+        this.saviorActive = playerData.isSaviorActive();
+        this.insidiousActive = playerData.isInsidiousActive();
+        this.explosiveLandingActive = playerData.isExplosiveLandingActive();
+        this.crumblingActive = playerData.isCrumblingActive();
+        this.crumblingVictim = playerData.isCrumblingVictim();
+        this.heavyBootsActive = playerData.isHeavyBootsActive();
+        this.heavyBootsVictim = playerData.isHeavyBootsVictim();
+        this.intoxicateActive = playerData.isIntoxicateActive();
+        this.intoxicateVictim = playerData.isIntoxicateVictim();
+        this.discombobulateVictim = playerData.isDiscombobulateVictim();
+        this.entangleVictim = playerData.isEntangleVictim();
+        this.terrainBonusActive = playerData.isTerrainBonusActive();
+        this.summonGodActive = playerData.isSummonGodActive();
+        this.powerfulFlockActive = playerData.isPowerfulFlockActive();
+        this.inFlock = playerData.isInFlock();
+        this.nearbyFriends = playerData.getNearbyFriends();
+        this.hellsFuryActive = playerData.isHellsFuryActive();
+        this.stamina = playerData.getStamina();
+        this.maxStamina = playerData.getMaxStamina();
+        this.coolDowns = playerData.getCoolDowns();
+    }
+
     public UUID getUuid() {
         return uuid;
     }

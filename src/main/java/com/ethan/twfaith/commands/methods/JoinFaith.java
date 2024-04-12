@@ -5,6 +5,7 @@ import com.ethan.twfaith.data.Faith;
 import com.ethan.twfaith.data.FaithHashMap;
 import com.ethan.twfaith.data.PlayerData;
 import com.ethan.twfaith.data.PlayerHashMap;
+import com.ethan.twfaith.tasks.AutoSave;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -48,6 +49,7 @@ public class JoinFaith {
                 playerData.setLedBy(faith.getLeader());
                 PlayerHashMap.playerDataHashMap.put(player.getUniqueId(), playerData);
                 FaithHashMap.playerFaithHashmap.put(faith.getLeader(), faith);
+                AutoSave.setChange(true);
             }
         }
     }
