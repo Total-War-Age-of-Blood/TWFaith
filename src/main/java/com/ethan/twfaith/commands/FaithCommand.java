@@ -5,6 +5,9 @@ import com.ethan.twfaith.customevents.OpenGUIEvent;
 import com.ethan.twfaith.data.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -113,7 +116,26 @@ public class FaithCommand implements CommandExecutor {
                 faithKick.FaithKick(playerData, player, args);
             }
 
-            //TODO make a command to check a faith's information
+            if (Objects.equals(args[0].toLowerCase(), "bossbar")){
+                if (Objects.equals(args[1].toLowerCase(), "on")){
+                    BossBar bossBar = Bukkit.createBossBar(ChatColor.YELLOW + "Stamina", BarColor.YELLOW, BarStyle.SEGMENTED_10);
+                    bossBar.setProgress(playerData.getStamina() / playerData.getMaxStamina());
+                    bossBar.addPlayer(player);
+                    BossBars.boss_bar_map.put(player.getUniqueId(), bossBar);
+                    playerData.setStaminaBarEnabled(true);
+                    player.sendMessage("Stamina Bar ON");
+                } else if (Objects.equals(args[1].toLowerCase(), "off")) {
+                    if (BossBars.boss_bar_map.containsKey(player.getUniqueId())){
+                        BossBar bossBar = BossBars.boss_bar_map.get(player.getUniqueId());
+                        bossBar.removePlayer(player);
+                        playerData.setStaminaBarEnabled(false);
+                        player.sendMessage(ChatColor.RED + "Stamina Bar OFF");
+                    }
+                } else{
+                    player.sendMessage(ChatColor.RED + "Usage: /faith bossBar on/off");
+                }
+            }
+
             if (Objects.equals(args[0], "info") && args.length == 2){
                 FaithInfo faithInfo = new FaithInfo();
                 faithInfo.faithInfo(args[1], player);

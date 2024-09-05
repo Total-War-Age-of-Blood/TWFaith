@@ -3,24 +3,12 @@ package com.ethan.twfaith.tasks;
 import com.ethan.twfaith.TWFaith;
 import com.ethan.twfaith.Util;
 import com.ethan.twfaith.data.*;
-import com.ethan.twfaith.powers.blessings.HellsFury;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class StaminaChecker extends BukkitRunnable {
 

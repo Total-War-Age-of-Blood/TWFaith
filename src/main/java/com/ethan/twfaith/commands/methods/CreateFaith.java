@@ -48,6 +48,7 @@ public class CreateFaith {
         bossBar.setProgress(1);
         bossBar.addPlayer(player);
         BossBars.boss_bar_map.put(player.getUniqueId(), bossBar);
+        player.sendMessage("You can disable the stamina bar with /faith bossBar off");
 
         try{
             if (!senderFaithFile.exists()){senderFaithFile.createNewFile();}

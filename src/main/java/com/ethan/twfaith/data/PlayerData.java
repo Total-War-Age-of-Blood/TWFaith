@@ -14,36 +14,31 @@ public class PlayerData {
     int faithPoints;
     boolean taunted;
     UUID taunter;
-    boolean lionsHeartActive;
-    boolean saviorActive;
-    boolean insidiousActive;
-    boolean explosiveLandingActive;
-    boolean crumblingActive;
-    boolean crumblingVictim;
-    boolean heavyBootsActive;
-    boolean heavyBootsVictim;
-    boolean intoxicateActive;
-    boolean intoxicateVictim;
-    boolean discombobulateVictim;
-    boolean entangleVictim;
-    boolean terrainBonusActive;
-    boolean summonGodActive;
-    boolean powerfulFlockActive;
-    boolean inFlock;
-    double nearbyFriends;
-    boolean hellsFuryActive;
-    double stamina;
-    double maxStamina;
+    boolean lionsHeartActive = false;
+    boolean saviorActive = false;
+    boolean insidiousActive = false;
+    boolean explosiveLandingActive = false;
+    boolean crumblingActive = false;
+    boolean crumblingVictim = false;
+    boolean heavyBootsActive = false;
+    boolean heavyBootsVictim = false;
+    boolean intoxicateActive = false;
+    boolean intoxicateVictim = false;
+    boolean discombobulateVictim = false;
+    boolean entangleVictim = false;
+    boolean terrainBonusActive = false;
+    boolean summonGodActive = false;
+    boolean powerfulFlockActive = false;
+    boolean inFlock = false;
+    double nearbyFriends = 0;
+    boolean hellsFuryActive = false;
+    double stamina = 100;
+    double maxStamina = 100;
     HashMap<String, Long> coolDowns;
+    boolean staminaBarEnabled = true;
 
     public PlayerData(UUID uuid, UUID ledBy, String faith, boolean in_faith, boolean leader, long lastPrayer,
-                      int faithPoints, boolean taunted, UUID taunter, boolean lionsHeartActive, boolean saviorActive,
-                      boolean insidiousActive, boolean explosiveLandingActive, boolean crumblingActive,
-                      boolean crumblingVictim, boolean heavyBootsActive, boolean heavyBootsVictim,
-                      boolean intoxicateActive, boolean intoxicateVictim, boolean discombobulateVictim,
-                      boolean entangleVictim, boolean terrainBonusActive, boolean summonGodActive,
-                      boolean powerfulFlockActive, boolean inFlock, double nearbyFriends, boolean hellsFuryActive,
-                      double stamina, double maxStamina, HashMap<String, Long> coolDowns) {
+                      int faithPoints, boolean taunted, UUID taunter, HashMap<String, Long> coolDowns) {
         this.uuid = uuid;
         this.ledBy = ledBy;
         this.faith = faith;
@@ -53,26 +48,6 @@ public class PlayerData {
         this.faithPoints = faithPoints;
         this.taunted = taunted;
         this.taunter = taunter;
-        this.lionsHeartActive = lionsHeartActive;
-        this.saviorActive = saviorActive;
-        this.insidiousActive = insidiousActive;
-        this.explosiveLandingActive = explosiveLandingActive;
-        this.crumblingActive = crumblingActive;
-        this.crumblingVictim = crumblingVictim;
-        this.heavyBootsActive = heavyBootsActive;
-        this.heavyBootsVictim = heavyBootsVictim;
-        this.intoxicateActive = intoxicateActive;
-        this.intoxicateVictim = intoxicateVictim;
-        this.discombobulateVictim = discombobulateVictim;
-        this.entangleVictim = entangleVictim;
-        this.terrainBonusActive = terrainBonusActive;
-        this.summonGodActive = summonGodActive;
-        this.powerfulFlockActive = powerfulFlockActive;
-        this.inFlock = inFlock;
-        this.nearbyFriends = nearbyFriends;
-        this.hellsFuryActive = hellsFuryActive;
-        this.stamina = stamina;
-        this.maxStamina = maxStamina;
         this.coolDowns = coolDowns;
     }
 
@@ -347,5 +322,13 @@ public class PlayerData {
 
     public void setCoolDowns(HashMap<String, Long> coolDowns) {
         this.coolDowns = coolDowns;
+    }
+
+    public boolean isStaminaBarEnabled() {
+        return staminaBarEnabled;
+    }
+
+    public void setStaminaBarEnabled(boolean staminaBarEnabled) {
+        this.staminaBarEnabled = staminaBarEnabled;
     }
 }

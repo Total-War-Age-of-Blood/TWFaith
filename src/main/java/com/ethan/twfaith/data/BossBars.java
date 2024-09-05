@@ -25,7 +25,7 @@ public class BossBars implements Listener {
         if (playerData.getLedBy() == null){playerData.setLedBy(player.getUniqueId());}
         // If the player is a god, generate their stamina bar when they log in. The stamina bar will be updated by the
         // Stamina Checker.
-        if (playerData.isInFaith() && playerData.isLeader()){
+        if (playerData.isInFaith() && playerData.isLeader() && playerData.staminaBarEnabled){
             BossBar bossBar = Bukkit.createBossBar(ChatColor.YELLOW + "Stamina", BarColor.YELLOW, BarStyle.SEGMENTED_10);
             bossBar.setProgress(1);
             bossBar.addPlayer(player);
